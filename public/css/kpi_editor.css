@@ -2006,7 +2006,19 @@ span.comment-sign.toggle-auto:hover {
 .text-left, .table-per-result.table-bordered tbody tr td.text-left{
     text-align: left!important;
 }
-
+.table-per-result.table-bordered tbody tr .extrascore{
+    color: darkcyan;
+}
+.table-per-result.table-bordered tbody tr .extrascore img{
+    width:15px;
+    vertical-align: top;
+}
+.table-per-result.table-bordered tbody tr td  span.minus_score{
+    color:#7ed321;
+}
+.table-per-result.table-bordered tbody tr td  span.plus_score{
+    color:#d9534f;
+}
 .com-name{
     font-size: 16px;
     color: #008b8b;
@@ -2585,16 +2597,7 @@ span.bonus-score {
     padding: 10px ;
     display: table-cell;
 }
-#main-content .bsc-category-content .kpi-delay{
-    background-color: #ababab!important;
-}
-#main-content .bsc-category-content .text-show-kpi-delay{
-    color: #d9534f;
-    margin-top:-25px;
-    font-size: 12px;
-    margin-left: 75px;
-    float:left;
-}
+
 .list-goals {
     margin-top: 30px;
     margin-left: 15px;
