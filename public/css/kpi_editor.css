@@ -2006,19 +2006,7 @@ span.comment-sign.toggle-auto:hover {
 .text-left, .table-per-result.table-bordered tbody tr td.text-left{
     text-align: left!important;
 }
-.table-per-result.table-bordered tbody tr .extrascore{
-    color: darkcyan;
-}
-.table-per-result.table-bordered tbody tr .extrascore img{
-    width:15px;
-    vertical-align: top;
-}
-.table-per-result.table-bordered tbody tr td  span.minus_score{
-    color:#7ed321;
-}
-.table-per-result.table-bordered tbody tr td  span.plus_score{
-    color:#d9534f;
-}
+
 .com-name{
     font-size: 16px;
     color: #008b8b;
@@ -2095,9 +2083,11 @@ span.bonus-score {
     color: #007777;
 }
 
-.kpi-panel .feature-box .fa, .kpi-panel .feature-box .material-icons{
+#company-kpi-snapshot .kpi-panel .feature-box .justify-content-sm-center .fa,#company-kpi-snapshot .kpi-panel .feature-box .justify-content-sm-center .material-icons{
     font-size: 36px;
-    padding-top: 15px;
+    /*padding-top: 10px;*/
+    height: 36px;
+    width: 36px;
     color: #008b8b;
 }
 
@@ -2596,6 +2586,17 @@ span.bonus-score {
     vertical-align: top;
     padding: 10px ;
     display: table-cell;
+}
+
+#main-content .bsc-category-content .kpi-delay{
+    background-color: #ababab!important;
+}
+#main-content .bsc-category-content .text-show-kpi-delay{
+    color: #d9534f;
+    margin-top:-25px;
+    font-size: 12px;
+    margin-left: 75px;
+    float:left;
 }
 
 .list-goals {
@@ -3735,7 +3736,8 @@ button.close{
         width: 450px;
     }
 }
-@media (min-width: 1200px) {
+/*@media (min-width: 1200px) {*/
+@media (min-width: 1300px) {
     .reponsive-table{
         min-width: 570px;
     }
@@ -3744,7 +3746,8 @@ button.close{
     }
 }
 
-@media (max-width: 1199px){
+/*@media (max-width: 1199px){*/
+@media (max-width: 1299px){
     .kpi-editor-content{
         padding: 0px;
     }
@@ -3786,12 +3789,13 @@ button.close{
         font-weight: bold;
     }
 
-    .kpi-panel .feature-box .fa, .kpi-panel .feature-box .material-icons{
+    #company-kpi-snapshot .kpi-panel .feature-box .justify-content-sm-center .fa,#company-kpi-snapshot .kpi-panel  .feature-box .justify-content-sm-center .material-icons{
         font-size: 36px;
         padding-top: 10px;
+        height: 36px;
+        width: 36px;
         color: #008b8b;
     }
-
     #kpi-container {
         min-width: 900px !important;
     }
