@@ -767,12 +767,26 @@ ul#content-nav > li.active[data-href="#tab-other"] ~ li.nav-color-style {
     float: left;
     vertical-align: middle;
     width: 315px;
+    width: 305px;
     text-align: left;
     padding: 4px;
     font-size: 12px;
 
 }
 
+#personal-kpis .kpiprogress-wrapper .wait_approve_edit_message{
+    float:left;
+    line-height: 20px;
+    text-transform: uppercase;
+    font-weight:bold;
+    color: #337ab7;
+    font-size: 12px;
+    border-radius: 3px;
+    border:1px solid #abd8ff;
+    padding: 1px 6px 0px 6px;
+    margin-top:3px;
+    cursor:pointer;
+}
 .kpiprogress-wrapper .kpiprogressreview-wrapper {
     float: right;
     vertical-align: middle;
