@@ -19,9 +19,9 @@
 
 }
 
-/* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
+/* :not(:checked) is a filter, so that browsers that donâ€™t support :checked donâ€™t
    follow these rules. Every browser that supports :checked also supports :not(), so
-   it doesn’t make the test unnecessarily selective */
+   it doesnâ€™t make the test unnecessarily selective */
 .kpi-rating:not(:checked) > input {
     position: absolute;
     top: -9999px;
@@ -49,7 +49,7 @@
 }
 
 .kpi-rating:not(:checked) > label:before {
-    /*content: '★ ';*/
+    /*content: 'â˜… ';*/
     content: '\2605 ';
 }
 
@@ -766,14 +766,12 @@ ul#content-nav > li.active[data-href="#tab-other"] ~ li.nav-color-style {
 .kpiprogress-wrapper .kpiprogresspercentage-wrapper {
     float: left;
     vertical-align: middle;
-    width: 315px;
     width: 305px;
     text-align: left;
     padding: 4px;
     font-size: 12px;
 
 }
-
 #personal-kpis .kpiprogress-wrapper .wait_approve_edit_message{
     float:left;
     line-height: 20px;
@@ -1302,7 +1300,7 @@ ul.success {
 
     .kpi-table .kpi-parent-wrapper {
         background-color: #a0998b !important;
-        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAALElE…aTwZiwNWrV/8RpRBo4v9ho/D69evEKbxx4wbRwfOHGHUAefsjBlRD9c0AAAAASUVORK5CYII=');
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAALElEâ€¦aTwZiwNWrV/8RpRBo4v9ho/D69evEKbxx4wbRwfOHGHUAefsjBlRD9c0AAAAASUVORK5CYII=');
     }
 
     .kpi-table {
@@ -2020,7 +2018,19 @@ span.comment-sign.toggle-auto:hover {
 .text-left, .table-per-result.table-bordered tbody tr td.text-left{
     text-align: left!important;
 }
-
+.table-per-result.table-bordered tbody tr .extrascore{
+    color: darkcyan;
+}
+.table-per-result.table-bordered tbody tr .extrascore img{
+    width:15px;
+    vertical-align: top;
+}
+.table-per-result.table-bordered tbody tr td  span.minus_score{
+    color:#7ed321;
+}
+.table-per-result.table-bordered tbody tr td  span.plus_score{
+    color:#d9534f;
+}
 .com-name{
     font-size: 16px;
     color: #008b8b;
@@ -2600,17 +2610,6 @@ span.bonus-score {
     vertical-align: top;
     padding: 10px ;
     display: table-cell;
-}
-
-#main-content .bsc-category-content .kpi-delay{
-    background-color: #ababab!important;
-}
-#main-content .bsc-category-content .text-show-kpi-delay{
-    color: #d9534f;
-    margin-top:-25px;
-    font-size: 12px;
-    margin-left: 75px;
-    float:left;
 }
 
 .list-goals {
