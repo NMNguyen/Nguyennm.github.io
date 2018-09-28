@@ -728,12 +728,12 @@ text-decoration: underline;
 
 .title-tooltip-kpi-performance{
     color:white;
-    width:170px;
+    width:175px;
     font-size:10px;
     padding:5px
 }
 .content-tooltip-kpi-performance{
-    width:70px;
+    width:100px;
     margin-right:10px;
     color:#ababab;
 }
