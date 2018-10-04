@@ -323,6 +323,9 @@ table.nocolor, table.nocolor tr, table.nocolor td {
     color: #ababab;
     font-style: normal;
 }
+.task-infor .row-detail-task .task-description .date-created{
+    margin-top:-5px;
+}
 .task-infor .row-limit-date {
     padding-left: 5px;
     width: 17%;
@@ -347,6 +350,11 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 }
 .task-infor .row-finish-date .date-late{
     color: #d9534f;
+    font-size: 14px;
+    font-weight: normal;
+}
+.task-infor .row-finish-date .date-early{
+    color: #008b8b;
     font-size: 14px;
     font-weight: normal;
 }
@@ -810,4 +818,32 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 }
 .cursor-no-drop{
     cursor: no-drop
+}
+.el-select-create-task-component .el-select-group .el-select-dropdown__item{
+    padding-left: 20px;
+    min-height: 50px;
+    line-height: 1px;
+}
+.el-select-create-task-component .el-select-group .el-select-dropdown__item span{
+    font-size: 14px;
+    color: #333333;
+    font-weight: 600;
+}
+.el-select-create-task-component .el-select-group .el-select-dropdown__item p{
+    font-size: 12px;
+    color: #666666;
+}
+
+.el-select-create-task-component .el-select-group .el-select-dropdown__item.selected span{
+    color:#008b8b;
+}
+.el-select-create-task-component .el-select-group .el-select-dropdown__item.selected p{
+    color:#008b8b;
+    font-weight:normal;
+}
+.el-select-create-task-component .el-select-group__wrap:not(:last-of-type){
+    padding:0px;
+}
+.el-select-create-task-component .el-select-group__wrap:not(:last-of-type):after{
+    display:none;
 }
