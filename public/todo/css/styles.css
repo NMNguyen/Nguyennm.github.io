@@ -248,6 +248,17 @@ table.nocolor, table.nocolor tr, table.nocolor td {
     font-weight: bold;
     text-transform: uppercase;
 }
+#my-task .body-table .title-kpi-name{
+    color: #337ab7;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#my-task .body-table .title-kpi-name p {
+    color: #666;
+    font-size: 14px;
+    text-transform: none;
+}
 #my-task .option-list .radio-btn-task:checked + .label-status{
     color: #008b8b;
 }
@@ -362,8 +373,8 @@ table.nocolor, table.nocolor tr, table.nocolor td {
     line-height: 8px;
 }
 .task-infor .row-finish-date .date-status .text{
-    color: #ababab;
-    font-size: 10px;
+    color: #666;
+    font-size: 12px;
     font-weight: normal;
 }
 .task-infor .row-icon-archive{
