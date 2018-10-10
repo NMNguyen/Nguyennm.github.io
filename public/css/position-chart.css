@@ -57,17 +57,6 @@
 	box-shadow: none;
     border: 1px solid rgb(171, 171, 171);
 }
-@font-face {
-    font-family: "Helvetica Neue Medium";
-    src: url({{ STATIC_URL }}fonts/helveticaneuemedium.ttf) format("truetype");
-}
-@font-face {
-    font-family: "Helvetica Neue Bold";
-    src: url({{ STATIC_URL }}fonts/helveticaneuebold.ttf) format("truetype");
-}
-body{
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-}
 #tab-content .menu .active{
     border-color:#008b8b!important;
     color:#008b8b!important;
@@ -83,7 +72,6 @@ body{
 }
 #position-chart-left{
     border-radius: 3px;
-    {#background-color: #ffffff;#}
     max-width:300px;
     min-width: 300px;
 }
@@ -171,10 +159,19 @@ body{
   color: #333333;
   margin-bottom:0px;
 }
-.table-text-small{
+#user-config .table-text-small{
   font-size: 10px;
   text-align: left;
   color: #666666;
+}
+#user-config .table-text-email{
+  font-size: 10px;
+  text-align: left;
+  color: #666666;
+}
+#user-config .table-assign{
+    padding: 4px 5px 5px 5px;
+    list-style-type: none;
 }
 #strategymap-2 table tbody tr td {
   line-height:unset!important;;
@@ -187,7 +184,6 @@ body{
 .btn-multiselect{
     margin-left:10px;
     margin-right:15px;
-    {#width:70px;#}
     height:20px;
     padding:0px 5px;
     display:inline-block;
@@ -445,9 +441,6 @@ text-decoration: underline;
     border: solid 1px rgba(245, 166, 35, 0.5);
     color:#f5a623;
 }
-{#.node .title{#}
-{#    border-bottom:1px solid rgba(171,171,171, 0.2);#}
-{#}#}
 .node.position-level-null.focused {
 	border-width: 2px !important;
 }

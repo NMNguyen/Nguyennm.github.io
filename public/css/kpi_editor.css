@@ -766,13 +766,25 @@ ul#content-nav > li.active[data-href="#tab-other"] ~ li.nav-color-style {
 .kpiprogress-wrapper .kpiprogresspercentage-wrapper {
     float: left;
     vertical-align: middle;
-    width: 315px;
+    width: 305px;
     text-align: left;
     padding: 4px;
     font-size: 12px;
 
 }
-
+#personal-kpis .kpiprogress-wrapper .wait_approve_edit_message{
+    float:left;
+    line-height: 20px;
+    text-transform: uppercase;
+    font-weight:bold;
+    color: #337ab7;
+    font-size: 12px;
+    border-radius: 3px;
+    border:1px solid #abd8ff;
+    padding: 1px 6px 0px 6px;
+    margin-top:3px;
+    cursor:pointer;
+}
 .kpiprogress-wrapper .kpiprogressreview-wrapper {
     float: right;
     vertical-align: middle;
@@ -2095,9 +2107,11 @@ span.bonus-score {
     color: #007777;
 }
 
-.kpi-panel .feature-box .fa, .kpi-panel .feature-box .material-icons{
+#company-kpi-snapshot .kpi-panel .feature-box .justify-content-sm-center .fa,#company-kpi-snapshot .kpi-panel .feature-box .justify-content-sm-center .material-icons{
     font-size: 36px;
-    padding-top: 15px;
+    /*padding-top: 10px;*/
+    height: 36px;
+    width: 36px;
     color: #008b8b;
 }
 
@@ -2596,6 +2610,17 @@ span.bonus-score {
     vertical-align: top;
     padding: 10px ;
     display: table-cell;
+}
+
+#main-content .bsc-category-content .kpi-delay{
+    background-color: #ababab!important;
+}
+#main-content .bsc-category-content .text-show-kpi-delay{
+    color: #d9534f;
+    margin-top:-25px;
+    font-size: 12px;
+    margin-left: 75px;
+    float:left;
 }
 
 .list-goals {
@@ -3735,7 +3760,8 @@ button.close{
         width: 450px;
     }
 }
-@media (min-width: 1200px) {
+/*@media (min-width: 1200px) {*/
+@media (min-width: 1300px) {
     .reponsive-table{
         min-width: 570px;
     }
@@ -3744,7 +3770,8 @@ button.close{
     }
 }
 
-@media (max-width: 1199px){
+/*@media (max-width: 1199px){*/
+@media (max-width: 1299px){
     .kpi-editor-content{
         padding: 0px;
     }
@@ -3786,12 +3813,13 @@ button.close{
         font-weight: bold;
     }
 
-    .kpi-panel .feature-box .fa, .kpi-panel .feature-box .material-icons{
+    #company-kpi-snapshot .kpi-panel .feature-box .justify-content-sm-center .fa,#company-kpi-snapshot .kpi-panel  .feature-box .justify-content-sm-center .material-icons{
         font-size: 36px;
         padding-top: 10px;
+        height: 36px;
+        width: 36px;
         color: #008b8b;
     }
-
     #kpi-container {
         min-width: 900px !important;
     }
@@ -4513,9 +4541,10 @@ button.close{
 #evidence .btn-evidences-1[disabled]:hover{
     color:#333!important;
 }
-#complate-review-modal .modal-footer .capture_download_btn{
-    float:left;
-    cursor:pointer!important;
+#complate-review-modal .modal-footer .capture_download_btn {
+    color: #d64f00;
+    float: left;
+    cursor: pointer !important;
 }
 #option-choose-kpi .nav-tabs>li.active>button{
     background-color: transparent;
