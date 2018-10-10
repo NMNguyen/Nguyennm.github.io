@@ -505,9 +505,13 @@ td {
 .table-hover>tbody>tr:hover {
     background-color: rgba(0, 139, 139, 0.1);
 }
+<<<<<<< HEAD
 /*.hover {*/
 	/*display: none;*/
 /*}*/
+=======
+
+>>>>>>> 957d8c5b9630b9e2774c5abe7351e439771f0cca
 tr:hover .hover {
 	display: initial;
 }
@@ -1401,6 +1405,7 @@ label.error{
     height:50px;
     width:50px;
 }
+<<<<<<< HEAD
 
 /*performance/templates/performance/people.html*/
 
@@ -1477,3 +1482,5 @@ label.error{
 #peopleApp .no-data{
     display: block;
 }
+=======
+>>>>>>> 957d8c5b9630b9e2774c5abe7351e439771f0cca

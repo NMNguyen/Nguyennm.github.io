@@ -857,4 +857,8 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 }
 .el-select-create-task-component .el-select-group__wrap:not(:last-of-type):after{
     display:none;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 957d8c5b9630b9e2774c5abe7351e439771f0cca
