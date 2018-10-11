@@ -883,18 +883,23 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 .qtip-dark.custom{
 	background:#333333!important;
     height:40px;
-    width:170px;
+    min-width:170px;
 }
 .qtip-dark.custom .title-tooltip{
 	color:#ababab;
-    width:70px;
 }
 .qtip-dark.custom p{
     margin-bottom:0px;
-    }
+}
 .qtip-dark.custom .result-tooltip{
     color:white;
 }
-.qtip-dark.custom .result-tooltip span{
-    margin-left:20px;
+.qtip-dark.custom .block-1{
+    width:70px;
+    float:left;
+}
+.qtip-dark.custom .block-2{
+    width:auto;
+    text-align: left;
+    float:left;
 }
