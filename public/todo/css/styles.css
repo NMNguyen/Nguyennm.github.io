@@ -254,10 +254,15 @@ table.nocolor, table.nocolor tr, table.nocolor td {
     font-weight: bold;
     text-transform: uppercase;
 }
+#my-task .body-table .title-kpi-name span{
+    display: block;
+}
 #my-task .body-table .title-kpi-name p {
     color: #666;
     font-size: 14px;
+    font-weight: normal;
     text-transform: none;
+    display: inline-block;
 }
 #my-task .option-list .radio-btn-task:checked + .label-status{
     color: #008b8b;
@@ -857,4 +862,39 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 }
 .el-select-create-task-component .el-select-group__wrap:not(:last-of-type):after{
     display:none;
+}
+
+#create-new-task .modal-body textarea{
+    border: solid 1px #ababab;
+}
+
+#create-new-task .modal-body textarea:focus{
+    border:solid 1px #008b8b;
+}
+#create-new-task .el-select .el-input .el-input__inner{
+    height:40px;
+}
+#create-new-task .bd-color-008b8b{
+    border:1px solid #008b8b;
+}
+#create-new-task .el-select{
+    width: 100%;
+}
+.qtip-dark.custom{
+	background:#333333!important;
+    height:40px;
+    width:170px;
+}
+.qtip-dark.custom .title-tooltip{
+	color:#ababab;
+    width:70px;
+}
+.qtip-dark.custom p{
+    margin-bottom:0px;
+    }
+.qtip-dark.custom .result-tooltip{
+    color:white;
+}
+.qtip-dark.custom .result-tooltip span{
+    margin-left:20px;
 }
