@@ -791,6 +791,7 @@ text-decoration: underline;
 .list-search-item {
 	line-height: 18px;
 	padding: 8px 0 8px 0;
+    word-break: break-word;
 }
 .emp-autocomplete .el-autocomplete-suggestion__wrap {
 	padding: 2px 0;
@@ -1026,17 +1027,13 @@ input[type="checkbox"]:after {
     padding:20px 20px 0px 20px;
 }
 .remove-modal{
-    padding:10px 20px;
     height:54px;
+    line-height:54px;
     background:#f9f9f9;
-    margin-top:15px;
-    position: absolute;
     width:100%;
-    bottom:0px;
 }
 .btn-edit-position i{
-    vertical-align: top;
-    padding-top:7px;
+    vertical-align: middle;
     font-size:20px;
 }
 #confirm2-position-modal .modal-body{
@@ -1060,4 +1057,12 @@ input[type="checkbox"]:after {
 }
 .pd-tp-5{
     padding-top:5px;
+}
+.word-break-position-chart{
+    word-break: break-word;
+}
+
+.el-search-remove-position-modal .el-select-dropdown__item{
+    max-width: 410px;
+    word-break: break-word;
 }
