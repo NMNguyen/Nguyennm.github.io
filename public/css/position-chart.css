@@ -1035,6 +1035,7 @@ input[type="checkbox"]:after {
 .btn-edit-position i{
     vertical-align: middle;
     font-size:20px;
+    margin-top:-2px;
 }
 #confirm2-position-modal .modal-body{
     padding:10px 20px 0px 20px;
@@ -1065,4 +1066,14 @@ input[type="checkbox"]:after {
 .el-search-remove-position-modal .el-select-dropdown__item{
     max-width: 410px;
     word-break: break-word;
+}
+#confirm1-position-modal ul{
+    list-style: none;
+}
+#confirm1-position-modal ul li::before {
+    content: "•";
+    color: #d8d8d8;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em
 }
