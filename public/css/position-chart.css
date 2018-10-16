@@ -721,12 +721,12 @@ text-decoration: underline;
 
 .title-tooltip-kpi-performance{
     color:white;
-    width:140px;
+    width:175px;
     font-size:10px;
     padding:5px
 }
 .content-tooltip-kpi-performance{
-    width:50px;
+    width:70px;
     margin-right:10px;
     color:#ababab;
 }
@@ -1066,6 +1066,10 @@ input[type="checkbox"]:after {
 .el-search-remove-position-modal .el-select-dropdown__item{
     max-width: 410px;
     word-break: break-word;
+}
+.el-search-remove-position-modal{
+    /*Hot fix, overwrite font-family by semantic-ui: Lato*/
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 #confirm1-position-modal ul{
     list-style: none;
