@@ -1081,3 +1081,17 @@ input[type="checkbox"]:after {
     width: 1em;
     margin-left: -1em
 }
+#todoer-modal .assign-performer.blank-kpilib{
+    text-align: center;
+}
+#todoer-modal .assign-performer.blank-kpilib p{
+    text-align: center;
+    width:255px;
+    margin:100px auto 10px auto;
+    color:#ababab;
+}
+#todoer-modal .assign-performer.blank-kpilib a{
+    color:#008b8b;
+    font-size:16px;
+    font-weight:bold;
+}
