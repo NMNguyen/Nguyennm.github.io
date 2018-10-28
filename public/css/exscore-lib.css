@@ -87,7 +87,6 @@
     font-weight:bold;
 }
 #list-exscore-lib-component .ui.celled.ordered.list .list>.item, .ui.celled.ordered.list>.item{
-    padding:10px 20px;
     min-height:50px;
     border-top:1px solid #e4e4e4;
 }
@@ -96,9 +95,7 @@
     cursor:pointer;
     z-index:10000001;
 }
-#list-exscore-lib-component .ui.celled.ordered.list .list>.item, .ui.celled.ordered.list>.item:hover +  #launcher{
-    display:none;
-}
+
 #list-exscore-lib-component .ui.list>.item:hover div.el-row{
     display: block;
 }
@@ -107,6 +104,7 @@
     font-size:14px;
     float:left;
     font-weight:normal;
+    padding: 12px 0px 10px 0px;
     color:#333;
     display: inline-block;
 }
@@ -114,7 +112,7 @@
     font-size:18px;
     font-weight:bold;
     margin-left:40px;
-    line-height:32px;
+    line-height:42px;
 }
 #list-exscore-lib-component .el-row i{
     font-size:20px;
@@ -130,7 +128,7 @@
     color:#d9534f;
 }
 #list-exscore-lib-component .el-row{
-    padding-top:5px;
+    padding-top:12px;
     display:none;
 }
 #list-exscore-lib-component .ui.list .content span{
@@ -318,8 +316,7 @@
     max-width: 570px;
 }
 .middle-exscorelib-text{
-    line-height:32px!important;
+    line-height:40px!important;
 }
 .middle-exscorelib-text-pd{
-    padding-top:8px;
 }
