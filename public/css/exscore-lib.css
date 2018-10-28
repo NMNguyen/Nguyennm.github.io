@@ -29,7 +29,7 @@
 #block-content .el-tabs__item{
     font-size:16px;
     font-weight:bold;
-    color:#666;
+    color:#ababab;
 }
 #block-content .el-tabs__item.is-active{
     color:#008b8b;
@@ -49,6 +49,9 @@
     background: #f9f9f9;
     line-height: 58px;
     padding-left: 65px;
+}
+#block-content .score-column-title.pull-left{
+    width:71%;
 }
 #block-content .el-tabs__content{
     height: calc(100vh - 210px);
@@ -73,4 +76,243 @@
 }
 #exscore-lib .btn-add:hover{
     background:#007777;
+}
+#list-exscore-lib-component{
+    padding-left:50px;
+    padding-right:50px;
+    padding-top:20px;
+}
+#list-exscore-lib-component .title-group-exscore{
+    color:#337ab7;
+    font-weight:bold;
+}
+#list-exscore-lib-component .ui.celled.ordered.list .list>.item, .ui.celled.ordered.list>.item{
+    padding:10px 20px;
+    min-height:50px;
+    border-top:1px solid #e4e4e4;
+}
+#list-exscore-lib-component .ui.celled.ordered.list .list>.item, .ui.celled.ordered.list>.item:hover{
+    background-color: #f5f9fc;
+    cursor:pointer;
+}
+#list-exscore-lib-component .ui.celled.ordered.list .list>.item, .ui.celled.ordered.list>.item:hover +  #launcher{
+    display:none;
+}
+#list-exscore-lib-component .ui.list>.item:hover div.el-row{
+    display: block;
+}
+#list-exscore-lib-component .ui.list .list>.item>.content, .ui.list>.item>.content .header{
+    width:70%;
+    font-size:14px;
+    float:left;
+    font-weight:normal;
+    color:#333;
+    display: inline-block;
+}
+#list-exscore-lib-component .ui.list .list>.item>.content, .ui.list>.item>.content .score{
+    font-size:18px;
+    font-weight:bold;
+    margin-left:40px;
+    line-height:32px;
+}
+#list-exscore-lib-component .el-row i{
+    font-size:20px;
+    margin-left:5px;
+}
+#list-exscore-lib-component .el-row i.info{
+    color:#ababab;
+}
+#list-exscore-lib-component .el-row i.edit{
+    color:#008b8b;
+}
+#list-exscore-lib-component .el-row i.delete{
+    color:#d9534f;
+}
+#list-exscore-lib-component .el-row{
+    padding-top:5px;
+    display:none;
+}
+#list-exscore-lib-component .ui.list .content span{
+    font-size:10px;
+    color:#ababab;
+}
+#list-exscore-lib-component .ui.list .content{
+    padding-left:5px;
+}
+#list-exscore-lib-component .ui.ordered.list .list>.item:before, .ui.ordered.list>.item:before, ol.ui.list li:before{
+    color:#e4e4e4;
+    font-size:14px;
+    font-weight:bold;
+}
+#list-exscore-lib-component  .ui.celled.ordered.list>.item:hover:before{
+    color:#ababab;
+}
+.no-border-top{
+    border-top:none!important;
+}
+.plus-score{
+    color:#7ed321;
+}
+.minus-score{
+    color:#d9534f;
+}
+#remove-exscore-lib-component .modal-content{
+    width:450px;
+    min-height:219px;
+    border:none;
+    box-shadow: none;
+}
+#remove-exscore-lib-component .modal-header, .modal-footer{
+    border:none;
+}
+#remove-exscore-lib-component .modal-header button{
+    font-size:28px;
+    font-weight:normal;
+}
+#remove-exscore-lib-component .modal-header h4{
+    font-size:20px;
+    font-weight:bold;
+    color:#333;
+}
+#remove-exscore-lib-component .modal-body p{
+    color:#666;
+}
+#remove-exscore-lib-component .modal-footer{
+    background:#f9f9f9;
+    border-radius:3px;
+    height:54px;
+    padding-top:11px;
+}
+#remove-exscore-lib-component .btn{
+    height:34px;
+}
+#remove-exscore-lib-component .btn-cancel{
+    border:1px solid #dedede;
+    background:white;
+    width:67px;
+}
+#remove-exscore-lib-component .btn-cancel:hover{
+    border:none;
+    background:#e4e4e4;
+}
+#remove-exscore-lib-component .btn-remove{
+    border:none;
+    color:white;
+    padding-top:7px;
+    background:#d9534f;
+}
+#remove-exscore-lib-component .btn-remove i{
+    font-size:20px;
+    vertical-align: top;
+}
+#remove-exscore-lib-component .btn-remove:hover{
+    background:#bc4744;
+}
+#add-exscore-lib-component .modal-content{
+    min-height: 518px;
+    box-shadow: none;
+    border: none;
+}
+#add-exscore-lib-component .modal-header, .modal-footer{
+    border:none;
+}
+#add-exscore-lib-component .modal-header button{
+    font-size:28px;
+}
+#add-exscore-lib-component .modal-header .modal-title{
+    font-size:20px;
+    color:#333;
+    font-weight:bold;
+}
+#add-exscore-lib-component .el-input__inner{
+    width:unset;
+    border-color:#ababab;
+}
+#add-exscore-lib-component .el-select .el-input.is-focus .el-input__inner{
+    border-color:#008b8b!important;
+}
+#add-exscore-lib-component .el-input__inner:focus{
+    border-color:#008b8b!important;
+}
+#add-exscore-lib-component .modal-body textarea{
+    height:100px;
+    font-size:14px;
+    border-color:#ababab;
+}
+#add-exscore-lib-component .modal-body textarea:focus{
+    border-color:#008b8b!important;
+}
+#add-exscore-lib-component .modal-footer{
+    height:54px;
+    background: #f9f9f9;
+    padding: 11px 15px;
+    border-radius:3px;
+}
+#add-exscore-lib-component .modal-body p{
+    font-size: 14px;
+    color:#333;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+#add-exscore-lib-component .el-input{
+    margin-bottom: 20px;
+}
+.width-100-percent, .width-100-percent .el-input, .width-100-percent .el-input__inner{
+    width:100%!important;
+}
+.width-100 .el-input__inner{
+    width: 100%!important;
+}
+#add-exscore-lib-component .btn{
+    height:34px;
+}
+#add-exscore-lib-component .btn-cancel{
+    border:1px solid #dedede;
+    background:white;
+    width:67px;
+}
+#add-exscore-lib-component .btn-cancel:hover{
+    border:none;
+    background:#e4e4e4;
+}
+#add-exscore-lib-component .btn-add{
+    padding-top:7px;
+    border:none;
+    color:white;
+    margin-left:5px;
+    background:#008b8b;
+}
+#add-exscore-lib-component .btn-add i{
+    font-size:20px;
+    vertical-align: top;
+}
+#add-exscore-lib-component .btn-add:hover{
+    background:#007777;
+}
+#add-exscore-lib-component .character-requirement, .messages-requirement{
+    color:#d9534f!important;
+}
+#add-exscore-lib-component  .messages-requirement{
+    color:#d9534f!important;
+    font-size:12px!important;
+    margin-top:-10px;
+}
+#add-exscore-lib-component  .btn-edit i{
+    vertical-align: middle;
+    font-size:14px;
+}
+#add-exscore-lib-component .el-input.is-disabled .el-input__inner, .el-textarea.is-disabled .el-textarea__inner{
+    border:1px solid #ababab;
+    color:#333;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.el-tooltip-exscorelib{
+    max-width:580px;
+    word-break: break-all;
+}
+.el-tooltip-exscorelib.not-show{
+    display:none!important;
+}
+.el-select-exscorelib .el-select-dropdown__item{
+    max-width: 570px;
 }
