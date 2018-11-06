@@ -172,6 +172,7 @@ function initModalHidden(modalSelector,callback){ // required jquery
     })
 
 }
+/* istanbul ignore next */
 function showTooltipPercentCompletedTask(id){
     $(".tooltip-percent-completed-task").each(function() {
          $(this).qtip({

@@ -24,7 +24,7 @@
 }
 #block-content .el-tabs__header{
     padding:10px 20px;
-    width:400px;
+    width: calc(100% - 220px);
 }
 #block-content .el-tabs__item{
     font-size:16px;
@@ -57,8 +57,14 @@
     height: calc(100vh - 210px);
     overflow-y: auto;
 }
-#exscore-lib .el-tabs__nav-wrap{
-    width: 365px;
+#exscore-lib .el-tabs__nav-wrap::after{
+    display:none;
+}
+#exscore-lib .el-tabs__active-bar{
+    bottom:-2px;
+}
+#exscore-lib .el-tabs__nav{
+    border-bottom:2px solid #e4e4e4;
 }
 #exscore-lib .btn-add{
     border:none;
@@ -93,7 +99,6 @@
 #list-exscore-lib-component .ui.celled.ordered.list .list>.item, .ui.celled.ordered.list>.item:hover{
     background-color: #f5f9fc;
     cursor:pointer;
-    z-index:10000001;
 }
 
 #list-exscore-lib-component .ui.list>.item:hover div.el-row{

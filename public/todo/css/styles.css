@@ -840,10 +840,23 @@ table.nocolor, table.nocolor tr, table.nocolor td {
     min-height: 50px;
     line-height: 1px;
 }
+.el-select-create-task-component .el-select-group .todo-no-data {
+    padding-left: 20px !important;
+    min-height: 34px !important;
+    color: #999 !important;
+    line-height: 34px !important;
+    text-align: center;
+}
 .el-select-create-task-component .el-select-group .el-select-dropdown__item span{
     font-size: 14px;
     color: #333333;
     font-weight: 600;
+    text-align: center;
+}
+.el-select-create-task-component .el-select-group .todo-no-data span{
+    font-size: 14px;
+    color: #999 !important;
+    font-weight: normal;
 }
 .el-select-create-task-component .el-select-group .el-select-dropdown__item p{
     font-size: 12px;

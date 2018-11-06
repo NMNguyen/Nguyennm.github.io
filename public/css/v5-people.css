@@ -36,10 +36,6 @@
      right: 0;
      top: 12px;
  }
-
- #content {
-	margin-top: 60px !important;
-}
 .img_ava {
     opacity: 1;
     display: block;
@@ -505,9 +501,6 @@ td {
 .table-hover>tbody>tr:hover {
     background-color: rgba(0, 139, 139, 0.1);
 }
-/*.hover {*/
-	/*display: none;*/
-/*}*/
 tr:hover .hover {
 	display: initial;
 }
@@ -1476,4 +1469,9 @@ label.error{
 }
 #peopleApp .no-data{
     display: block;
+}
+#peopleApp .btn_icon, .people-modal .btn_icon{
+    font-size: 20px;
+    padding-bottom: 2px;
+    line-height: 1px;
 }
