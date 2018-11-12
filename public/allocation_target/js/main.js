@@ -798,7 +798,7 @@ var targetPage = new Vue({
             var self = this
             cloudjetRequest.ajax({
                 type: 'GET',
-                url: '/api/v2/user/' + this.currentUserId + '/kpis/',
+                url: '/api/v2/user/' + this.currentUserId + '/kpis/?include_childs=1',
                 success: function (result) {
 
                     self.kpiList = result.map(function(elmParent){

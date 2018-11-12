@@ -19,13 +19,6 @@
 
 }
 
-#quarter_result {
-    vertical-align: top;
-}
-#quarter_result .q-resutl-container{
-    margin-left: 60px;
-}
-
 /* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
    follow these rules. Every browser that supports :checked also supports :not(), so
    it doesn’t make the test unnecessarily selective */
@@ -773,25 +766,13 @@ ul#content-nav > li.active[data-href="#tab-other"] ~ li.nav-color-style {
 .kpiprogress-wrapper .kpiprogresspercentage-wrapper {
     float: left;
     vertical-align: middle;
-    width: 305px;
+    width: 315px;
     text-align: left;
     padding: 4px;
     font-size: 12px;
 
 }
-#personal-kpis .kpiprogress-wrapper .wait_approve_edit_message{
-    float:left;
-    line-height: 20px;
-    text-transform: uppercase;
-    font-weight:bold;
-    color: #337ab7;
-    font-size: 12px;
-    border-radius: 3px;
-    border:1px solid #abd8ff;
-    padding: 1px 6px 0px 6px;
-    margin-top:3px;
-    cursor:pointer;
-}
+
 .kpiprogress-wrapper .kpiprogressreview-wrapper {
     float: right;
     vertical-align: middle;
@@ -860,6 +841,7 @@ ul#content-nav > li.active[data-href="#tab-other"] ~ li.nav-color-style {
 
 .feature-box {
     float: right;
+    padding: 4px;
 }
 
 .feature-box .fa-cog, .feature-box .fa-search, .feature-box .fa-comments {
@@ -2011,7 +1993,6 @@ span.comment-sign.toggle-auto:hover {
 
 .table-per-result.table-bordered tr td{
     color: #666666;
-    vertical-align: middle;
 }
 
 .table-per-com-result .table-striped > tbody > tr:nth-of-type(odd), .table-per-result.table-bordered tr:last-child td {
@@ -2025,19 +2006,7 @@ span.comment-sign.toggle-auto:hover {
 .text-left, .table-per-result.table-bordered tbody tr td.text-left{
     text-align: left!important;
 }
-.table-per-result.table-bordered tbody tr .extrascore{
-    color: darkcyan;
-}
-.table-per-result.table-bordered tbody tr .extrascore img{
-    width:15px;
-    vertical-align: top;
-}
-.table-per-result.table-bordered tbody tr td  span.minus_score{
-    color:#7ed321;
-}
-.table-per-result.table-bordered tbody tr td  span.plus_score{
-    color:#d9534f;
-}
+
 .com-name{
     font-size: 16px;
     color: #008b8b;
@@ -3767,6 +3736,7 @@ button.close{
         width: 450px;
     }
 }
+/*@media (min-width: 1200px) {*/
 @media (min-width: 1300px) {
     .reponsive-table{
         min-width: 570px;
@@ -3776,6 +3746,7 @@ button.close{
     }
 }
 
+/*@media (max-width: 1199px){*/
 @media (max-width: 1299px){
     .kpi-editor-content{
         padding: 0px;
@@ -4388,9 +4359,6 @@ button.close{
     border-radius:3px;
     margin-right:-15px;
 }
-#edit-all-weight-modal tbody{
-    border:none;
-}
 #edit-all-weight-modal .modal-header .title{
     font-size:20px;
     font-weight:bold;
@@ -4414,9 +4382,6 @@ button.close{
 }
 #edit-all-weight-modal .modal-content .modal-footer .btn-save{
     padding:5px 10px;
-}
-#edit-all-weight-modal .modal-content .modal-footer .btn-save:focus{
-    color:white;
 }
 #list-kpi{
     border-collapse: collapse;
@@ -4552,10 +4517,9 @@ button.close{
 #evidence .btn-evidences-1[disabled]:hover{
     color:#333!important;
 }
-#complate-review-modal .modal-footer .capture_download_btn {
-    color: #d64f00;
-    float: left;
-    cursor: pointer !important;
+#complate-review-modal .modal-footer .capture_download_btn{
+    float:left;
+    cursor:pointer!important;
 }
 #option-choose-kpi .nav-tabs>li.active>button{
     background-color: transparent;
@@ -5382,4 +5346,3 @@ button.close{
     color: #008b8b!important;
     vertical-align: unset!important;
 }
-
