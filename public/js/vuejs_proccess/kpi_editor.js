@@ -4106,7 +4106,7 @@ var v = new Vue({
                     that.update_score(kpi);
                     break;
                 case 'month_target':
-                    that.update_month_target(kpi, (!kpi.enable_edit && !that.organization.allow_edit_monthly_target) || kpi.score_calculation_type == 'average');
+                    that.update_month_target(kpi, (!kpi.enable_edit && !that.organization.allow_edit_monthly_target));
                     break;
                 case 'score_calculation':
                     that.update_quarter_target(kpi);
