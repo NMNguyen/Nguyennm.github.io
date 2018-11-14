@@ -131,6 +131,9 @@ function clear_form() {
     $("#id-employee-phone-edit").val("");
     $("#id-employee-skype-edit").val("");
     $("#listuc").val("");
+    //Reset status delay employee. 0 = delay, 1 = no delay;
+    peopleApp.emp_status = 1;
+
 }
 
 function load_data_update(node){
@@ -267,6 +270,8 @@ function get_managers_for_new_person(node) {
 function remove_person(node, delete_kpis) {
 
     var alertcf = gettext("Employee ") + node.data.name + gettext(" will be deleted immediately, are you sure?");
+    var parent_node = node.getParents().pop();
+    console.log(parent_node.id);
     swal({
         title: gettext("Warning"),
         text: alertcf,
@@ -292,19 +297,18 @@ function remove_person(node, delete_kpis) {
             },
             success: function (data) {
                 if (typeof data == 'object' && data.status == "ok") {
-                	p = node.getParents().pop();
-                    if (p) {
-                        load_data_node(p);
-                        st.onClick(st.root);
+
+                    if (parent_node) {
+                        // load_data_node(parent_node);
+                        // st.onClick(parent_node.id);
+                        init_node(parent_node);
                     }
 
-                    if(node.data.type){
-                        peopleApp.get_list_backup_user();
-                    }
+                    peopleApp.get_list_backup_user();
+
                     st.removeSubtree(node.id, true, 'animate', {
                         hideLabels: false,
                         onComplete: function () {
-
                         }
                     });
                 }
@@ -406,7 +410,6 @@ function bind_avatar_upload(node) {
     $('#id-btn-upload').click(function () {
         $("#id-avatar-upload").click();
     });
-
     $("#id-avatar-upload").data('ajaxUploader-setup', false);
     $("#id-avatar-upload").ajaxfileupload({
         action: "/performance/people/",
@@ -424,7 +427,6 @@ function bind_avatar_upload(node) {
                 $('.progress-striped').hide();
                 $('.progress-striped .bar').css('width', '60%');
             } else {
-                console.log(response);
             }
             //alert(JSON.stringify(response));
         },
@@ -597,6 +599,7 @@ function init_node(node) {
     $("#add-sub-person").click(function () {
         clear_form();
         get_managers_for_new_person(node);
+        console.log(node.data.name);
         bind_new_person();
         $("#reason_box").hide();
     });
@@ -624,7 +627,7 @@ function init_node(node) {
         $("#btn-delete-user-with-kpis").unbind('click');
         $("#btn-delete-user-with-kpis").click(
             function () {
-                    $("#confirm-delete").modal('toggle');
+                $("#confirm-delete").modal('toggle');
                 remove_person(node, true);
                 }
         );

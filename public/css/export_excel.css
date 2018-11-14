@@ -442,6 +442,8 @@ div[id^='modalCreateFilter'] div.modal-dialog {
 
 .list_unit .alert p {
     margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .list_unit .manager_unit, .list_unit .user_unit_rm {
@@ -692,5 +694,9 @@ div[id^='modalCreateFilter'] .left{
     padding-top: 10px;
     padding-right: 5px;
 }
-
+.custom-el-select{
+    max-width: 225px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 /*[END]------------performance/templates/report/report-score-excel.html------------[END]*/
