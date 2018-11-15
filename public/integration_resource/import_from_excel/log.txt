@@ -1,0 +1,303 @@
+2018-11-15 13:28:39,051 - root - INFO - system9093f92
+2018-11-15 13:28:39,051 - root - INFO - system9093f92@cjs.vn
+2018-11-15 13:28:39,098 - root - INFO - [KPI(287)]
+2018-11-15 13:28:39,099 - root - INFO - 2
+2018-11-15 13:28:40,984 - root - INFO - ['elms/static/integration_resource/import_from_excel/downloaded/2018-10-01/NSCL20181001.xlsx']
+2018-11-15 13:28:40,984 - root - INFO - ['elms/static/integration_resource/import_from_excel/downloaded/2018-10-01/NSCL20181001.xlsx']
+2018-11-15 13:28:41,011 - root - INFO - {'kpi_name': 'B4', u'none': None, u'sheet': u'\u0110VH', 'target': 'D4', u'column_result': u'F', 'unique_code': 'vh_4FDB', 'result': 'F4', u'line': 4L, u'column_target': u'D', u'email': u'soldier_dabez@cjs.vn', u'column_name': u'B'}
+2018-11-15 13:28:41,011 - root - INFO - {'kpi_name': 'B4', u'none': None, u'sheet': u'\u0110VH', 'target': 'D4', u'column_result': u'F', 'unique_code': 'vh_4FDB', 'result': 'F4', u'line': 4L, u'column_target': u'D', u'email': u'soldier_dabez@cjs.vn', u'column_name': u'B'}
+2018-11-15 13:28:41,100 - root - INFO - {'kpi_name': u'%  TH\u1ef0C HI\u1ec6N CH\u1ec8 TI\xcaU QOSO', 'owner_email': u'soldier_dabez@cjs.vn', 'unique_code': 'vh_4FDB', 'target': 10.0, 'result': 10.0}
+2018-11-15 13:28:41,100 - root - INFO - {'kpi_name': u'%  TH\u1ef0C HI\u1ec6N CH\u1ec8 TI\xcaU QOSO', 'owner_email': u'soldier_dabez@cjs.vn', 'unique_code': 'vh_4FDB', 'target': 10.0, 'result': 10.0}
+2018-11-15 13:28:41,101 - root - INFO - systemfa52bf4
+2018-11-15 13:28:41,101 - root - INFO - systemfa52bf4
+2018-11-15 13:28:41,101 - root - INFO - systemfa52bf4@cjs.vn
+2018-11-15 13:28:41,101 - root - INFO - systemfa52bf4@cjs.vn
+2018-11-15 13:28:41,143 - root - INFO - [KPI(292)]
+2018-11-15 13:28:41,143 - root - INFO - [KPI(292)]
+2018-11-15 13:28:41,144 - root - INFO - 1
+2018-11-15 13:28:41,144 - root - INFO - 1
+2018-11-15 13:28:41,646 - root - INFO - {'kpi_name': u'S\u1ed1 ch\u1ec9 ti\xeau ho\xe0n th\xe0nh MTCL c\u1ee7a T\u1ed5ng c\xf4ng ty', 'owner_email': u'soldier_dabez@cjs.vn', 'unique_code': 'vh_5FDB', 'target': 10.0, 'result': 10.0}
+2018-11-15 13:28:41,646 - root - INFO - {'kpi_name': u'S\u1ed1 ch\u1ec9 ti\xeau ho\xe0n th\xe0nh MTCL c\u1ee7a T\u1ed5ng c\xf4ng ty', 'owner_email': u'soldier_dabez@cjs.vn', 'unique_code': 'vh_5FDB', 'target': 10.0, 'result': 10.0}
+2018-11-15 13:28:41,647 - root - INFO - systemfa52bf4
+2018-11-15 13:28:41,647 - root - INFO - systemfa52bf4
+2018-11-15 13:28:41,647 - root - INFO - systemfa52bf4@cjs.vn
+2018-11-15 13:28:41,647 - root - INFO - systemfa52bf4@cjs.vn
+2018-11-15 13:28:41,685 - root - INFO - [KPI(293)]
+2018-11-15 13:28:41,685 - root - INFO - [KPI(293)]
+2018-11-15 13:28:41,686 - root - INFO - 1
+2018-11-15 13:28:41,686 - root - INFO - 1
+2018-11-15 13:28:42,171 - root - INFO - {'kpi_name': u'% SLA X\u1eec L\xdd PH\u1ea2N \xc1NH KH\xc1CH H\xc0NG', 'owner_email': u'soldier_dabez@cjs.vn', 'unique_code': 'vh_6FDB', 'target': 10.0, 'result': 10.0}
+2018-11-15 13:28:42,171 - root - INFO - {'kpi_name': u'% SLA X\u1eec L\xdd PH\u1ea2N \xc1NH KH\xc1CH H\xc0NG', 'owner_email': u'soldier_dabez@cjs.vn', 'unique_code': 'vh_6FDB', 'target': 10.0, 'result': 10.0}
+2018-11-15 13:28:42,172 - root - INFO - systemfa52bf4
+2018-11-15 13:28:42,172 - root - INFO - systemfa52bf4
+2018-11-15 13:28:42,172 - root - INFO - systemfa52bf4@cjs.vn
+2018-11-15 13:28:42,172 - root - INFO - systemfa52bf4@cjs.vn
+2018-11-15 13:28:42,195 - root - INFO - {'kpi_name': u'# \u0110I\u1ec2M HO\xc0N TH\xc0NH B\xc1O C\xc1O T\xc0I CH\xcdNH H\xc0NG TH\xc1NG C\u1ee6A TRUNG T\xc2M', 'owner_email': u'integrations_nofear@cjs.vn', 'unique_code': 'ktoan_4FDB', 'target': 10.0, 'result': 10.0}
+2018-11-15 13:28:42,195 - root - INFO - {'kpi_name': u'# \u0110I\u1ec2M HO\xc0N TH\xc0NH B\xc1O C\xc1O T\xc0I CH\xcdNH H\xc0NG TH\xc1NG C\u1ee6A TRUNG T\xc2M', 'owner_email': u'integrations_nofear@cjs.vn', 'unique_code': 'ktoan_4FDB', 'target': 10.0, 'result': 10.0}
+2018-11-15 13:28:42,195 - root - INFO - systemfa52bf4
+2018-11-15 13:28:42,195 - root - INFO - systemfa52bf4
+2018-11-15 13:28:42,196 - root - INFO - systemfa52bf4@cjs.vn
+2018-11-15 13:28:42,196 - root - INFO - systemfa52bf4@cjs.vn
+2018-11-15 13:28:42,233 - root - INFO - [KPI(290)]
+2018-11-15 13:28:42,233 - root - INFO - [KPI(290)]
+2018-11-15 13:28:42,234 - root - INFO - 1
+2018-11-15 13:28:42,234 - root - INFO - 1
+2018-11-15 13:28:42,714 - root - INFO - {'kpi_name': u'S\u1ed1 PAKH ph\xe1t sinh li\xean quan \u0111\u1ebfn m\u1ea1ng l\u01b0\u1edbi', 'owner_email': u'integrations_nofear@cjs.vn', 'unique_code': 'ktoan_5FDB', 'target': 30.0, 'result': 30.0}
+2018-11-15 13:28:42,714 - root - INFO - {'kpi_name': u'S\u1ed1 PAKH ph\xe1t sinh li\xean quan \u0111\u1ebfn m\u1ea1ng l\u01b0\u1edbi', 'owner_email': u'integrations_nofear@cjs.vn', 'unique_code': 'ktoan_5FDB', 'target': 30.0, 'result': 30.0}
+2018-11-15 13:28:42,715 - root - INFO - systemfa52bf4
+2018-11-15 13:28:42,715 - root - INFO - systemfa52bf4
+2018-11-15 13:28:42,715 - root - INFO - systemfa52bf4@cjs.vn
+2018-11-15 13:28:42,715 - root - INFO - systemfa52bf4@cjs.vn
+2018-11-15 13:28:42,750 - root - INFO - [KPI(291)]
+2018-11-15 13:28:42,750 - root - INFO - [KPI(291)]
+2018-11-15 13:28:42,751 - root - INFO - 1
+2018-11-15 13:28:42,751 - root - INFO - 1
+2018-11-15 13:28:43,221 - root - INFO - Report for user: soldier_dabez@cjs.vn
+2018-11-15 13:28:43,221 - root - INFO - Report for user: soldier_dabez@cjs.vn
+2018-11-15 13:28:43,328 - root - INFO - Report for user: integrations_nofear@cjs.vn
+2018-11-15 13:28:43,328 - root - INFO - Report for user: integrations_nofear@cjs.vn
+2018-11-15 13:28:43,462 - root - INFO - Sending email for admin to notify successful automated
+2018-11-15 13:28:43,462 - root - INFO - Sending email for admin to notify successful automated
+2018-11-15 13:28:44,195 - root - INFO - ['elms/static/integration_resource/import_from_excel/downloaded/2018-10-01/NSCL20181001.xlsx']
+2018-11-15 13:28:44,195 - root - INFO - ['elms/static/integration_resource/import_from_excel/downloaded/2018-10-01/NSCL20181001.xlsx']
+2018-11-15 13:28:44,195 - root - INFO - ['elms/static/integration_resource/import_from_excel/downloaded/2018-10-01/NSCL20181001.xlsx']
+2018-11-15 13:28:44,217 - root - INFO - {'kpi_name': 'B4', u'none': None, u'sheet': u'\u0110VH', 'target': 'D4', u'column_result': u'F', 'unique_code': 'vh_4FDB', 'result': 'F4', u'line': 4L, u'column_target': u'D', u'email': u'soldier_dabez@cjs.vn', u'column_name': u'B'}
+2018-11-15 13:28:44,217 - root - INFO - {'kpi_name': 'B4', u'none': None, u'sheet': u'\u0110VH', 'target': 'D4', u'column_result': u'F', 'unique_code': 'vh_4FDB', 'result': 'F4', u'line': 4L, u'column_target': u'D', u'email': u'soldier_dabez@cjs.vn', u'column_name': u'B'}
+2018-11-15 13:28:44,217 - root - INFO - {'kpi_name': 'B4', u'none': None, u'sheet': u'\u0110VH', 'target': 'D4', u'column_result': u'F', 'unique_code': 'vh_4FDB', 'result': 'F4', u'line': 4L, u'column_target': u'D', u'email': u'soldier_dabez@cjs.vn', u'column_name': u'B'}
+2018-11-15 13:28:44,218 - root - ERROR - Not match any files with month: 20
+
+DISABLE_EMAIL_REPORT=False 
+
+FROM_EMAIL=help@cloudjetkpi.com 
+
+REPORT_DIRECTORY=elms/static/integration_resource/import_from_excel/report 
+
+FTP_ROOT_STORE_FILES_TO=elms/static/integration_resource/import_from_excel 
+
+FTP_PASSWORD=None 
+
+FTP_PORT=21 
+
+FTP_STORE_FILES_TO=elms/static/integration_resource/import_from_excel/downloaded 
+
+FTP_IP=None 
+
+DISABLE_FTP=True 
+
+RESULT_LOG=elms/static/integration_resource/import_from_excel/log.txt 
+
+FTP_GET_FILES_FROM=. 
+
+FTP=ftplib.FTP 
+
+EMAIL_NOTFOUND=[] 
+
+here=/home/nguyen/venv/lib/python2.7/site-packages/openpyxl 
+
+LAST_RAISE_ERROR=True 
+
+NUMPY=False 
+
+KPI_NAME_NOTFOUND=[] 
+
+system_user=system7c1f3d4 
+
+PANDAS=False 
+
+TEMPLATE_CONFIGURATIONS={'report_date': 'D9', 'display_name': 'D6', 'company_name': 'B1', 'warning_color': 'f49541', 'employee_code': 'D7', 'owner_email': 'D8', 'kpi_starting_row': 11, 'kpi_field_starting': 2, 'kpi_field_order': ['prefix', 'group_name', 'weight', 'kpi_name', 'owner_email', 'unit', 'measurement', 'operator', 'target', 'score']} 
+
+LXML=False 
+
+FTP_FILE_MATCH=*.* 
+
+CURRENT_KPI_INFO={'kpi_name': u'S\u1ed1 PAKH ph\xe1t sinh li\xean quan \u0111\u1ebfn m\u1ea1ng l\u01b0\u1edbi', 'owner_email': u'integrations_nofear@cjs.vn', 'unique_code': 'ktoan_5FDB', 'target': 30.0, 'result': 30.0} 
+
+TODAY_DIRECTORY=2018-11-15 
+
+src_file=/home/nguyen/venv/lib/python2.7/site-packages/openpyxl/.constants.json 
+
+RESULT_DIRECTORY=elms/static/integration_resource/import_from_excel/result 
+
+CURRENT_REPORTER=integrations_nofear@cjs.vn 
+
+REPORT_TEMPLATE_FILE_PATH=elms/static/integration_resource/import_from_excel/report_template.xlsx 
+
+FTP_USERNAME=None 
+
+DECLARATION_FILE_PATH=elms/static/integration_resource/import_from_excel/mapper.xlsx 
+
+ORGANIZATION_HASH=d037c1f3d47d8ff86fc7a02dd8d71466 
+
+constants={u'__author_email__': u'eric.gazoni@gmail.com', u'__license__': u'MIT/Expat', u'__author__': u'See AUTHORS', u'__url__': u'http://openpyxl.readthedocs.org', u'__version__': u'2.4.0', u'__maintainer_email__': u'openpyxl-users@googlegroups.com'} 
+
+FTP_FILE_PREFIX=NSCL 
+
+
+
+Traceback (most recent call last):
+  File "/home/nguyen/Downloads/cloudjet/performance/management/commands/automation_score.py", line 273, in _wrapped_view_func
+    return view_func(*args, **kwargs)
+  File "/home/nguyen/Downloads/cloudjet/performance/management/commands/automation_score.py", line 543, in detect_target_file
+    raise LookupError("Not match any files with month: {}".format(month))
+LookupError: Not match any files with month: 20
+
+
+
+2018-11-15 13:28:44,218 - root - ERROR - Not match any files with month: 20
+
+DISABLE_EMAIL_REPORT=False 
+
+FROM_EMAIL=help@cloudjetkpi.com 
+
+REPORT_DIRECTORY=elms/static/integration_resource/import_from_excel/report 
+
+FTP_ROOT_STORE_FILES_TO=elms/static/integration_resource/import_from_excel 
+
+FTP_PASSWORD=None 
+
+FTP_PORT=21 
+
+FTP_STORE_FILES_TO=elms/static/integration_resource/import_from_excel/downloaded 
+
+FTP_IP=None 
+
+DISABLE_FTP=True 
+
+RESULT_LOG=elms/static/integration_resource/import_from_excel/log.txt 
+
+FTP_GET_FILES_FROM=. 
+
+FTP=ftplib.FTP 
+
+EMAIL_NOTFOUND=[] 
+
+here=/home/nguyen/venv/lib/python2.7/site-packages/openpyxl 
+
+LAST_RAISE_ERROR=True 
+
+NUMPY=False 
+
+KPI_NAME_NOTFOUND=[] 
+
+system_user=system7c1f3d4 
+
+PANDAS=False 
+
+TEMPLATE_CONFIGURATIONS={'report_date': 'D9', 'display_name': 'D6', 'company_name': 'B1', 'warning_color': 'f49541', 'employee_code': 'D7', 'owner_email': 'D8', 'kpi_starting_row': 11, 'kpi_field_starting': 2, 'kpi_field_order': ['prefix', 'group_name', 'weight', 'kpi_name', 'owner_email', 'unit', 'measurement', 'operator', 'target', 'score']} 
+
+LXML=False 
+
+FTP_FILE_MATCH=*.* 
+
+CURRENT_KPI_INFO={'kpi_name': u'S\u1ed1 PAKH ph\xe1t sinh li\xean quan \u0111\u1ebfn m\u1ea1ng l\u01b0\u1edbi', 'owner_email': u'integrations_nofear@cjs.vn', 'unique_code': 'ktoan_5FDB', 'target': 30.0, 'result': 30.0} 
+
+TODAY_DIRECTORY=2018-11-15 
+
+src_file=/home/nguyen/venv/lib/python2.7/site-packages/openpyxl/.constants.json 
+
+RESULT_DIRECTORY=elms/static/integration_resource/import_from_excel/result 
+
+CURRENT_REPORTER=integrations_nofear@cjs.vn 
+
+REPORT_TEMPLATE_FILE_PATH=elms/static/integration_resource/import_from_excel/report_template.xlsx 
+
+FTP_USERNAME=None 
+
+DECLARATION_FILE_PATH=elms/static/integration_resource/import_from_excel/mapper.xlsx 
+
+ORGANIZATION_HASH=d037c1f3d47d8ff86fc7a02dd8d71466 
+
+constants={u'__author_email__': u'eric.gazoni@gmail.com', u'__license__': u'MIT/Expat', u'__author__': u'See AUTHORS', u'__url__': u'http://openpyxl.readthedocs.org', u'__version__': u'2.4.0', u'__maintainer_email__': u'openpyxl-users@googlegroups.com'} 
+
+FTP_FILE_PREFIX=NSCL 
+
+
+
+Traceback (most recent call last):
+  File "/home/nguyen/Downloads/cloudjet/performance/management/commands/automation_score.py", line 273, in _wrapped_view_func
+    return view_func(*args, **kwargs)
+  File "/home/nguyen/Downloads/cloudjet/performance/management/commands/automation_score.py", line 543, in detect_target_file
+    raise LookupError("Not match any files with month: {}".format(month))
+LookupError: Not match any files with month: 20
+
+
+
+2018-11-15 13:28:44,218 - root - ERROR - Not match any files with month: 20
+
+DISABLE_EMAIL_REPORT=False 
+
+FROM_EMAIL=help@cloudjetkpi.com 
+
+REPORT_DIRECTORY=elms/static/integration_resource/import_from_excel/report 
+
+FTP_ROOT_STORE_FILES_TO=elms/static/integration_resource/import_from_excel 
+
+FTP_PASSWORD=None 
+
+FTP_PORT=21 
+
+FTP_STORE_FILES_TO=elms/static/integration_resource/import_from_excel/downloaded 
+
+FTP_IP=None 
+
+DISABLE_FTP=True 
+
+RESULT_LOG=elms/static/integration_resource/import_from_excel/log.txt 
+
+FTP_GET_FILES_FROM=. 
+
+FTP=ftplib.FTP 
+
+EMAIL_NOTFOUND=[] 
+
+here=/home/nguyen/venv/lib/python2.7/site-packages/openpyxl 
+
+LAST_RAISE_ERROR=True 
+
+NUMPY=False 
+
+KPI_NAME_NOTFOUND=[] 
+
+system_user=system7c1f3d4 
+
+PANDAS=False 
+
+TEMPLATE_CONFIGURATIONS={'report_date': 'D9', 'display_name': 'D6', 'company_name': 'B1', 'warning_color': 'f49541', 'employee_code': 'D7', 'owner_email': 'D8', 'kpi_starting_row': 11, 'kpi_field_starting': 2, 'kpi_field_order': ['prefix', 'group_name', 'weight', 'kpi_name', 'owner_email', 'unit', 'measurement', 'operator', 'target', 'score']} 
+
+LXML=False 
+
+FTP_FILE_MATCH=*.* 
+
+CURRENT_KPI_INFO={'kpi_name': u'S\u1ed1 PAKH ph\xe1t sinh li\xean quan \u0111\u1ebfn m\u1ea1ng l\u01b0\u1edbi', 'owner_email': u'integrations_nofear@cjs.vn', 'unique_code': 'ktoan_5FDB', 'target': 30.0, 'result': 30.0} 
+
+TODAY_DIRECTORY=2018-11-15 
+
+src_file=/home/nguyen/venv/lib/python2.7/site-packages/openpyxl/.constants.json 
+
+RESULT_DIRECTORY=elms/static/integration_resource/import_from_excel/result 
+
+CURRENT_REPORTER=integrations_nofear@cjs.vn 
+
+REPORT_TEMPLATE_FILE_PATH=elms/static/integration_resource/import_from_excel/report_template.xlsx 
+
+FTP_USERNAME=None 
+
+DECLARATION_FILE_PATH=elms/static/integration_resource/import_from_excel/mapper.xlsx 
+
+ORGANIZATION_HASH=d037c1f3d47d8ff86fc7a02dd8d71466 
+
+constants={u'__author_email__': u'eric.gazoni@gmail.com', u'__license__': u'MIT/Expat', u'__author__': u'See AUTHORS', u'__url__': u'http://openpyxl.readthedocs.org', u'__version__': u'2.4.0', u'__maintainer_email__': u'openpyxl-users@googlegroups.com'} 
+
+FTP_FILE_PREFIX=NSCL 
+
+
+
+Traceback (most recent call last):
+  File "/home/nguyen/Downloads/cloudjet/performance/management/commands/automation_score.py", line 273, in _wrapped_view_func
+    return view_func(*args, **kwargs)
+  File "/home/nguyen/Downloads/cloudjet/performance/management/commands/automation_score.py", line 543, in detect_target_file
+    raise LookupError("Not match any files with month: {}".format(month))
+LookupError: Not match any files with month: 20
+
+
+
