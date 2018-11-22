@@ -699,4 +699,7 @@ div[id^='modalCreateFilter'] .left{
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.white-space-pre{
+    white-space: pre;
+}
 /*[END]------------performance/templates/report/report-score-excel.html------------[END]*/

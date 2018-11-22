@@ -353,6 +353,7 @@ var targetPage = new Vue({
     delimiters: ['${', '}$'],
     el: '#target',
     data: {
+        loading:false,
         kpi_select_not_edit :{},
         actorId: COMMON.ActorId,
         nameActor: COMMON.UserName,
@@ -392,6 +393,14 @@ var targetPage = new Vue({
         },
     },
     methods: {
+        check_number: function(e){
+            var _number = String.fromCharCode(e.keyCode);
+            if ('0123456789.'.indexOf(_number) !== -1) {
+                return _number;
+            }
+            e.preventDefault();
+            return false;
+        },
         refreshHistoryData: function () {
             var self = this;
             self.$set(self, 'storage_user', self.getHistoryStorageByEmail(this.emailActor))
@@ -420,8 +429,11 @@ var targetPage = new Vue({
             return result;
 
         },
-        saveKpiSelected: function (kpi_select) {
+        saveKpiSelected: function (kpi_select,class_field) {
             this.kpi_select_not_edit = JSON.parse(JSON.stringify(kpi_select))
+            setTimeout(function(){
+                $('.' + class_field + kpi_select.row_id+":last")[0].children[0].focus();
+            },200);
         },
         checkUserExistedInSearchHistory: function (userID, searchHistoryArray) {
             var that = this;
@@ -790,15 +802,20 @@ var targetPage = new Vue({
                 }
             })
         },
-        cancel: function (kpi_select) {
+        hiddenPopover: function(kpi_select){
             kpi_select = Object.assign(kpi_select, this.kpi_select_not_edit)
+        },
+        cancel: function (kpi_select) {
+            var self = this
             $('.el-popover').hide()
+            self.hiddenPopover(kpi_select)
         },
         getListKpi: function () { // sap xep kpi theo category
             var self = this
+            self.loading = true
             cloudjetRequest.ajax({
                 type: 'GET',
-                url: '/api/v2/user/' + this.currentUserId + '/kpis/',
+                url: '/api/v2/user/' + this.currentUserId + '/kpis/?include_childs=1',
                 success: function (result) {
 
                     self.kpiList = result.map(function(elmParent){
@@ -851,10 +868,11 @@ var targetPage = new Vue({
                         self.tableData.push.apply(self.tableData, self.tableData.concat.apply([], self.groupMore));
                     }
                     // console.log(self.tableData)
+                    self.loading = false
                 },
 
                 error: function (a, b, c) {
-
+                    self.loading = false
                 }
 
             })
