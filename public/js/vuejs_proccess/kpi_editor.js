@@ -3226,7 +3226,7 @@ var v = new Vue({
                 url: `/api/v2/kpi/${kpi.id}/update-quarter-target/`,
                 data: JSON.stringify(kpi),
                 success: function (data) {
-                    that.kpi_list[kpi.id] = Object.assign(that.kpi_list[kpi.id], data['data']);
+                    that.kpi_list[kpi.id] = Object.assign(that.kpi_list[kpi.id], data);
 
                     for (i = 1; i <= 4; i++) {
                         $('#qtip' + kpi.id + '_' + i).qtip({
@@ -3254,7 +3254,7 @@ var v = new Vue({
                 url: `/api/v2/kpi/${kpi.id}/update-score-calculation-type/`,
                 data: JSON.stringify(kpi),
                 success: function (data) {
-                    that.kpi_list[kpi.id] = Object.assign(that.kpi_list[kpi.id], data['data']);
+                    that.kpi_list[kpi.id] = Object.assign(that.kpi_list[kpi.id], data);
                     that.get_current_employee_performance();
 
                     success_requestcenter(gettext("Update successful!"));
@@ -3440,7 +3440,7 @@ var v = new Vue({
                             //$('.kpiprogressreview-wrapper').tooltip();
                             that.$set('kpi_list[' + kpi.id + '].latest_score', data.score)
                             that.$set('kpi_list[' + kpi.id + '].real', data.real)
-                            that.$set(that.kpi_list[kpi.id], 'target', data.kpi.target)
+                            that.kpi_list[kpi.id].target = data.kpi.target;
 
                             that.kpi_list[kpi.id].latest_score = data.score; //JSON.parse(data);
                             that.kpi_list[kpi.id].real = data.real; //JSON.parse(data);
