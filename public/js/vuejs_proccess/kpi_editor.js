@@ -3221,12 +3221,14 @@ var v = new Vue({
         },
         update_quarter_target: function (kpi, callback = null) {
             var that = this;
+            kpi.command = 'update_quarter_target';
             cloudjetRequest.ajax({
                 type: "POST",
-                url: `/api/v2/kpi/${kpi.id}/update-quarter-target/`,
+                url: COMMON.LinkKPISevices,
                 data: JSON.stringify(kpi),
                 success: function (data) {
                     that.kpi_list[kpi.id] = Object.assign(that.kpi_list[kpi.id], data);
+                    that.get_current_employee_performance();
 
                     for (i = 1; i <= 4; i++) {
                         $('#qtip' + kpi.id + '_' + i).qtip({
@@ -3247,24 +3249,7 @@ var v = new Vue({
                 callback();
             }
         },
-        update_score_calculation_type: function (kpi, callback = null) {
-            var that = this;
-            cloudjetRequest.ajax({
-                type: "POST",
-                url: `/api/v2/kpi/${kpi.id}/update-score-calculation-type/`,
-                data: JSON.stringify(kpi),
-                success: function (data) {
-                    that.kpi_list[kpi.id] = Object.assign(that.kpi_list[kpi.id], data);
-                    that.get_current_employee_performance();
 
-                    success_requestcenter(gettext("Update successful!"));
-                },
-                contentType: "application/json"
-            });
-            if (typeof callback === 'function') {
-                callback();
-            }
-        },
         set_month_target_from_last_quarter_three_months_result: function (kpi_id, user_id, kpi_unique_key, last_quarter_id) {
             // Khang build this function
             //       Pace.start(); // Monitor ajax
@@ -3440,7 +3425,6 @@ var v = new Vue({
                             //$('.kpiprogressreview-wrapper').tooltip();
                             that.$set('kpi_list[' + kpi.id + '].latest_score', data.score)
                             that.$set('kpi_list[' + kpi.id + '].real', data.real)
-                            that.kpi_list[kpi.id].target = data.kpi.target;
 
                             that.kpi_list[kpi.id].latest_score = data.score; //JSON.parse(data);
                             that.kpi_list[kpi.id].real = data.real; //JSON.parse(data);
@@ -4128,7 +4112,7 @@ var v = new Vue({
                     that.update_month_target(kpi, (!kpi.enable_edit && !that.organization.allow_edit_monthly_target));
                     break;
                 case 'score_calculation':
-                    that.update_score_calculation_type(kpi);
+                    that.update_quarter_target(kpi);
                     break;
                 case 'operator':
                     that.update_score(kpi);
@@ -4218,10 +4202,6 @@ var v = new Vue({
         },
         update_quarter_target_and_ready: function (kpi, controller_prefix, ready) {
             this.update_quarter_target(kpi);
-            this.kpi_ready(kpi.id, controller_prefix, ready);
-        },
-        update_score_calculation_type_and_ready: function (kpi, controller_prefix, ready) {
-            this.update_score_calculation_type(kpi);
             this.kpi_ready(kpi.id, controller_prefix, ready);
         },
         init_data_for_kpilib: function(){
