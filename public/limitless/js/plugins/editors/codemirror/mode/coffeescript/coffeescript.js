@@ -29,7 +29,7 @@ CodeMirror.defineMode("coffeescript", function(conf) {
                                   "instanceof", "typeof"]);
   var indentKeywords = ["for", "while", "loop", "if", "unless", "else",
                         "switch", "try", "catch", "finally", "class"];
-  var commonKeywords = ["break", "by", "continue", "", "delete",
+  var commonKeywords = ["break", "by", "continue", "debugger", "delete",
                         "do", "in", "of", "new", "return", "then",
                         "this", "throw", "when", "until"];
 
