@@ -811,23 +811,6 @@ module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE
 
 /***/ }),
 
-/***/ "0221":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/list_emp_and_score/main.vue?vue&type=template&id=5ac768c4&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"modal fade",attrs:{"id":"report-modal","tabindex":"-1","role":"dialog","aria-labelledby":"myModalLabel"}},[_c('div',{staticClass:"modal-dialog",attrs:{"role":"document"}},[_c('div',{staticClass:"modal-content"},[_vm._m(0),_c('div',{staticClass:"modal-body"},[_c('form_view_list_quarter',{attrs:{"quarters":_vm.quarters,"currentQuarter":_vm.currentQuarter,"userActor":_vm.userViewed}})],1),_c('div',{staticClass:"modal-footer"},[_c('submit_form')],1)])])])}
-var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"modal-header"},[_c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-label":"Close"}},[_c('span',{attrs:{"aria-hidden":"true"}},[_vm._v("×")])]),_c('h4',{staticClass:"modal-title",attrs:{"id":"myModalLabel"}},[_vm._v("Danh sách nhân viên & Điểm")])])}]
-
-
-// CONCATENATED MODULE: ./src/templates/components/list_emp_and_score/main.vue?vue&type=template&id=5ac768c4&scoped=true&
-/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
-/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
-
-
-/***/ }),
-
 /***/ "026b":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -836,7 +819,7 @@ var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _
 
 var cov_1b6earyxpk = function () {
   var path = "/home/nguyen/Downloads/cloudjet/cloudjet_ui/src/registry/core/registry_components.js",
-      hash = "c93b34f1e11d35d77967acf483fb821234bb3334",
+      hash = "34cc474e959e7bf69947b9bec8a3a607bbba20fc",
       Function = function () {}.constructor,
       global = new Function('return this')(),
       gcv = "__coverage__",
@@ -859,37 +842,17 @@ var cov_1b6earyxpk = function () {
           column: 0
         },
         end: {
-          line: 48,
-          column: 45
+          line: 50,
+          column: 2
         }
       },
       "2": {
         start: {
           line: 49,
-          column: 0
-        },
-        end: {
-          line: 52,
-          column: 2
-        }
-      },
-      "3": {
-        start: {
-          line: 50,
           column: 4
         },
         end: {
-          line: 50,
-          column: 33
-        }
-      },
-      "4": {
-        start: {
-          line: 51,
-          column: 4
-        },
-        end: {
-          line: 51,
+          line: 49,
           column: 40
         }
       }
@@ -899,34 +862,32 @@ var cov_1b6earyxpk = function () {
         name: "(anonymous_0)",
         decl: {
           start: {
-            line: 49,
+            line: 48,
             column: 32
           },
           end: {
-            line: 49,
+            line: 48,
             column: 33
           }
         },
         loc: {
           start: {
-            line: 49,
+            line: 48,
             column: 40
           },
           end: {
-            line: 52,
+            line: 50,
             column: 1
           }
         },
-        line: 49
+        line: 48
       }
     },
     branchMap: {},
     s: {
       "0": 0,
       "1": 0,
-      "2": 0,
-      "3": 0,
-      "4": 0
+      "2": 0
     },
     f: {
       "0": 0
@@ -1005,13 +966,9 @@ var Components = (cov_1b6earyxpk.s[0]++, {
 
 });
 cov_1b6earyxpk.s[1]++;
-console.warn('Automatic register component');
-cov_1b6earyxpk.s[2]++;
 Object.keys(Components).forEach(function (name) {
   cov_1b6earyxpk.f[0]++;
-  cov_1b6earyxpk.s[3]++;
-  console.warn('name: ' + name);
-  cov_1b6earyxpk.s[4]++;
+  cov_1b6earyxpk.s[2]++;
 
   _vue.default.component(name, Components[name]);
 });
@@ -1108,6 +1065,23 @@ module.exports = function (TYPE, $create) {
 
 /***/ }),
 
+/***/ "0b05":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/cloudjet_search_user_textbox/components/minor_components/search_user_container_show_default/search_user_container_show_default.vue?vue&type=template&id=11217e50&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"search-user-container"},[_c('search_user_textbox',{attrs:{"onFocus":_vm.textboxOnFocus,"onBlur":_vm.textBoxOnBlur,"onSearch":_vm.textBoxOnSearch,"onEmpty":_vm.textBoxOnEmpty,"placeHolder":_vm.textBoxPlaceHolder}}),(_vm.isShowListSearchResult)?_c('div',{staticClass:"search-user-container__list-wrapper"},[(!_vm.isShowSearchMode)?_c('div',{staticClass:"search-user-container__default-mode"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.historySearchUsers.length>0),expression:"historySearchUsers.length>0"}],staticClass:"search-user-container__history-list-wrapper"},[_c('search_user_result_list',{staticClass:"search-user-container__list search-user-container__history-list",attrs:{"header":_vm._f("transle")('Lịch sử'),"users":_vm.historySearchUsers},on:{"click":_vm.listItemOnClick}}),_c('button',{staticClass:"search-user-container__delete-history-btn",on:{"mousedown":_vm.onDeleteHistory}},[_vm._v("\n                  Xóa lịch sử\n              ")])],1),_c('search_user_result_list',{directives:[{name:"show",rawName:"v-show",value:(_vm.transformBossUser.length>0),expression:"transformBossUser.length>0"}],staticClass:"search-user-container__list",attrs:{"header":_vm._f("transle")('Cấp trên'),"users":_vm.transformBossUser},on:{"click":_vm.listItemOnClick}}),_c('search_user_result_list',{directives:[{name:"show",rawName:"v-show",value:(_vm.subordinateUsers.length>0),expression:"subordinateUsers.length>0"}],staticClass:"search-user-container__list",attrs:{"header":_vm._f("transle")('Cấp dưới'),"users":_vm.subordinateUsers},on:{"click":_vm.listItemOnClick}})],1):_c('div',{staticClass:"search-user-container__search-result-wrapper"},[_c('search_user_result_list',{attrs:{"users":_vm.searchResultUsers},on:{"click":_vm.listItemSearchResultOnClick}}),(_vm.searchResultUsers.length===0)?_c('div',{staticClass:"search-user-container__no-result-found"},[_vm._v("\n              "+_vm._s(_vm._f("translate")('Không tìm thấy kết quả'))+"\n          ")]):_vm._e()],1)]):_vm._e()],1)}
+var staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/templates/components/cloudjet_search_user_textbox/components/minor_components/search_user_container_show_default/search_user_container_show_default.vue?vue&type=template&id=11217e50&scoped=true&
+/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
+/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
+
+
+/***/ }),
+
 /***/ "0b17":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1116,7 +1090,7 @@ module.exports = function (TYPE, $create) {
 
 var cov_2km9mdz8pk = function () {
   var path = "/home/nguyen/Downloads/cloudjet/cloudjet_ui/src/templates/components/cloudjet_search_user_textbox/store/mutations.js",
-      hash = "47b295825160595c39170e44a2974ffda2972b93",
+      hash = "15aef670852fbe35a759f9d4c72216bde9992d9e",
       Function = function () {}.constructor,
       global = new Function('return this')(),
       gcv = "__coverage__",
@@ -1215,121 +1189,111 @@ var cov_2km9mdz8pk = function () {
       },
       "9": {
         start: {
-          line: 19,
+          line: 20,
           column: 8
         },
         end: {
-          line: 19,
-          column: 38
+          line: 36,
+          column: 9
         }
       },
       "10": {
         start: {
-          line: 24,
-          column: 8
+          line: 22,
+          column: 36
         },
         end: {
-          line: 59,
-          column: 9
+          line: 24,
+          column: 14
         }
       },
       "11": {
         start: {
-          line: 45,
-          column: 36
+          line: 23,
+          column: 16
         },
         end: {
-          line: 47,
-          column: 14
+          line: 23,
+          column: 49
         }
       },
       "12": {
         start: {
-          line: 46,
-          column: 16
+          line: 27,
+          column: 12
         },
         end: {
-          line: 46,
-          column: 49
+          line: 30,
+          column: 13
         }
       },
       "13": {
         start: {
-          line: 50,
-          column: 12
+          line: 29,
+          column: 16
         },
         end: {
-          line: 53,
-          column: 13
+          line: 29,
+          column: 66
         }
       },
       "14": {
         start: {
-          line: 52,
-          column: 16
+          line: 33,
+          column: 12
         },
         end: {
-          line: 52,
-          column: 66
+          line: 35,
+          column: 13
         }
       },
       "15": {
         start: {
-          line: 56,
-          column: 12
+          line: 34,
+          column: 16
         },
         end: {
-          line: 58,
-          column: 13
+          line: 34,
+          column: 59
         }
       },
       "16": {
         start: {
-          line: 57,
-          column: 16
+          line: 39,
+          column: 8
         },
         end: {
-          line: 57,
-          column: 59
+          line: 39,
+          column: 46
         }
       },
       "17": {
         start: {
-          line: 62,
+          line: 43,
           column: 8
         },
         end: {
-          line: 62,
-          column: 46
+          line: 43,
+          column: 40
         }
       },
       "18": {
         start: {
-          line: 66,
+          line: 47,
           column: 8
         },
         end: {
-          line: 66,
-          column: 40
+          line: 47,
+          column: 29
         }
       },
       "19": {
         start: {
-          line: 70,
+          line: 51,
           column: 8
         },
         end: {
-          line: 70,
-          column: 29
-        }
-      },
-      "20": {
-        start: {
-          line: 74,
-          column: 8
-        },
-        end: {
-          line: 74,
+          line: 51,
           column: 37
         }
       }
@@ -1339,126 +1303,126 @@ var cov_2km9mdz8pk = function () {
         name: "(anonymous_0)",
         decl: {
           start: {
-            line: 45,
+            line: 22,
             column: 71
           },
           end: {
-            line: 45,
+            line: 22,
             column: 72
           }
         },
         loc: {
           start: {
-            line: 45,
+            line: 22,
             column: 86
           },
           end: {
-            line: 47,
+            line: 24,
             column: 13
           }
         },
-        line: 45
+        line: 22
       }
     },
     branchMap: {
       "0": {
         loc: {
           start: {
-            line: 24,
+            line: 20,
             column: 8
           },
           end: {
-            line: 59,
+            line: 36,
             column: 9
           }
         },
         type: "if",
         locations: [{
           start: {
-            line: 24,
+            line: 20,
             column: 8
           },
           end: {
-            line: 59,
+            line: 36,
             column: 9
           }
         }, {
           start: {
-            line: 24,
+            line: 20,
             column: 8
           },
           end: {
-            line: 59,
+            line: 36,
             column: 9
           }
         }],
-        line: 24
+        line: 20
       },
       "1": {
         loc: {
           start: {
-            line: 50,
+            line: 27,
             column: 12
           },
           end: {
-            line: 53,
+            line: 30,
             column: 13
           }
         },
         type: "if",
         locations: [{
           start: {
-            line: 50,
+            line: 27,
             column: 12
           },
           end: {
-            line: 53,
+            line: 30,
             column: 13
           }
         }, {
           start: {
-            line: 50,
+            line: 27,
             column: 12
           },
           end: {
-            line: 53,
+            line: 30,
             column: 13
           }
         }],
-        line: 50
+        line: 27
       },
       "2": {
         loc: {
           start: {
-            line: 56,
+            line: 33,
             column: 12
           },
           end: {
-            line: 58,
+            line: 35,
             column: 13
           }
         },
         type: "if",
         locations: [{
           start: {
-            line: 56,
+            line: 33,
             column: 12
           },
           end: {
-            line: 58,
+            line: 35,
             column: 13
           }
         }, {
           start: {
-            line: 56,
+            line: 33,
             column: 12
           },
           end: {
-            line: 58,
+            line: 35,
             column: 13
           }
         }],
-        line: 56
+        line: 33
       }
     },
     s: {
@@ -1481,8 +1445,7 @@ var cov_2km9mdz8pk = function () {
       "16": 0,
       "17": 0,
       "18": 0,
-      "19": 0,
-      "20": 0
+      "19": 0
     },
     f: {
       "0": 0
@@ -1538,43 +1501,24 @@ var _default = (_setSubordinateUsersM = {}, (0, _defineProperty2.default)(_setSu
 }), (0, _defineProperty2.default)(_setSubordinateUsersM, setSearchResultUsersMutation, function (state, user) {
   cov_2km9mdz8pk.s[8]++;
   state.searchResultUsers = user;
-}), (0, _defineProperty2.default)(_setSubordinateUsersM, removeOldestHistoryUserMutation, function (state) {
-  cov_2km9mdz8pk.s[9]++;
-  state.historySearchUsers.pop();
 }), (0, _defineProperty2.default)(_setSubordinateUsersM, addHistorySearchUserMutation, function (state, user) {
-  cov_2km9mdz8pk.s[10]++;
+  cov_2km9mdz8pk.s[9]++;
 
   // Not have to check if array is empty
   if (state.historySearchUsers.length > 0) {
     cov_2km9mdz8pk.b[0][0]++;
-    // /**
-    //  * Mutation must add withou dupplicate
-    //  */
-    // let isFindDupplicate = false
-    // // check if find dupplicate
-    // for (let compareUser of state.historySearchUsers) {
-    //     /* istanbul ignore else  */
-    //     if (compareUser.id === user.id) {
-    //         isFindDupplicate = true
-    //         break
-    //     }
-    // }
-    // // if not found then add
-    // if (!isFindDupplicate) {
-    //     state.historySearchUsers.unshift(user)
-    // }
-    // Find index of dupplicate
-    var dupplicateIndex = (cov_2km9mdz8pk.s[11]++, state.historySearchUsers.findIndex(function (compareUser) {
+    // If found dupplicate
+    var dupplicateIndex = (cov_2km9mdz8pk.s[10]++, state.historySearchUsers.findIndex(function (compareUser) {
       cov_2km9mdz8pk.f[0]++;
-      cov_2km9mdz8pk.s[12]++;
+      cov_2km9mdz8pk.s[11]++;
       return compareUser.id === user.id;
     })); // Remove dupplicate
 
-    cov_2km9mdz8pk.s[13]++;
+    cov_2km9mdz8pk.s[12]++;
 
     if (dupplicateIndex !== -1) {
       cov_2km9mdz8pk.b[1][0]++;
-      cov_2km9mdz8pk.s[14]++;
+      cov_2km9mdz8pk.s[13]++;
       // found
       // If exist remove element in that position
       state.historySearchUsers.splice(dupplicateIndex, 1);
@@ -1583,30 +1527,30 @@ var _default = (_setSubordinateUsersM = {}, (0, _defineProperty2.default)(_setSu
     } // Remove if element is still 3
 
 
-    cov_2km9mdz8pk.s[15]++;
+    cov_2km9mdz8pk.s[14]++;
 
     if (state.historySearchUsers.length === 3) {
       cov_2km9mdz8pk.b[2][0]++;
-      cov_2km9mdz8pk.s[16]++;
+      cov_2km9mdz8pk.s[15]++;
       this.removeOldestHistoryUserMutation(state);
     } else {
       cov_2km9mdz8pk.b[2][1]++;
     }
   } else {
     cov_2km9mdz8pk.b[0][1]++;
-  } // It's away push element to the top no matter what happend Push element to the top
+  } // It's push element to the top
 
 
-  cov_2km9mdz8pk.s[17]++;
+  cov_2km9mdz8pk.s[16]++;
   state.historySearchUsers.unshift(user);
 }), (0, _defineProperty2.default)(_setSubordinateUsersM, setHistoryUserMutation, function (state, users) {
-  cov_2km9mdz8pk.s[18]++;
+  cov_2km9mdz8pk.s[17]++;
   state.historySearchUsers = users;
 }), (0, _defineProperty2.default)(_setSubordinateUsersM, setBossUserMutation, function (state, user) {
-  cov_2km9mdz8pk.s[19]++;
+  cov_2km9mdz8pk.s[18]++;
   state.bossUser = user;
 }), (0, _defineProperty2.default)(_setSubordinateUsersM, removeHistoryUserMutation, function (state) {
-  cov_2km9mdz8pk.s[20]++;
+  cov_2km9mdz8pk.s[19]++;
   state.historySearchUsers = [];
 }), _setSubordinateUsersM);
 
@@ -1677,7 +1621,7 @@ module.exports = function () {
 
 var cov_vjs9vbowm = function () {
   var path = "/home/nguyen/Downloads/cloudjet/cloudjet_ui/src/registry/core/registry_vuex.js",
-      hash = "b358e1e82ca0a9e53ab5df4d3a293e35723b43cb",
+      hash = "9d0815c6b222472ce8777cb61375e205d79f1caa",
       Function = function () {}.constructor,
       global = new Function('return this')(),
       gcv = "__coverage__",
@@ -1700,7 +1644,7 @@ var cov_vjs9vbowm = function () {
           column: 15
         },
         end: {
-          line: 66,
+          line: 69,
           column: 2
         }
       },
@@ -1786,131 +1730,161 @@ var cov_vjs9vbowm = function () {
       },
       "10": {
         start: {
-          line: 37,
-          column: 29
+          line: 35,
+          column: 31
         },
         end: {
-          line: 37,
-          column: 71
+          line: 35,
+          column: 53
         }
       },
       "11": {
         start: {
-          line: 38,
+          line: 36,
           column: 12
         },
         end: {
-          line: 38,
-          column: 56
+          line: 36,
+          column: 68
         }
       },
       "12": {
         start: {
-          line: 41,
+          line: 39,
           column: 29
         },
         end: {
-          line: 41,
-          column: 86
+          line: 39,
+          column: 71
         }
       },
       "13": {
         start: {
-          line: 42,
+          line: 40,
           column: 12
         },
         end: {
-          line: 42,
-          column: 58
+          line: 40,
+          column: 56
         }
       },
       "14": {
         start: {
-          line: 45,
-          column: 29
+          line: 43,
+          column: 12
         },
         end: {
-          line: 45,
-          column: 63
+          line: 43,
+          column: 50
         }
       },
       "15": {
         start: {
-          line: 46,
-          column: 12
+          line: 44,
+          column: 29
         },
         end: {
-          line: 46,
-          column: 59
+          line: 44,
+          column: 86
         }
       },
       "16": {
         start: {
-          line: 49,
+          line: 45,
           column: 12
         },
         end: {
-          line: 49,
-          column: 81
+          line: 45,
+          column: 58
         }
       },
       "17": {
         start: {
-          line: 54,
-          column: 12
+          line: 48,
+          column: 29
         },
         end: {
-          line: 54,
-          column: 47
+          line: 48,
+          column: 63
         }
       },
       "18": {
         start: {
-          line: 57,
+          line: 49,
           column: 12
         },
         end: {
-          line: 57,
-          column: 48
+          line: 49,
+          column: 59
         }
       },
       "19": {
         start: {
-          line: 60,
+          line: 52,
           column: 12
         },
         end: {
-          line: 60,
-          column: 50
+          line: 52,
+          column: 81
         }
       },
       "20": {
         start: {
+          line: 57,
+          column: 12
+        },
+        end: {
+          line: 57,
+          column: 47
+        }
+      },
+      "21": {
+        start: {
+          line: 60,
+          column: 12
+        },
+        end: {
+          line: 60,
+          column: 48
+        }
+      },
+      "22": {
+        start: {
           line: 63,
           column: 12
         },
         end: {
           line: 63,
+          column: 50
+        }
+      },
+      "23": {
+        start: {
+          line: 66,
+          column: 12
+        },
+        end: {
+          line: 66,
           column: 59
         }
       },
-      "21": {
+      "24": {
         start: {
-          line: 68,
+          line: 71,
           column: 0
         },
         end: {
-          line: 68,
+          line: 71,
           column: 29
         }
       },
-      "22": {
+      "25": {
         start: {
-          line: 70,
+          line: 73,
           column: 0
         },
         end: {
-          line: 70,
+          line: 73,
           column: 22
         }
       }
@@ -2030,7 +2004,7 @@ var cov_vjs9vbowm = function () {
             column: 43
           },
           end: {
-            line: 35,
+            line: 37,
             column: 9
           }
         },
@@ -2040,138 +2014,114 @@ var cov_vjs9vbowm = function () {
         name: "(anonymous_5)",
         decl: {
           start: {
-            line: 36,
+            line: 38,
             column: 26
           },
           end: {
-            line: 36,
+            line: 38,
             column: 27
           }
         },
         loc: {
           start: {
-            line: 36,
+            line: 38,
             column: 49
           },
           end: {
-            line: 39,
+            line: 41,
             column: 9
           }
         },
-        line: 36
+        line: 38
       },
       "6": {
         name: "(anonymous_6)",
         decl: {
           start: {
-            line: 40,
+            line: 42,
             column: 27
           },
           end: {
-            line: 40,
+            line: 42,
             column: 28
           }
         },
         loc: {
           start: {
-            line: 40,
+            line: 42,
             column: 64
           },
           end: {
-            line: 43,
+            line: 46,
             column: 9
           }
         },
-        line: 40
+        line: 42
       },
       "7": {
         name: "(anonymous_7)",
         decl: {
           start: {
-            line: 44,
+            line: 47,
             column: 29
           },
           end: {
-            line: 44,
+            line: 47,
             column: 30
           }
         },
         loc: {
           start: {
-            line: 44,
-            column: 52
-          },
-          end: {
             line: 47,
-            column: 9
-          }
-        },
-        line: 44
-      },
-      "8": {
-        name: "(anonymous_8)",
-        decl: {
-          start: {
-            line: 48,
-            column: 38
-          },
-          end: {
-            line: 48,
-            column: 39
-          }
-        },
-        loc: {
-          start: {
-            line: 48,
-            column: 77
+            column: 52
           },
           end: {
             line: 50,
             column: 9
           }
         },
-        line: 48
+        line: 47
+      },
+      "8": {
+        name: "(anonymous_8)",
+        decl: {
+          start: {
+            line: 51,
+            column: 38
+          },
+          end: {
+            line: 51,
+            column: 39
+          }
+        },
+        loc: {
+          start: {
+            line: 51,
+            column: 77
+          },
+          end: {
+            line: 53,
+            column: 9
+          }
+        },
+        line: 51
       },
       "9": {
         name: "(anonymous_9)",
         decl: {
           start: {
-            line: 53,
+            line: 56,
             column: 19
           },
           end: {
-            line: 53,
+            line: 56,
             column: 20
           }
         },
         loc: {
           start: {
-            line: 53,
+            line: 56,
             column: 34
-          },
-          end: {
-            line: 55,
-            column: 9
-          }
-        },
-        line: 53
-      },
-      "10": {
-        name: "(anonymous_10)",
-        decl: {
-          start: {
-            line: 56,
-            column: 20
-          },
-          end: {
-            line: 56,
-            column: 21
-          }
-        },
-        loc: {
-          start: {
-            line: 56,
-            column: 35
           },
           end: {
             line: 58,
@@ -2180,22 +2130,22 @@ var cov_vjs9vbowm = function () {
         },
         line: 56
       },
-      "11": {
-        name: "(anonymous_11)",
+      "10": {
+        name: "(anonymous_10)",
         decl: {
           start: {
             line: 59,
-            column: 22
+            column: 20
           },
           end: {
             line: 59,
-            column: 23
+            column: 21
           }
         },
         loc: {
           start: {
             line: 59,
-            column: 37
+            column: 35
           },
           end: {
             line: 61,
@@ -2204,22 +2154,22 @@ var cov_vjs9vbowm = function () {
         },
         line: 59
       },
-      "12": {
-        name: "(anonymous_12)",
+      "11": {
+        name: "(anonymous_11)",
         decl: {
           start: {
             line: 62,
-            column: 31
+            column: 22
           },
           end: {
             line: 62,
-            column: 32
+            column: 23
           }
         },
         loc: {
           start: {
             line: 62,
-            column: 46
+            column: 37
           },
           end: {
             line: 64,
@@ -2227,6 +2177,30 @@ var cov_vjs9vbowm = function () {
           }
         },
         line: 62
+      },
+      "12": {
+        name: "(anonymous_12)",
+        decl: {
+          start: {
+            line: 65,
+            column: 31
+          },
+          end: {
+            line: 65,
+            column: 32
+          }
+        },
+        loc: {
+          start: {
+            line: 65,
+            column: 46
+          },
+          end: {
+            line: 67,
+            column: 9
+          }
+        },
+        line: 65
       }
     },
     branchMap: {
@@ -2320,7 +2294,10 @@ var cov_vjs9vbowm = function () {
       "19": 0,
       "20": 0,
       "21": 0,
-      "22": 0
+      "22": 0,
+      "23": 0,
+      "24": 0,
+      "25": 0
     },
     f: {
       "0": 0,
@@ -2413,6 +2390,7 @@ var vStore = (cov_vjs9vbowm.s[1]++, new _vuex.default.Store({
       var _initialize = (0, _asyncToGenerator2.default)(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(context) {
+        var userViewedID;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2458,6 +2436,12 @@ var vStore = (cov_vjs9vbowm.s[1]++, new _vuex.default.Store({
                 cov_vjs9vbowm.b[1][1]++;
 
               case 19:
+                userViewedID = (cov_vjs9vbowm.s[10]++, this._vm.$userViewedID);
+                cov_vjs9vbowm.s[11]++;
+                _context.next = 23;
+                return context.dispatch('userViewedActions', userViewedID);
+
+              case 23:
               case "end":
                 return _context.stop();
             }
@@ -2479,13 +2463,13 @@ var vStore = (cov_vjs9vbowm.s[1]++, new _vuex.default.Store({
             switch (_context2.prev = _context2.next) {
               case 0:
                 cov_vjs9vbowm.f[5]++;
-                cov_vjs9vbowm.s[10]++;
+                cov_vjs9vbowm.s[12]++;
                 _context2.next = 4;
                 return (0, _profile.default)().getInitialProfile();
 
               case 4:
                 response = _context2.sent;
-                cov_vjs9vbowm.s[11]++;
+                cov_vjs9vbowm.s[13]++;
                 context.commit('userActorMutation', response);
 
               case 7:
@@ -2510,16 +2494,18 @@ var vStore = (cov_vjs9vbowm.s[1]++, new _vuex.default.Store({
             switch (_context3.prev = _context3.next) {
               case 0:
                 cov_vjs9vbowm.f[6]++;
-                cov_vjs9vbowm.s[12]++;
-                _context3.next = 4;
+                cov_vjs9vbowm.s[14]++;
+                console.log("abcxyz: " + idUserViewed);
+                cov_vjs9vbowm.s[15]++;
+                _context3.next = 6;
                 return (0, _profile.default)().getProfileUserViewed(idUserViewed);
 
-              case 4:
+              case 6:
                 response = _context3.sent;
-                cov_vjs9vbowm.s[13]++;
+                cov_vjs9vbowm.s[16]++;
                 context.commit('userViewedMutation', response);
 
-              case 7:
+              case 9:
               case "end":
                 return _context3.stop();
             }
@@ -2541,13 +2527,13 @@ var vStore = (cov_vjs9vbowm.s[1]++, new _vuex.default.Store({
             switch (_context4.prev = _context4.next) {
               case 0:
                 cov_vjs9vbowm.f[7]++;
-                cov_vjs9vbowm.s[14]++;
+                cov_vjs9vbowm.s[17]++;
                 _context4.next = 4;
                 return (0, _organization.default)().getInitialOrg();
 
               case 4:
                 response = _context4.sent;
-                cov_vjs9vbowm.s[15]++;
+                cov_vjs9vbowm.s[18]++;
                 context.commit('organizationMutation', response);
 
               case 7:
@@ -2564,36 +2550,36 @@ var vStore = (cov_vjs9vbowm.s[1]++, new _vuex.default.Store({
     }(),
     userActorSubordinatesActions: function userActorSubordinatesActions(context, userActorSubordinates) {
       cov_vjs9vbowm.f[8]++;
-      cov_vjs9vbowm.s[16]++;
+      cov_vjs9vbowm.s[19]++;
       context.commit('userActorSubordinatesMutation', userActorSubordinates);
     }
   },
   getters: {
     userActor: function userActor(state) {
       cov_vjs9vbowm.f[9]++;
-      cov_vjs9vbowm.s[17]++;
+      cov_vjs9vbowm.s[20]++;
       return (0, _object.cloneObject)(state.userActor);
     },
     userViewed: function userViewed(state) {
       cov_vjs9vbowm.f[10]++;
-      cov_vjs9vbowm.s[18]++;
+      cov_vjs9vbowm.s[21]++;
       return (0, _object.cloneObject)(state.userViewed);
     },
     organization: function organization(state) {
       cov_vjs9vbowm.f[11]++;
-      cov_vjs9vbowm.s[19]++;
+      cov_vjs9vbowm.s[22]++;
       return (0, _object.cloneObject)(state.organization);
     },
     userActorSubordinates: function userActorSubordinates(state) {
       cov_vjs9vbowm.f[12]++;
-      cov_vjs9vbowm.s[20]++;
+      cov_vjs9vbowm.s[23]++;
       return (0, _object.cloneObject)(state.userActorSubordinates);
     }
   }
 }));
-cov_vjs9vbowm.s[21]++;
+cov_vjs9vbowm.s[24]++;
 _vue.default.prototype.$store = vStore;
-cov_vjs9vbowm.s[22]++;
+cov_vjs9vbowm.s[25]++;
 window.vStore = vStore;
 var _default = vStore; // End setting up vuex store
 
@@ -14090,6 +14076,23 @@ __webpack_require__("30f1")(String, 'String', function (iterated) {
 
 /***/ }),
 
+/***/ "165e":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/cloudjet_search_user_textbox/components/main/todopage.vue?vue&type=template&id=87763f20&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('search_user_container',{attrs:{"subordinateUsers":_vm.subordinateUsers,"searchResultUsers":_vm.searchResultUsers,"historySearchUsers":_vm.historySearchUsers,"bossUser":_vm.bossUser,"onSearch":_vm.getSearchResultUsersAction,"onDeleteHistory":_vm.deleteHistoryUser,"onAddHistory":_vm.addHistoryUser,"textBoxPlaceHolder":"Tìm nhân viên để xem công việc"},on:{"click":_vm.listItemOnClick}})}
+var staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/templates/components/cloudjet_search_user_textbox/components/main/todopage.vue?vue&type=template&id=87763f20&scoped=true&
+/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
+/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
+
+
+/***/ }),
+
 /***/ "1691":
 /***/ (function(module, exports) {
 
@@ -15557,6 +15560,17 @@ module.exports = {
 
 /***/ }),
 
+/***/ "1a69":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_homepage_vue_vue_type_style_index_0_id_3e6325c8_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("4f08");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_homepage_vue_vue_type_style_index_0_id_3e6325c8_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_homepage_vue_vue_type_style_index_0_id_3e6325c8_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_homepage_vue_vue_type_style_index_0_id_3e6325c8_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "1ba2":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -15655,7 +15669,7 @@ module.exports = function (it, S) {
 
 var cov_17t8y7cv7g = function () {
   var path = "/home/nguyen/Downloads/cloudjet/cloudjet_ui/src/templates/components/cloudjet_search_user_textbox/components/main/todopage.vue",
-      hash = "698883cad34ffccc05beeddbcfaf463292096de5",
+      hash = "b3543098f1dca0bae40335b9a10ca394966f237f",
       Function = function () {}.constructor,
       global = new Function('return this')(),
       gcv = "__coverage__",
@@ -15768,8 +15782,8 @@ var cov_17t8y7cv7g = function () {
           column: 4
         },
         end: {
-          line: 111,
-          column: 45
+          line: 121,
+          column: 6
         }
       },
       "11": {
@@ -15779,7 +15793,7 @@ var cov_17t8y7cv7g = function () {
         },
         end: {
           line: 114,
-          column: 50
+          column: 31
         }
       },
       "12": {
@@ -15789,7 +15803,7 @@ var cov_17t8y7cv7g = function () {
         },
         end: {
           line: 117,
-          column: 47
+          column: 28
         }
       },
       "13": {
@@ -15799,7 +15813,7 @@ var cov_17t8y7cv7g = function () {
         },
         end: {
           line: 120,
-          column: 49
+          column: 30
         }
       }
     },
@@ -15827,6 +15841,30 @@ var cov_17t8y7cv7g = function () {
           }
         },
         line: 57
+      },
+      "1": {
+        name: "(anonymous_1)",
+        decl: {
+          start: {
+            line: 111,
+            column: 50
+          },
+          end: {
+            line: 111,
+            column: 51
+          }
+        },
+        loc: {
+          start: {
+            line: 111,
+            column: 54
+          },
+          end: {
+            line: 121,
+            column: 5
+          }
+        },
+        line: 111
       }
     },
     branchMap: {
@@ -15914,7 +15952,8 @@ var cov_17t8y7cv7g = function () {
       "13": 0
     },
     f: {
-      "0": 0
+      "0": 0,
+      "1": 0
     },
     b: {
       "0": [0, 0],
@@ -16019,26 +16058,33 @@ var _default = {
     var _mounted = (0, _asyncToGenerator2.default)(
     /*#__PURE__*/
     regeneratorRuntime.mark(function _callee() {
+      var _this = this;
+
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               cov_17t8y7cv7g.s[10]++;
               _context.next = 3;
-              return this.$store.dispatch("initialize");
+              return this.$store.dispatch("initialize").then(function () {
+                cov_17t8y7cv7g.f[1]++;
+                cov_17t8y7cv7g.s[11]++;
+
+                // Get subordinate of target id
+                _this.getSubordinateAction(); // // get boss of target id
+
+
+                cov_17t8y7cv7g.s[12]++;
+
+                _this.getBossUserAction(); // // Get history of current logged user
+
+
+                cov_17t8y7cv7g.s[13]++;
+
+                _this.getHistoryUserAcion();
+              });
 
             case 3:
-              cov_17t8y7cv7g.s[11]++;
-              // Get subordinate of target id
-              this.getSubordinateAction(this.userActor.user); // // get boss of target id
-
-              cov_17t8y7cv7g.s[12]++;
-              this.getBossUserAction(this.userActor.user); // // Get history of current logged user
-
-              cov_17t8y7cv7g.s[13]++;
-              this.getHistoryUserAcion(this.userActor.user);
-
-            case 9:
             case "end":
               return _context.stop();
           }
@@ -16454,13 +16500,6 @@ module.exports = function (it) {
 
 /***/ }),
 
-/***/ "23b0":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "23c6":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16511,7 +16550,7 @@ module.exports = function (it) {
 
 var cov_131g7ela29 = function () {
   var path = "/home/nguyen/Downloads/cloudjet/cloudjet_ui/src/sdk/network/user/profile/factory.js",
-      hash = "2e025209ef5dd7b37296c561f899da037f879e14",
+      hash = "947b4c2620e161d93e3c95a44d7732714f2ef03d",
       Function = function () {}.constructor,
       global = new Function('return this')(),
       gcv = "__coverage__",
@@ -16534,7 +16573,7 @@ var cov_131g7ela29 = function () {
           column: 4
         },
         end: {
-          line: 54,
+          line: 58,
           column: 5
         }
       },
@@ -16571,20 +16610,50 @@ var cov_131g7ela29 = function () {
       "5": {
         start: {
           line: 42,
-          column: 13
+          column: 22
         },
         end: {
-          line: 45,
-          column: 14
+          line: 42,
+          column: 33
         }
       },
       "6": {
         start: {
-          line: 49,
+          line: 43,
           column: 12
         },
         end: {
-          line: 52,
+          line: 45,
+          column: 13
+        }
+      },
+      "7": {
+        start: {
+          line: 44,
+          column: 16
+        },
+        end: {
+          line: 44,
+          column: 49
+        }
+      },
+      "8": {
+        start: {
+          line: 46,
+          column: 13
+        },
+        end: {
+          line: 49,
+          column: 14
+        }
+      },
+      "9": {
+        start: {
+          line: 53,
+          column: 12
+        },
+        end: {
+          line: 56,
           column: 32
         }
       }
@@ -16608,7 +16677,7 @@ var cov_131g7ela29 = function () {
             column: 62
           },
           end: {
-            line: 55,
+            line: 59,
             column: 1
           }
         },
@@ -16632,7 +16701,7 @@ var cov_131g7ela29 = function () {
             column: 47
           },
           end: {
-            line: 46,
+            line: 50,
             column: 9
           }
         },
@@ -16663,6 +16732,39 @@ var cov_131g7ela29 = function () {
           }
         }],
         line: 10
+      },
+      "1": {
+        loc: {
+          start: {
+            line: 43,
+            column: 12
+          },
+          end: {
+            line: 45,
+            column: 13
+          }
+        },
+        type: "if",
+        locations: [{
+          start: {
+            line: 43,
+            column: 12
+          },
+          end: {
+            line: 45,
+            column: 13
+          }
+        }, {
+          start: {
+            line: 43,
+            column: 12
+          },
+          end: {
+            line: 45,
+            column: 13
+          }
+        }],
+        line: 43
       }
     },
     s: {
@@ -16672,14 +16774,18 @@ var cov_131g7ela29 = function () {
       "3": 0,
       "4": 0,
       "5": 0,
-      "6": 0
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0
     },
     f: {
       "0": 0,
       "1": 0
     },
     b: {
-      "0": [0]
+      "0": [0],
+      "1": [0, 0]
     },
     _coverageSchema: "332fd63041d2c1bcb487cc26dd0d5f7d97098a6c"
   },
@@ -16737,19 +16843,30 @@ var _default = function _default(userId) {
       cov_131g7ela29.s[4]++;
       return (0, _network_builder.buildPromise)({
         httpMethod: 'GET',
-        url: getSubordinatePath
+        url: "".concat(getSubordinatePath).concat(userId)
       });
     },
     getProfileUserViewed: function getProfileUserViewed(idUserViewed) {
       cov_131g7ela29.f[1]++;
-      cov_131g7ela29.s[5]++;
+      var url = (cov_131g7ela29.s[5]++, profilePath);
+      cov_131g7ela29.s[6]++;
+
+      if (idUserViewed) {
+        cov_131g7ela29.b[1][0]++;
+        cov_131g7ela29.s[7]++;
+        url += '?user_id=' + idUserViewed;
+      } else {
+        cov_131g7ela29.b[1][1]++;
+      }
+
+      cov_131g7ela29.s[8]++;
       return (0, _network_builder.buildPromise)({
         httpMethod: 'GET',
-        url: profilePath + '?user_id=' + idUserViewed
+        url: url
       });
     },
     searchUser: function searchUser(query) {
-      cov_131g7ela29.s[6]++;
+      cov_131g7ela29.s[9]++;
       return (0, _network_builder.buildPromise)({
         httpMethod: 'GET',
         url: "".concat(searchUserPath).concat(query)
@@ -18343,23 +18460,6 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ "2aaf":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/cloudjet_search_user_textbox/components/main/homepage.vue?vue&type=template&id=643e4e10&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('search_user_container',{attrs:{"subordinateUsers":_vm.subordinateUsers,"searchResultUsers":_vm.searchResultUsers,"historySearchUsers":_vm.historySearchUsers,"bossUser":_vm.bossUser,"onSearch":_vm.getSearchResultUsersAction,"onDeleteHistory":_vm.deleteHistoryUser,"onAddHistory":_vm.addHistoryUser,"textBoxPlaceHolder":"Tìm kiếm nhân viên"},on:{"click":_vm.listItemOnClick}})}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/templates/components/cloudjet_search_user_textbox/components/main/homepage.vue?vue&type=template&id=643e4e10&scoped=true&
-/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
-/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
-
-
-/***/ }),
-
 /***/ "2aba":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18564,17 +18664,6 @@ var staticRenderFns = []
 /* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
 /* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
 
-
-/***/ }),
-
-/***/ "2d65":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_style_index_0_id_5ac768c4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("4195");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_style_index_0_id_5ac768c4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_style_index_0_id_5ac768c4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_style_index_0_id_5ac768c4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -19809,17 +19898,6 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ "329e":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_todopage_vue_vue_type_style_index_0_id_f5e9ecc8_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("d693");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_todopage_vue_vue_type_style_index_0_id_f5e9ecc8_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_todopage_vue_vue_type_style_index_0_id_f5e9ecc8_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_todopage_vue_vue_type_style_index_0_id_f5e9ecc8_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "32e9":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -19852,23 +19930,6 @@ __webpack_require__.r(__webpack_exports__);
 
 var document = __webpack_require__("e53d").document;
 module.exports = document && document.documentElement;
-
-
-/***/ }),
-
-/***/ "3349":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/list_emp_and_score/components/form_view_list_quarter/form_view_list_quarter.vue?vue&type=template&id=237ba7dd&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form',{staticClass:"form-horizontal",attrs:{"id":"score-report-form","action":"/performance/score/","method":"get"}},[_c('div',{staticClass:"form-group mg-bt-0"},[_c('label',{staticClass:"col-sm-3 control-label"},[_vm._v("Đợt đánh giá:")]),_c('div',{staticClass:"col-sm-8"},[_c('select',{staticClass:"form-control ELS_DDL_SCHEDULE",attrs:{"name":"quarter_id","id":"quarter_name"}},_vm._l((_vm.quarters),function(q){return (_vm.currentQuarter.id==q.id)?_c('option',{attrs:{"selected":"selected","date":q.due_date},domProps:{"value":q.id}},[_vm._v("\n                    "+_vm._s(q.quarter_name)+" ( "+_vm._s(_vm._f("dateTimeFormatStandard")(q.due_date))+" )\n                ")]):_c('option',{attrs:{"date":q.due_date},domProps:{"value":q.id}},[_vm._v("\n                    "+_vm._s(q.quarter_name)+" ( "+_vm._s(_vm._f("dateTimeFormatStandard")(q.due_date))+" )\n                ")])}))])]),_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"col-sm-offset-3 col-sm-8"},[_c('div',{staticClass:"checkbox "},[_c('input',{staticClass:"ELS_CBX_SUB",attrs:{"type":"checkbox","checked":"","name":"user_id","id":"id_check_user_id"},domProps:{"value":_vm.userActor.user}}),_c('label',{attrs:{"for":"id_check_user_id"}},[_vm._v("\n                    Xuất báo cáo cho những nhân viên cấp dưới của ["+_vm._s(_vm.userActor.display_name)+"]\n                ")])])])]),_c('input',{attrs:{"type":"hidden","name":"report_type","id":"tin-report-type","value":"score"}})])}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/templates/components/list_emp_and_score/components/form_view_list_quarter/form_view_list_quarter.vue?vue&type=template&id=237ba7dd&scoped=true&
-/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
-/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
 
 
 /***/ }),
@@ -19918,13 +19979,6 @@ __webpack_require__.r(__webpack_exports__);
 
 exports.f = {}.propertyIsEnumerable;
 
-
-/***/ }),
-
-/***/ "3566":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -20157,10 +20211,10 @@ var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _todopage_vue_vue_type_template_id_f5e9ecc8_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("cc43");
+/* harmony import */ var _todopage_vue_vue_type_template_id_87763f20_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("165e");
 /* harmony import */ var _todopage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("a333");
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _todopage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _todopage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _todopage_vue_vue_type_style_index_0_id_f5e9ecc8_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("329e");
+/* harmony import */ var _todopage_vue_vue_type_style_index_0_id_87763f20_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("959c");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("2877");
 
 
@@ -20172,11 +20226,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(
   _todopage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _todopage_vue_vue_type_template_id_f5e9ecc8_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
-  _todopage_vue_vue_type_template_id_f5e9ecc8_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
+  _todopage_vue_vue_type_template_id_87763f20_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
+  _todopage_vue_vue_type_template_id_87763f20_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
   false,
   null,
-  "f5e9ecc8",
+  "87763f20",
   null
   
 )
@@ -20472,13 +20526,6 @@ exports.default = {
 
 /***/ }),
 
-/***/ "4195":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "41a0":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20497,6 +20544,13 @@ module.exports = function (Constructor, NAME, next) {
   setToStringTag(Constructor, NAME + ' Iterator');
 };
 
+
+/***/ }),
+
+/***/ "41b0":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -20562,10 +20616,10 @@ function getFirstComponentChild(children) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _main_vue_vue_type_template_id_5ac768c4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("0221");
+/* harmony import */ var _main_vue_vue_type_template_id_6c2895a9_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("53a2");
 /* harmony import */ var _main_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("9e40");
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _main_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _main_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _main_vue_vue_type_style_index_0_id_5ac768c4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("2d65");
+/* harmony import */ var _main_vue_vue_type_style_index_0_id_6c2895a9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("840f");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("2877");
 
 
@@ -20577,11 +20631,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(
   _main_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _main_vue_vue_type_template_id_5ac768c4_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
-  _main_vue_vue_type_template_id_5ac768c4_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
+  _main_vue_vue_type_template_id_6c2895a9_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
+  _main_vue_vue_type_template_id_6c2895a9_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
   false,
   null,
-  "5ac768c4",
+  "6c2895a9",
   null
   
 )
@@ -23548,6 +23602,13 @@ module.exports = __webpack_require__("417f");
 
 /***/ }),
 
+/***/ "4f08":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "5035":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -24658,7 +24719,7 @@ module.exports = __webpack_require__("584a").Object.assign;
 
 var cov_2ppj25vy5v = function () {
   var path = "/home/nguyen/Downloads/cloudjet/cloudjet_ui/src/templates/components/list_emp_and_score/main.vue",
-      hash = "0d9c279106302171817ea9d21ae7f6d3285b84c0",
+      hash = "5cb59d856f24657a92e84192f271470990cdc377",
       Function = function () {}.constructor,
       global = new Function('return this')(),
       gcv = "__coverage__",
@@ -24667,142 +24728,142 @@ var cov_2ppj25vy5v = function () {
     statementMap: {
       "0": {
         start: {
-          line: 65,
+          line: 64,
           column: 12
         },
         end: {
-          line: 67,
+          line: 66,
           column: 13
         }
       },
       "1": {
         start: {
-          line: 66,
+          line: 65,
           column: 16
         },
         end: {
-          line: 66,
+          line: 65,
           column: 33
         }
       },
       "2": {
         start: {
-          line: 70,
+          line: 69,
           column: 12
         },
         end: {
-          line: 71,
+          line: 70,
           column: 42
         }
       },
       "3": {
         start: {
-          line: 71,
+          line: 70,
           column: 16
         },
         end: {
-          line: 71,
+          line: 70,
           column: 42
         }
       },
       "4": {
         start: {
-          line: 75,
+          line: 74,
           column: 8
         },
         end: {
-          line: 75,
+          line: 74,
           column: 49
         }
       },
       "5": {
         start: {
-          line: 76,
+          line: 75,
           column: 8
         },
         end: {
-          line: 76,
+          line: 75,
           column: 29
         }
       },
       "6": {
         start: {
-          line: 77,
+          line: 76,
           column: 8
         },
         end: {
-          line: 77,
+          line: 76,
           column: 33
         }
       },
       "7": {
         start: {
-          line: 78,
+          line: 77,
           column: 8
         },
         end: {
-          line: 78,
+          line: 77,
           column: 34
         }
       },
       "8": {
         start: {
-          line: 79,
+          line: 78,
           column: 8
         },
         end: {
-          line: 79,
+          line: 78,
           column: 30
         }
       },
       "9": {
         start: {
-          line: 82,
+          line: 81,
           column: 26
         },
         end: {
-          line: 82,
+          line: 81,
           column: 47
         }
       },
       "10": {
         start: {
-          line: 83,
+          line: 82,
           column: 8
         },
         end: {
-          line: 85,
+          line: 84,
           column: 9
         }
       },
       "11": {
         start: {
-          line: 84,
+          line: 83,
           column: 12
         },
         end: {
-          line: 84,
+          line: 83,
           column: 57
         }
       },
       "12": {
         start: {
-          line: 93,
+          line: 92,
           column: 23
         },
         end: {
-          line: 93,
+          line: 92,
           column: 27
         }
       },
       "13": {
         start: {
-          line: 94,
+          line: 96,
           column: 12
         },
         end: {
-          line: 94,
-          column: 72
+          line: 96,
+          column: 51
         }
       },
       "14": {
@@ -24812,46 +24873,36 @@ var cov_2ppj25vy5v = function () {
         },
         end: {
           line: 97,
-          column: 51
+          column: 54
         }
       },
       "15": {
         start: {
-          line: 98,
-          column: 12
+          line: 100,
+          column: 23
         },
         end: {
-          line: 98,
-          column: 54
+          line: 100,
+          column: 27
         }
       },
       "16": {
         start: {
           line: 101,
-          column: 23
+          column: 12
         },
         end: {
-          line: 101,
-          column: 27
+          line: 103,
+          column: 15
         }
       },
       "17": {
         start: {
           line: 102,
-          column: 12
-        },
-        end: {
-          line: 104,
-          column: 15
-        }
-      },
-      "18": {
-        start: {
-          line: 103,
           column: 16
         },
         end: {
-          line: 103,
+          line: 102,
           column: 41
         }
       }
@@ -24861,174 +24912,174 @@ var cov_2ppj25vy5v = function () {
         name: "(anonymous_0)",
         decl: {
           start: {
-            line: 64,
+            line: 63,
             column: 15
           },
           end: {
-            line: 64,
+            line: 63,
             column: 16
           }
         },
         loc: {
           start: {
-            line: 64,
+            line: 63,
             column: 30
           },
           end: {
-            line: 68,
+            line: 67,
             column: 9
           }
         },
-        line: 64
+        line: 63
       },
       "1": {
         name: "(anonymous_1)",
         decl: {
           start: {
-            line: 69,
+            line: 68,
             column: 22
           },
           end: {
-            line: 69,
+            line: 68,
             column: 23
           }
         },
         loc: {
           start: {
-            line: 69,
+            line: 68,
             column: 35
           },
           end: {
-            line: 72,
+            line: 71,
             column: 9
           }
         },
-        line: 69
+        line: 68
       },
       "2": {
         name: "(anonymous_2)",
         decl: {
           start: {
-            line: 102,
+            line: 101,
             column: 60
           },
           end: {
-            line: 102,
+            line: 101,
             column: 61
           }
         },
         loc: {
           start: {
-            line: 102,
+            line: 101,
             column: 72
           },
           end: {
-            line: 104,
+            line: 103,
             column: 13
           }
         },
-        line: 102
+        line: 101
       }
     },
     branchMap: {
       "0": {
         loc: {
           start: {
-            line: 65,
+            line: 64,
             column: 12
           },
           end: {
-            line: 67,
+            line: 66,
             column: 13
           }
         },
         type: "if",
         locations: [{
           start: {
-            line: 65,
+            line: 64,
             column: 12
           },
           end: {
-            line: 67,
+            line: 66,
             column: 13
           }
         }, {
           start: {
-            line: 65,
+            line: 64,
             column: 12
           },
           end: {
-            line: 67,
+            line: 66,
             column: 13
           }
         }],
-        line: 65
+        line: 64
       },
       "1": {
         loc: {
           start: {
-            line: 70,
+            line: 69,
             column: 12
           },
           end: {
-            line: 71,
+            line: 70,
             column: 42
           }
         },
         type: "if",
         locations: [{
           start: {
-            line: 70,
+            line: 69,
             column: 12
           },
           end: {
-            line: 71,
+            line: 70,
             column: 42
           }
         }, {
           start: {
-            line: 70,
+            line: 69,
             column: 12
           },
           end: {
-            line: 71,
+            line: 70,
             column: 42
           }
         }],
-        line: 70
+        line: 69
       },
       "2": {
         loc: {
           start: {
-            line: 83,
+            line: 82,
             column: 8
           },
           end: {
-            line: 85,
+            line: 84,
             column: 9
           }
         },
         type: "if",
         locations: [{
           start: {
-            line: 83,
+            line: 82,
             column: 8
           },
           end: {
-            line: 85,
+            line: 84,
             column: 9
           }
         }, {
           start: {
-            line: 83,
+            line: 82,
             column: 8
           },
           end: {
-            line: 85,
+            line: 84,
             column: 9
           }
         }],
-        line: 83
+        line: 82
       }
     },
     s: {
@@ -25049,8 +25100,7 @@ var cov_2ppj25vy5v = function () {
       "14": 0,
       "15": 0,
       "16": 0,
-      "17": 0,
-      "18": 0
+      "17": 0
     },
     f: {
       "0": 0,
@@ -25100,8 +25150,7 @@ var _form_view_list_quarter = _interopRequireDefault(__webpack_require__("77f6")
 var _submit_form = _interopRequireDefault(__webpack_require__("3a3b"));
 
 var _default = {
-  // [Vue warn]: Invalid component name: "main.vue". Component names can only contain alphanumeric characters and the hyphen, and must start with a letter.
-  // name: "main.vue",
+  name: "main.vue",
   props: {
     /**
      * Giá trị để bật tắt modal
@@ -25200,22 +25249,20 @@ var _default = {
     getCurrentQuarter: "$emp_list_and_score/".concat(_actions.getCurrentQuarter)
   }), {
     getUserViewedInfor: function getUserViewedInfor() {
-      var self = (cov_2ppj25vy5v.s[12]++, this);
-      cov_2ppj25vy5v.s[13]++;
-      this.$store.dispatch('userViewedActions', self.userviewedid);
+      var self = (cov_2ppj25vy5v.s[12]++, this); // this.$store.dispatch('userViewedActions', self.userviewedid)
     },
     showModal: function showModal() {
-      cov_2ppj25vy5v.s[14]++;
+      cov_2ppj25vy5v.s[13]++;
       window.$('#report-modal').modal('show');
-      cov_2ppj25vy5v.s[15]++;
+      cov_2ppj25vy5v.s[14]++;
       window.$('#report-modal').appendTo('body');
     },
     eventHideModal: function eventHideModal() {
-      var self = (cov_2ppj25vy5v.s[16]++, this);
-      cov_2ppj25vy5v.s[17]++;
+      var self = (cov_2ppj25vy5v.s[15]++, this);
+      cov_2ppj25vy5v.s[16]++;
       window.$('#report-modal').on('hidden.bs.modal', function () {
         cov_2ppj25vy5v.f[2]++;
-        cov_2ppj25vy5v.s[18]++;
+        cov_2ppj25vy5v.s[17]++;
         self.$emit('hide_modal');
       });
     }
@@ -25230,6 +25277,13 @@ exports.default = _default;
 
 exports.f = {}.propertyIsEnumerable;
 
+
+/***/ }),
+
+/***/ "52c0":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -25406,6 +25460,23 @@ var staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/templates/components/cloudjet_table_importuser/main.vue?vue&type=template&id=7a23e080&
+/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
+/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
+
+
+/***/ }),
+
+/***/ "53a2":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/list_emp_and_score/main.vue?vue&type=template&id=6c2895a9&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"modal fade",attrs:{"id":"report-modal","tabindex":"-1","role":"dialog","aria-labelledby":"myModalLabel"}},[_c('div',{staticClass:"modal-dialog",attrs:{"role":"document"}},[_c('div',{staticClass:"modal-content"},[_vm._m(0),_c('div',{staticClass:"modal-body"},[_c('form_view_list_quarter',{attrs:{"quarters":_vm.quarters,"currentQuarter":_vm.currentQuarter,"userActor":_vm.userViewed}})],1),_c('div',{staticClass:"modal-footer"},[_c('submit_form')],1)])])])}
+var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"modal-header"},[_c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-label":"Close"}},[_c('span',{attrs:{"aria-hidden":"true"}},[_vm._v("×")])]),_c('h4',{staticClass:"modal-title",attrs:{"id":"myModalLabel"}},[_vm._v("Danh sách nhân viên & Điểm")])])}]
+
+
+// CONCATENATED MODULE: ./src/templates/components/list_emp_and_score/main.vue?vue&type=template&id=6c2895a9&scoped=true&
 /* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
 /* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
 
@@ -26268,7 +26339,7 @@ module.exports = function (IS_INCLUDES) {
 
 var cov_vcm67j1ta = function () {
   var path = "/home/nguyen/Downloads/cloudjet/cloudjet_ui/src/templates/components/cloudjet_search_user_textbox/store/actions.js",
-      hash = "ab0c7470c3df441e7662e366dba71f3053d09d1f",
+      hash = "35ce0f8fde46d1bb31902c9260ed504dab99a651",
       Function = function () {}.constructor,
       global = new Function('return this')(),
       gcv = "__coverage__",
@@ -26341,191 +26412,201 @@ var cov_vcm67j1ta = function () {
           column: 8
         },
         end: {
-          line: 28,
-          column: 14
+          line: 22,
+          column: 32
         }
       },
       "7": {
         start: {
-          line: 27,
-          column: 16
+          line: 23,
+          column: 8
         },
         end: {
-          line: 27,
-          column: 58
+          line: 23,
+          column: 41
         }
       },
       "8": {
         start: {
-          line: 32,
-          column: 8
+          line: 24,
+          column: 9
         },
         end: {
-          line: 48,
-          column: 10
+          line: 30,
+          column: 14
         }
       },
       "9": {
         start: {
-          line: 33,
-          column: 12
+          line: 29,
+          column: 16
         },
         end: {
-          line: 47,
-          column: 18
+          line: 29,
+          column: 58
         }
       },
       "10": {
         start: {
-          line: 41,
-          column: 34
+          line: 34,
+          column: 8
         },
         end: {
-          line: 41,
-          column: 50
+          line: 50,
+          column: 10
         }
       },
       "11": {
         start: {
-          line: 42,
-          column: 20
+          line: 35,
+          column: 12
         },
         end: {
-          line: 42,
-          column: 63
+          line: 49,
+          column: 18
         }
       },
       "12": {
         start: {
           line: 43,
-          column: 20
+          column: 34
         },
         end: {
           line: 43,
-          column: 29
+          column: 50
         }
       },
       "13": {
         start: {
-          line: 46,
+          line: 44,
           column: 20
         },
         end: {
-          line: 46,
-          column: 29
+          line: 44,
+          column: 63
         }
       },
       "14": {
         start: {
-          line: 70,
-          column: 8
+          line: 45,
+          column: 20
         },
         end: {
-          line: 70,
-          column: 50
+          line: 45,
+          column: 29
         }
       },
       "15": {
         start: {
-          line: 73,
-          column: 8
+          line: 48,
+          column: 20
         },
         end: {
-          line: 73,
-          column: 100
+          line: 48,
+          column: 29
         }
       },
       "16": {
         start: {
-          line: 78,
-          column: 43
+          line: 72,
+          column: 8
         },
         end: {
-          line: 78,
-          column: 93
+          line: 72,
+          column: 50
         }
       },
       "17": {
         start: {
-          line: 79,
-          column: 45
+          line: 75,
+          column: 8
         },
         end: {
-          line: 79,
-          column: 83
+          line: 75,
+          column: 100
         }
       },
       "18": {
         start: {
-          line: 81,
-          column: 8
+          line: 80,
+          column: 43
         },
         end: {
-          line: 83,
-          column: 9
+          line: 80,
+          column: 111
         }
       },
       "19": {
         start: {
-          line: 82,
-          column: 12
+          line: 81,
+          column: 45
         },
         end: {
-          line: 82,
-          column: 72
+          line: 81,
+          column: 83
         }
       },
       "20": {
         start: {
-          line: 93,
+          line: 83,
           column: 8
         },
         end: {
-          line: 105,
+          line: 85,
           column: 9
         }
       },
       "21": {
         start: {
-          line: 94,
+          line: 84,
           column: 12
         },
         end: {
-          line: 94,
-          column: 68
+          line: 84,
+          column: 72
         }
       },
       "22": {
         start: {
-          line: 99,
+          line: 98,
           column: 12
         },
         end: {
-          line: 104,
-          column: 18
+          line: 105,
+          column: 13
         }
       },
       "23": {
         start: {
-          line: 101,
-          column: 20
+          line: 99,
+          column: 16
         },
         end: {
-          line: 103,
-          column: 21
+          line: 102,
+          column: 22
         }
       },
       "24": {
         start: {
-          line: 102,
+          line: 101,
           column: 24
         },
         end: {
-          line: 102,
-          column: 68
+          line: 101,
+          column: 60
         }
       },
       "25": {
+        start: {
+          line: 104,
+          column: 16
+        },
+        end: {
+          line: 104,
+          column: 49
+        }
+      },
+      "26": {
         start: {
           line: 110,
           column: 8
@@ -26535,7 +26616,7 @@ var cov_vcm67j1ta = function () {
           column: 67
         }
       },
-      "26": {
+      "27": {
         start: {
           line: 113,
           column: 8
@@ -26551,118 +26632,118 @@ var cov_vcm67j1ta = function () {
         name: "(anonymous_0)",
         decl: {
           start: {
-            line: 23,
+            line: 25,
             column: 18
           },
           end: {
-            line: 23,
+            line: 25,
             column: 19
           }
         },
         loc: {
           start: {
-            line: 23,
+            line: 25,
             column: 29
           },
           end: {
-            line: 28,
+            line: 30,
             column: 13
           }
         },
-        line: 23
+        line: 25
       },
       "1": {
         name: "(anonymous_1)",
         decl: {
           start: {
-            line: 32,
+            line: 34,
             column: 27
           },
           end: {
-            line: 32,
+            line: 34,
             column: 28
           }
         },
         loc: {
           start: {
-            line: 32,
+            line: 34,
             column: 40
           },
           end: {
-            line: 48,
+            line: 50,
             column: 9
           }
         },
-        line: 32
+        line: 34
       },
       "2": {
         name: "(anonymous_2)",
         decl: {
           start: {
-            line: 37,
+            line: 39,
             column: 22
           },
           end: {
-            line: 37,
+            line: 39,
             column: 23
           }
         },
         loc: {
           start: {
-            line: 37,
+            line: 39,
             column: 32
           },
           end: {
-            line: 44,
+            line: 46,
             column: 17
           }
         },
-        line: 37
+        line: 39
       },
       "3": {
         name: "(anonymous_3)",
         decl: {
           start: {
-            line: 45,
+            line: 47,
             column: 23
           },
           end: {
-            line: 45,
+            line: 47,
             column: 24
           }
         },
         loc: {
           start: {
-            line: 45,
+            line: 47,
             column: 30
           },
           end: {
-            line: 47,
+            line: 49,
             column: 17
           }
         },
-        line: 45
+        line: 47
       },
       "4": {
         name: "(anonymous_4)",
         decl: {
           start: {
             line: 100,
-            column: 22
+            column: 26
           },
           end: {
             line: 100,
-            column: 23
+            column: 27
           }
         },
         loc: {
           start: {
             line: 100,
-            column: 31
+            column: 35
           },
           end: {
-            line: 104,
-            column: 17
+            line: 102,
+            column: 21
           }
         },
         line: 100
@@ -26673,22 +26754,22 @@ var cov_vcm67j1ta = function () {
         loc: {
           start: {
             line: 21,
-            column: 53
+            column: 49
           },
           end: {
             line: 21,
-            column: 79
+            column: 75
           }
         },
         type: "default-arg",
         locations: [{
           start: {
             line: 21,
-            column: 68
+            column: 64
           },
           end: {
             line: 21,
-            column: 79
+            column: 75
           }
         }],
         line: 21
@@ -26696,149 +26777,149 @@ var cov_vcm67j1ta = function () {
       "1": {
         loc: {
           start: {
-            line: 31,
+            line: 33,
             column: 52
           },
           end: {
-            line: 31,
+            line: 33,
             column: 78
           }
         },
         type: "default-arg",
         locations: [{
           start: {
-            line: 31,
+            line: 33,
             column: 67
           },
           end: {
-            line: 31,
+            line: 33,
             column: 78
           }
         }],
-        line: 31
+        line: 33
       },
       "2": {
         loc: {
           start: {
-            line: 81,
+            line: 83,
             column: 8
           },
           end: {
-            line: 83,
+            line: 85,
             column: 9
           }
         },
         type: "if",
         locations: [{
           start: {
-            line: 81,
+            line: 83,
             column: 8
           },
           end: {
-            line: 83,
+            line: 85,
             column: 9
           }
         }, {
           start: {
-            line: 81,
+            line: 83,
             column: 8
           },
           end: {
-            line: 83,
+            line: 85,
             column: 9
           }
         }],
-        line: 81
+        line: 83
       },
       "3": {
         loc: {
           start: {
-            line: 92,
-            column: 60
+            line: 94,
+            column: 46
           },
           end: {
-            line: 92,
-            column: 86
+            line: 94,
+            column: 72
           }
         },
         type: "default-arg",
         locations: [{
           start: {
-            line: 92,
-            column: 75
+            line: 94,
+            column: 61
           },
           end: {
-            line: 92,
-            column: 86
+            line: 94,
+            column: 72
           }
         }],
-        line: 92
+        line: 94
       },
       "4": {
         loc: {
           start: {
-            line: 93,
-            column: 8
+            line: 98,
+            column: 12
           },
           end: {
             line: 105,
-            column: 9
+            column: 13
           }
         },
         type: "if",
         locations: [{
           start: {
-            line: 93,
-            column: 8
+            line: 98,
+            column: 12
           },
           end: {
             line: 105,
-            column: 9
+            column: 13
           }
         }, {
           start: {
-            line: 93,
-            column: 8
+            line: 98,
+            column: 12
           },
           end: {
             line: 105,
-            column: 9
+            column: 13
           }
         }],
-        line: 93
+        line: 98
       },
       "5": {
         loc: {
           start: {
-            line: 101,
-            column: 20
+            line: 98,
+            column: 15
           },
           end: {
-            line: 103,
-            column: 21
+            line: 98,
+            column: 66
           }
         },
-        type: "if",
+        type: "binary-expr",
         locations: [{
           start: {
-            line: 101,
-            column: 20
+            line: 98,
+            column: 15
           },
           end: {
-            line: 103,
-            column: 21
+            line: 98,
+            column: 35
           }
         }, {
           start: {
-            line: 101,
-            column: 20
+            line: 98,
+            column: 39
           },
           end: {
-            line: 103,
-            column: 21
+            line: 98,
+            column: 66
           }
         }],
-        line: 101
+        line: 98
       }
     },
     s: {
@@ -26868,7 +26949,8 @@ var cov_vcm67j1ta = function () {
       "23": 0,
       "24": 0,
       "25": 0,
-      "26": 0
+      "26": 0,
+      "27": 0
     },
     f: {
       "0": 0,
@@ -26906,8 +26988,6 @@ exports.default = exports.deleteHisoryUserAction = exports.getBossUserAction = e
 
 var _defineProperty2 = _interopRequireDefault(__webpack_require__("965f"));
 
-__webpack_require__("c5f6");
-
 __webpack_require__("551c");
 
 var _profile = _interopRequireDefault(__webpack_require__("8222"));
@@ -26929,13 +27009,18 @@ exports.getBossUserAction = getBossUserAction;
 var deleteHisoryUserAction = (cov_vcm67j1ta.s[5]++, 'deleteHisoryUserAction');
 exports.deleteHisoryUserAction = deleteHisoryUserAction;
 
-var _default = (_getSubordinateAction = {}, (0, _defineProperty2.default)(_getSubordinateAction, getSubordinateAction, function (_ref, targetUserId) {
-  var commit = _ref.commit;
-  var INetworkUser = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : (cov_vcm67j1ta.b[0][0]++, _profile.default);
+var _default = (_getSubordinateAction = {}, (0, _defineProperty2.default)(_getSubordinateAction, getSubordinateAction, function (_ref) {
+  var commit = _ref.commit,
+      rootState = _ref.rootState;
+  var INetworkUser = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (cov_vcm67j1ta.b[0][0]++, _profile.default);
   cov_vcm67j1ta.s[6]++;
-  INetworkUser(targetUserId).getSubordinate().then(function (users) {
+  console.log("hahhahaha");
+  cov_vcm67j1ta.s[7]++;
+  console.log(rootState.userViewed);
+  cov_vcm67j1ta.s[8]++;
+  INetworkUser(rootState.userViewed.user).getSubordinate().then(function (users) {
     cov_vcm67j1ta.f[0]++;
-    cov_vcm67j1ta.s[7]++;
+    cov_vcm67j1ta.s[9]++;
 
     /**
      * Data trả về dạng mảng
@@ -26945,10 +27030,10 @@ var _default = (_getSubordinateAction = {}, (0, _defineProperty2.default)(_getSu
 }), (0, _defineProperty2.default)(_getSubordinateAction, getSearchResultUsersAction, function (_ref2, query) {
   var commit = _ref2.commit;
   var INetworkUser = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : (cov_vcm67j1ta.b[1][0]++, _profile.default);
-  cov_vcm67j1ta.s[8]++;
+  cov_vcm67j1ta.s[10]++;
   return new Promise(function (resolve) {
     cov_vcm67j1ta.f[1]++;
-    cov_vcm67j1ta.s[9]++;
+    cov_vcm67j1ta.s[11]++;
     INetworkUser().searchUser(query.trim()) // Object destructuring ES6:
     // Backend why not name this users instead of suggestions
     // Resolve 
@@ -26958,14 +27043,14 @@ var _default = (_getSubordinateAction = {}, (0, _defineProperty2.default)(_getSu
       /**
        * Data trả về dạng {suggestions: mảng user}
        */
-      var users = (cov_vcm67j1ta.s[10]++, data.suggestions);
-      cov_vcm67j1ta.s[11]++;
+      var users = (cov_vcm67j1ta.s[12]++, data.suggestions);
+      cov_vcm67j1ta.s[13]++;
       commit(_mutations.setSearchResultUsersMutation, users);
-      cov_vcm67j1ta.s[12]++;
+      cov_vcm67j1ta.s[14]++;
       resolve();
     }).catch(function (err) {
       cov_vcm67j1ta.f[3]++;
-      cov_vcm67j1ta.s[13]++;
+      cov_vcm67j1ta.s[15]++;
       resolve();
     });
   });
@@ -26989,61 +27074,54 @@ var _default = (_getSubordinateAction = {}, (0, _defineProperty2.default)(_getSu
     commit(_mutations.removeOldestHistoryUserMutation);
   }
 
-  cov_vcm67j1ta.s[14]++;
+  cov_vcm67j1ta.s[16]++;
   commit(_mutations.addHistorySearchUserMutation, user); // Save to localstorage
 
-  cov_vcm67j1ta.s[15]++;
+  cov_vcm67j1ta.s[17]++;
   localStorage.setItem("cjs-searchHistory".concat(userId), JSON.stringify(state.historySearchUsers));
-}), (0, _defineProperty2.default)(_getSubordinateAction, getHistoryUserAcion, function (_ref5, userId) {
-  var commit = _ref5.commit;
-  var serializehistorySeachUsers = (cov_vcm67j1ta.s[16]++, localStorage.getItem("cjs-searchHistory".concat(userId)));
-  var deserializeHistorySearchUser = (cov_vcm67j1ta.s[17]++, JSON.parse(serializehistorySeachUsers));
-  cov_vcm67j1ta.s[18]++;
+}), (0, _defineProperty2.default)(_getSubordinateAction, getHistoryUserAcion, function (_ref5) {
+  var commit = _ref5.commit,
+      rootState = _ref5.rootState;
+  var serializehistorySeachUsers = (cov_vcm67j1ta.s[18]++, localStorage.getItem("cjs-searchHistory".concat(rootState.userActor.user)));
+  var deserializeHistorySearchUser = (cov_vcm67j1ta.s[19]++, JSON.parse(serializehistorySeachUsers));
+  cov_vcm67j1ta.s[20]++;
 
   if (deserializeHistorySearchUser != null) {
     cov_vcm67j1ta.b[2][0]++;
-    cov_vcm67j1ta.s[19]++;
+    cov_vcm67j1ta.s[21]++;
     commit(_mutations.setHistoryUserMutation, deserializeHistorySearchUser);
   } else {
     cov_vcm67j1ta.b[2][1]++;
   }
-}), (0, _defineProperty2.default)(_getSubordinateAction, getBossUserAction, function (_ref6, targetUserId) {
+}), (0, _defineProperty2.default)(_getSubordinateAction, getBossUserAction, function (_ref6) {
   var commit = _ref6.commit,
       rootState = _ref6.rootState;
-  var INetworkUser = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : (cov_vcm67j1ta.b[3][0]++, _profile.default);
-  cov_vcm67j1ta.s[20]++;
+  var INetworkUser = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (cov_vcm67j1ta.b[3][0]++, _profile.default);
+  cov_vcm67j1ta.s[22]++;
 
-  if (rootState.userActor.user === Number(targetUserId)) {
+  /**
+   * Get boss user from api
+   */
+  if ((cov_vcm67j1ta.b[5][0]++, rootState.userViewed) && (cov_vcm67j1ta.b[5][1]++, rootState.userViewed.parent)) {
     cov_vcm67j1ta.b[4][0]++;
-    cov_vcm67j1ta.s[21]++;
-    commit(_mutations.setBossUserMutation, rootState.userActor.manager);
+    cov_vcm67j1ta.s[23]++;
+    INetworkUser(rootState.userViewed.parent).getSpecificUserProfile().then(function (profile) {
+      cov_vcm67j1ta.f[4]++;
+      cov_vcm67j1ta.s[24]++;
+      commit(_mutations.setBossUserMutation, profile);
+    });
   } else {
     cov_vcm67j1ta.b[4][1]++;
-    cov_vcm67j1ta.s[22]++;
-
-    /**
-     * Get boss user from api
-     */
-    INetworkUser(targetUserId).getSpecificUserProfile().then(function (profile) {
-      cov_vcm67j1ta.f[4]++;
-      cov_vcm67j1ta.s[23]++;
-
-      if (profile.manager) {
-        cov_vcm67j1ta.b[5][0]++;
-        cov_vcm67j1ta.s[24]++;
-        commit(_mutations.setBossUserMutation, profile.manager);
-      } else {
-        cov_vcm67j1ta.b[5][1]++;
-      }
-    });
+    cov_vcm67j1ta.s[25]++;
+    commit(_mutations.setBossUserMutation, null);
   }
 }), (0, _defineProperty2.default)(_getSubordinateAction, deleteHisoryUserAction, function (_ref7, targetUserId) {
   var commit = _ref7.commit;
-  cov_vcm67j1ta.s[25]++;
+  cov_vcm67j1ta.s[26]++;
   // delete userId history from localStorage
   localStorage.removeItem("cjs-searchHistory".concat(targetUserId)); // remove from store    
 
-  cov_vcm67j1ta.s[26]++;
+  cov_vcm67j1ta.s[27]++;
   commit(_mutations.removeHistoryUserMutation);
 }), _getSubordinateAction);
 
@@ -59676,6 +59754,23 @@ module.exports = function (KEY, exec) {
 
 /***/ }),
 
+/***/ "5fed":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/cloudjet_search_user_textbox/components/main/teampage.vue?vue&type=template&id=68f2b880&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('search_user_container',{attrs:{"searchResultUsers":_vm.searchResultUsers,"textBoxPlaceHolder":"Tìm kiếm nhân viên","onSearch":_vm.getSearchResultUsersAction},on:{"click":_vm.listItemOnClick}})}
+var staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/templates/components/cloudjet_search_user_textbox/components/main/teampage.vue?vue&type=template&id=68f2b880&scoped=true&
+/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
+/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
+
+
+/***/ }),
+
 /***/ "6114":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -61107,7 +61202,7 @@ component.options.__file = "main.vue"
 
 var cov_17z9k7ce15 = function () {
   var path = "/home/nguyen/Downloads/cloudjet/cloudjet_ui/src/templates/components/cloudjet_search_user_textbox/components/minor_components/search_user_container_show_default/search_user_container_show_default.vue",
-      hash = "17f95d68e4d266b6db2c82c876613618cf6ac5f2",
+      hash = "e5e2dfba44773f2f906894b3de5760bd78c5d94c",
       Function = function () {}.constructor,
       global = new Function('return this')(),
       gcv = "__coverage__",
@@ -61150,41 +61245,61 @@ var cov_17z9k7ce15 = function () {
           column: 4
         },
         end: {
-          line: 127,
+          line: 125,
           column: 6
         }
       },
       "4": {
         start: {
-          line: 133,
+          line: 131,
           column: 6
         },
         end: {
-          line: 133,
+          line: 131,
           column: 50
         }
       },
       "5": {
         start: {
-          line: 144,
-          column: 6
+          line: 142,
+          column: 17
         },
         end: {
-          line: 144,
-          column: 33
+          line: 142,
+          column: 21
         }
       },
       "6": {
         start: {
-          line: 145,
+          line: 143,
           column: 6
         },
         end: {
-          line: 145,
-          column: 29
+          line: 143,
+          column: 33
         }
       },
       "7": {
+        start: {
+          line: 147,
+          column: 17
+        },
+        end: {
+          line: 147,
+          column: 21
+        }
+      },
+      "8": {
+        start: {
+          line: 148,
+          column: 6
+        },
+        end: {
+          line: 148,
+          column: 29
+        }
+      },
+      "9": {
         start: {
           line: 149,
           column: 6
@@ -61194,83 +61309,93 @@ var cov_17z9k7ce15 = function () {
           column: 31
         }
       },
-      "8": {
-        start: {
-          line: 155,
-          column: 6
-        },
-        end: {
-          line: 163,
-          column: 7
-        }
-      },
-      "9": {
-        start: {
-          line: 156,
-          column: 24
-        },
-        end: {
-          line: 156,
-          column: 44
-        }
-      },
       "10": {
         start: {
-          line: 158,
-          column: 8
+          line: 154,
+          column: 17
         },
         end: {
-          line: 158,
-          column: 37
+          line: 154,
+          column: 21
         }
       },
       "11": {
         start: {
-          line: 162,
-          column: 8
+          line: 156,
+          column: 6
         },
         end: {
-          line: 162,
-          column: 38
+          line: 164,
+          column: 7
         }
       },
       "12": {
         start: {
-          line: 168,
-          column: 6
+          line: 157,
+          column: 24
         },
         end: {
-          line: 168,
-          column: 36
+          line: 157,
+          column: 44
         }
       },
       "13": {
         start: {
-          line: 175,
-          column: 6
+          line: 159,
+          column: 8
         },
         end: {
-          line: 175,
-          column: 41
+          line: 159,
+          column: 37
         }
       },
       "14": {
         start: {
-          line: 180,
-          column: 6
+          line: 163,
+          column: 8
         },
         end: {
-          line: 182,
-          column: 14
+          line: 163,
+          column: 38
         }
       },
       "15": {
         start: {
+          line: 169,
+          column: 6
+        },
+        end: {
+          line: 169,
+          column: 36
+        }
+      },
+      "16": {
+        start: {
+          line: 176,
+          column: 6
+        },
+        end: {
+          line: 176,
+          column: 41
+        }
+      },
+      "17": {
+        start: {
           line: 181,
+          column: 6
+        },
+        end: {
+          line: 183,
+          column: 14
+        }
+      },
+      "18": {
+        start: {
+          line: 182,
           column: 8
         },
         end: {
-          line: 181,
+          line: 182,
           column: 44
         }
       }
@@ -61448,93 +61573,93 @@ var cov_17z9k7ce15 = function () {
         name: "(anonymous_7)",
         decl: {
           start: {
-            line: 180,
+            line: 181,
             column: 17
           },
           end: {
-            line: 180,
+            line: 181,
             column: 18
           }
         },
         loc: {
           start: {
-            line: 180,
+            line: 181,
             column: 23
           },
           end: {
-            line: 182,
+            line: 183,
             column: 7
           }
         },
-        line: 180
+        line: 181
       }
     },
     branchMap: {
       "0": {
         loc: {
           start: {
-            line: 133,
+            line: 131,
             column: 13
           },
           end: {
-            line: 133,
+            line: 131,
             column: 49
           }
         },
         type: "cond-expr",
         locations: [{
           start: {
-            line: 133,
+            line: 131,
             column: 29
           },
           end: {
-            line: 133,
+            line: 131,
             column: 44
           }
         }, {
           start: {
-            line: 133,
+            line: 131,
             column: 47
           },
           end: {
-            line: 133,
+            line: 131,
             column: 49
           }
         }],
-        line: 133
+        line: 131
       },
       "1": {
         loc: {
           start: {
-            line: 155,
+            line: 156,
             column: 6
           },
           end: {
-            line: 163,
+            line: 164,
             column: 7
           }
         },
         type: "if",
         locations: [{
           start: {
-            line: 155,
+            line: 156,
             column: 6
           },
           end: {
-            line: 163,
+            line: 164,
             column: 7
           }
         }, {
           start: {
-            line: 155,
+            line: 156,
             column: 6
           },
           end: {
-            line: 163,
+            line: 164,
             column: 7
           }
         }],
-        line: 155
+        line: 156
       }
     },
     s: {
@@ -61553,7 +61678,10 @@ var cov_17z9k7ce15 = function () {
       "12": 0,
       "13": 0,
       "14": 0,
-      "15": 0
+      "15": 0,
+      "16": 0,
+      "17": 0,
+      "18": 0
     },
     f: {
       "0": 0,
@@ -61587,8 +61715,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-
-var _defineProperty2 = _interopRequireDefault(__webpack_require__("965f"));
 
 __webpack_require__("c5f6");
 
@@ -61665,11 +61791,12 @@ var _default2 = {
   },
   data: function data() {
     cov_17z9k7ce15.s[3]++;
-    return (0, _defineProperty2.default)({
-      isShowListSearchResult: false,
+    return {
       // Display default if it false, else render a result list
-      isShowSearchMode: false
-    }, "isShowListSearchResult", false);
+      isShowSearchMode: false,
+      // Display List
+      isShowListSearchResult: false
+    };
   },
   computed: {
     // users property input array so must transform boss user: object? into user
@@ -61684,52 +61811,55 @@ var _default2 = {
   },
   methods: {
     listItemSearchResultOnClick: function listItemSearchResultOnClick(user) {
-      cov_17z9k7ce15.s[5]++;
-      this.listItemOnClick(user);
+      var self = (cov_17z9k7ce15.s[5]++, this);
       cov_17z9k7ce15.s[6]++;
-      this.onAddHistory(user);
+      self.listItemOnClick(user);
     },
     listItemOnClick: function listItemOnClick(user) {
-      cov_17z9k7ce15.s[7]++;
-      this.$emit('click', user);
+      var self = (cov_17z9k7ce15.s[7]++, this);
+      cov_17z9k7ce15.s[8]++;
+      self.onAddHistory(user);
+      cov_17z9k7ce15.s[9]++;
+      self.$emit('click', user);
     },
     // Textbox event
     textBoxOnSearch: function textBoxOnSearch(query) {
-      cov_17z9k7ce15.s[8]++;
+      var self = (cov_17z9k7ce15.s[10]++, this); // This is handler wait for textboxOnSearch
 
-      // This is handler wait for textboxOnSearch
-      if (query !== '') {
+      cov_17z9k7ce15.s[11]++;
+
+      if (query) {
         cov_17z9k7ce15.b[1][0]++;
-        // debounce 
-        var promise = (cov_17z9k7ce15.s[9]++, this.onSearch(query)); // Prvent rerender
+        // debounce
+        var promise = (cov_17z9k7ce15.s[12]++, this.onSearch(query)); // Prvent rerender
 
-        cov_17z9k7ce15.s[10]++;
+        cov_17z9k7ce15.s[13]++;
         this.isShowSearchMode = true;
       } else {
         cov_17z9k7ce15.b[1][1]++;
-        cov_17z9k7ce15.s[11]++;
+        cov_17z9k7ce15.s[14]++;
         // Search Mode = true -> Show Search Result List
         // Search Mode = fales -> Show subordinates, boss, history
         this.isShowSearchMode = false;
       }
     },
     textBoxOnEmpty: function textBoxOnEmpty() {
-      cov_17z9k7ce15.s[12]++;
+      cov_17z9k7ce15.s[15]++;
       this.isShowSearchMode = false; // Chuyển trạng thái Show default
       // this.isShowListSearchResult = false;
     },
     textboxOnFocus: function textboxOnFocus() {
-      cov_17z9k7ce15.s[13]++;
+      cov_17z9k7ce15.s[16]++;
       this.isShowListSearchResult = true;
     },
     textBoxOnBlur: function textBoxOnBlur() {
       var _this = this;
 
-      cov_17z9k7ce15.s[14]++;
+      cov_17z9k7ce15.s[17]++;
       // It's should timeout wait click register on list item
       setTimeout(function () {
         cov_17z9k7ce15.f[7]++;
-        cov_17z9k7ce15.s[15]++;
+        cov_17z9k7ce15.s[18]++;
         _this.isShowListSearchResult = false;
       }, 150);
     }
@@ -62071,23 +62201,6 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 
 /***/ }),
 
-/***/ "6b1f":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/cloudjet_search_user_textbox/components/main/teampage.vue?vue&type=template&id=5d874602&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('search_user_container',{attrs:{"searchResultUsers":_vm.searchResultUsers,"textBoxPlaceHolder":"Tìm kiếm nhân viên","onSearch":_vm.getSearchResultUsersAction},on:{"click":_vm.listItemOnClick}})}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/templates/components/cloudjet_search_user_textbox/components/main/teampage.vue?vue&type=template&id=5d874602&scoped=true&
-/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
-/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
-
-
-/***/ }),
-
 /***/ "6b4c":
 /***/ (function(module, exports) {
 
@@ -62283,13 +62396,13 @@ var _default = {
      * List quarter
      */
     quarters: {
-      type: [Object, Array]
+      type: Object
     },
 
     /**
      * Current Quarter
      */
-    currentQuarter: [Object, Array],
+    currentQuarter: Array,
 
     /**
      *  User Actor
@@ -63661,10 +63774,10 @@ module.exports = !$assign || __webpack_require__("79e5")(function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _teampage_vue_vue_type_template_id_5d874602_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("6b1f");
+/* harmony import */ var _teampage_vue_vue_type_template_id_68f2b880_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("5fed");
 /* harmony import */ var _teampage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("d937");
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _teampage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _teampage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _teampage_vue_vue_type_style_index_0_id_5d874602_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("a242");
+/* harmony import */ var _teampage_vue_vue_type_style_index_0_id_68f2b880_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("cfcd");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("2877");
 
 
@@ -63676,28 +63789,17 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(
   _teampage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _teampage_vue_vue_type_template_id_5d874602_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
-  _teampage_vue_vue_type_template_id_5d874602_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
+  _teampage_vue_vue_type_template_id_68f2b880_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
+  _teampage_vue_vue_type_template_id_68f2b880_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
   false,
   null,
-  "5d874602",
+  "68f2b880",
   null
   
 )
 
 component.options.__file = "teampage.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "74c8":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_homepage_vue_vue_type_style_index_0_id_643e4e10_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9910");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_homepage_vue_vue_type_style_index_0_id_643e4e10_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_homepage_vue_vue_type_style_index_0_id_643e4e10_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_homepage_vue_vue_type_style_index_0_id_643e4e10_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -63732,6 +63834,17 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 component.options.__file = "performance_table.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "751c":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_search_user_container_show_default_vue_vue_type_style_index_0_id_11217e50_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("b6de");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_search_user_container_show_default_vue_vue_type_style_index_0_id_11217e50_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_search_user_container_show_default_vue_vue_type_style_index_0_id_11217e50_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_search_user_container_show_default_vue_vue_type_style_index_0_id_11217e50_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -64395,10 +64508,10 @@ module.exports = function (index, length) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _form_view_list_quarter_vue_vue_type_template_id_237ba7dd_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("3349");
+/* harmony import */ var _form_view_list_quarter_vue_vue_type_template_id_87385896_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("e5fb");
 /* harmony import */ var _form_view_list_quarter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("914e");
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _form_view_list_quarter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _form_view_list_quarter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _form_view_list_quarter_vue_vue_type_style_index_0_id_237ba7dd_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("918a");
+/* harmony import */ var _form_view_list_quarter_vue_vue_type_style_index_0_id_87385896_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("aca2");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("2877");
 
 
@@ -64410,11 +64523,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(
   _form_view_list_quarter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _form_view_list_quarter_vue_vue_type_template_id_237ba7dd_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
-  _form_view_list_quarter_vue_vue_type_template_id_237ba7dd_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
+  _form_view_list_quarter_vue_vue_type_template_id_87385896_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
+  _form_view_list_quarter_vue_vue_type_template_id_87385896_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
   false,
   null,
-  "237ba7dd",
+  "87385896",
   null
   
 )
@@ -65214,7 +65327,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var cov_127u9dedk4 = function () {
   var path = "/home/nguyen/Downloads/cloudjet/cloudjet_ui/src/templates/components/cloudjet_search_user_textbox/components/main/homepage.vue",
-      hash = "efa0330faaba7942c4819dec40e14b0c6cb1b3ed",
+      hash = "5dfb6beec857118982211345a2c61cb750386386",
       Function = function () {}.constructor,
       global = new Function('return this')(),
       gcv = "__coverage__",
@@ -65223,115 +65336,45 @@ var cov_127u9dedk4 = function () {
     statementMap: {
       "0": {
         start: {
-          line: 38,
-          column: 21
+          line: 59,
+          column: 18
         },
         end: {
-          line: 38,
-          column: 41
+          line: 59,
+          column: 31
         }
       },
       "1": {
         start: {
-          line: 46,
-          column: 16
+          line: 77,
+          column: 6
         },
         end: {
-          line: 46,
-          column: 75
+          line: 77,
+          column: 54
         }
       },
       "2": {
         start: {
-          line: 47,
-          column: 17
+          line: 81,
+          column: 19
         },
         end: {
-          line: 47,
-          column: 39
+          line: 81,
+          column: 42
         }
       },
       "3": {
         start: {
-          line: 49,
-          column: 2
-        },
-        end: {
-          line: 53,
-          column: 3
-        }
-      },
-      "4": {
-        start: {
-          line: 50,
-          column: 4
-        },
-        end: {
-          line: 50,
-          column: 21
-        }
-      },
-      "5": {
-        start: {
-          line: 52,
-          column: 4
-        },
-        end: {
-          line: 52,
-          column: 27
-        }
-      },
-      "6": {
-        start: {
-          line: 57,
-          column: 18
-        },
-        end: {
-          line: 57,
-          column: 31
-        }
-      },
-      "7": {
-        start: {
-          line: 75,
-          column: 6
-        },
-        end: {
-          line: 75,
-          column: 54
-        }
-      },
-      "8": {
-        start: {
-          line: 79,
+          line: 82,
           column: 8
         },
         end: {
           line: 82,
-          column: 16
+          column: 62
         }
       },
-      "9": {
-        start: {
-          line: 80,
-          column: 23
-        },
-        end: {
-          line: 80,
-          column: 48
-        }
-      },
-      "10": {
-        start: {
-          line: 81,
-          column: 12
-        },
-        end: {
-          line: 81,
-          column: 66
-        }
-      },
-      "11": {
+      "4": {
         start: {
           line: 87,
           column: 6
@@ -65341,7 +65384,7 @@ var cov_127u9dedk4 = function () {
           column: 45
         }
       },
-      "12": {
+      "5": {
         start: {
           line: 92,
           column: 6
@@ -65351,7 +65394,7 @@ var cov_127u9dedk4 = function () {
           column: 8
         }
       },
-      "13": {
+      "6": {
         start: {
           line: 123,
           column: 4
@@ -65361,7 +65404,7 @@ var cov_127u9dedk4 = function () {
           column: 5
         }
       },
-      "14": {
+      "7": {
         start: {
           line: 124,
           column: 6
@@ -65371,175 +65414,108 @@ var cov_127u9dedk4 = function () {
           column: 51
         }
       },
-      "15": {
+      "8": {
         start: {
           line: 130,
           column: 4
         },
         end: {
-          line: 130,
-          column: 45
+          line: 142,
+          column: 7
         }
       },
-      "16": {
+      "9": {
         start: {
-          line: 135,
-          column: 31
+          line: 136,
+          column: 8
         },
         end: {
-          line: 135,
-          column: 63
+          line: 136,
+          column: 35
         }
       },
-      "17": {
+      "10": {
         start: {
-          line: 146,
-          column: 4
+          line: 139,
+          column: 8
         },
         end: {
-          line: 146,
-          column: 49
+          line: 139,
+          column: 32
         }
       },
-      "18": {
+      "11": {
         start: {
-          line: 149,
-          column: 4
+          line: 141,
+          column: 8
         },
         end: {
-          line: 149,
-          column: 46
-        }
-      },
-      "19": {
-        start: {
-          line: 152,
-          column: 4
-        },
-        end: {
-          line: 152,
-          column: 49
+          line: 141,
+          column: 34
         }
       }
     },
     fnMap: {
       "0": {
-        name: "getTargetId",
+        name: "(anonymous_0)",
         decl: {
           start: {
-            line: 34,
-            column: 16
+            line: 130,
+            column: 50
           },
           end: {
-            line: 34,
-            column: 27
+            line: 130,
+            column: 51
           }
         },
         loc: {
           start: {
-            line: 34,
-            column: 45
+            line: 130,
+            column: 54
           },
           end: {
-            line: 54,
-            column: 1
+            line: 142,
+            column: 5
           }
         },
-        line: 34
-      },
-      "1": {
-        name: "(anonymous_1)",
-        decl: {
-          start: {
-            line: 79,
-            column: 19
-          },
-          end: {
-            line: 79,
-            column: 20
-          }
-        },
-        loc: {
-          start: {
-            line: 79,
-            column: 25
-          },
-          end: {
-            line: 82,
-            column: 9
-          }
-        },
-        line: 79
+        line: 130
       }
     },
     branchMap: {
       "0": {
         loc: {
           start: {
-            line: 49,
-            column: 2
+            line: 81,
+            column: 19
           },
           end: {
-            line: 53,
-            column: 3
-          }
-        },
-        type: "if",
-        locations: [{
-          start: {
-            line: 49,
-            column: 2
-          },
-          end: {
-            line: 53,
-            column: 3
-          }
-        }, {
-          start: {
-            line: 49,
-            column: 2
-          },
-          end: {
-            line: 53,
-            column: 3
-          }
-        }],
-        line: 49
-      },
-      "1": {
-        loc: {
-          start: {
-            line: 80,
-            column: 23
-          },
-          end: {
-            line: 80,
-            column: 48
+            line: 81,
+            column: 42
           }
         },
         type: "binary-expr",
         locations: [{
           start: {
-            line: 80,
-            column: 23
+            line: 81,
+            column: 19
           },
           end: {
-            line: 80,
-            column: 32
+            line: 81,
+            column: 26
           }
         }, {
           start: {
-            line: 80,
-            column: 36
+            line: 81,
+            column: 30
           },
           end: {
-            line: 80,
-            column: 48
+            line: 81,
+            column: 42
           }
         }],
-        line: 80
+        line: 81
       },
-      "2": {
+      "1": {
         loc: {
           start: {
             line: 123,
@@ -65585,24 +65561,14 @@ var cov_127u9dedk4 = function () {
       "8": 0,
       "9": 0,
       "10": 0,
-      "11": 0,
-      "12": 0,
-      "13": 0,
-      "14": 0,
-      "15": 0,
-      "16": 0,
-      "17": 0,
-      "18": 0,
-      "19": 0
+      "11": 0
     },
     f: {
-      "0": 0,
-      "1": 0
+      "0": 0
     },
     b: {
       "0": [0, 0],
-      "1": [0, 0],
-      "2": [0, 0]
+      "1": [0, 0]
     },
     _coverageSchema: "332fd63041d2c1bcb487cc26dd0d5f7d97098a6c"
   },
@@ -65621,7 +65587,6 @@ var _interopRequireDefault = __webpack_require__("496d");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getTargetId = getTargetId;
 exports.default = void 0;
 
 __webpack_require__("96cf");
@@ -65640,58 +65605,49 @@ var _mutations = __webpack_require__("0b17");
 
 var _store = _interopRequireDefault(__webpack_require__("13a3"));
 
-function getTargetId(currentLoggedId) {
-  cov_127u9dedk4.f[0]++;
-  // Get url
-  // Parse url using regular expression
-  // If match -> Extract id from
-  var currentUrl = (cov_127u9dedk4.s[0]++, window.location.href);
-  /**
-   * Matching pattern:
-   * second section expect domain should be
-   * /kpi-editor/emp/<uid>/
-   * https://jsbin.com/yupobepucu/edit?js,console
-   */
-
-  var regex = (cov_127u9dedk4.s[1]++, /^http(s)?:\/\/[^/]+\/performance\/kpi-editor\/emp\/(\d+)/g);
-  var result = (cov_127u9dedk4.s[2]++, regex.exec(currentUrl));
-  cov_127u9dedk4.s[3]++;
-
-  if (result !== null) {
-    cov_127u9dedk4.b[0][0]++;
-    cov_127u9dedk4.s[4]++;
-    return result[2];
-  } else {
-    cov_127u9dedk4.b[0][1]++;
-    cov_127u9dedk4.s[5]++;
-    return currentLoggedId;
-  }
-} // Đặt store key ngoài đâys
-
-
-var STORE_KEY = (cov_127u9dedk4.s[6]++, "$searchUser");
+// export function getTargetId(currentLoggedId) {
+//   // Get url
+//   // Parse url using regular expression
+//   // If match -> Extract id from
+//   const currentUrl = window.location.href;
+//
+//   /**
+//    * Matching pattern:
+//    * second section expect domain should be
+//    * /kpi-editor/emp/<uid>/
+//    * https://jsbin.com/yupobepucu/edit?js,console
+//    */
+//   const regex = /^http(s)?:\/\/[^/]+\/performance\/kpi-editor\/emp\/(\d+)/g;
+//   const result = regex.exec(currentUrl);
+//
+//
+//
+//   if (result !== null) {
+//     return result[2];
+//   } else {
+//     return currentLoggedId;
+//   }
+// }
+// Đặt store key ngoài đâys
+var STORE_KEY = (cov_127u9dedk4.s[0]++, "$searchUser");
 var _default = {
   name: "main",
   methods: (0, _objectSpread2.default)({}, (0, _vuex.mapActions)(STORE_KEY, [_actions.getSubordinateAction, _actions.getSearchResultUsersAction, _actions.addHistoryUserAction, _actions.getHistoryUserAcion, _actions.getBossUserAction, _actions.deleteHisoryUserAction]), {
     deleteHistoryUser: function deleteHistoryUser() {
-      cov_127u9dedk4.s[7]++;
+      cov_127u9dedk4.s[1]++;
       this.deleteHisoryUserAction(this.userActor.user);
     },
     listItemOnClick: function listItemOnClick(user) {
-      cov_127u9dedk4.s[8]++;
-      setTimeout(function () {
-        cov_127u9dedk4.f[1]++;
-        var id = (cov_127u9dedk4.s[9]++, (cov_127u9dedk4.b[1][0]++, user.user) || (cov_127u9dedk4.b[1][1]++, user.user_id));
-        cov_127u9dedk4.s[10]++;
-        window.location = "/performance/kpi-editor/emp/".concat(id);
-      }, 150);
+      var id = (cov_127u9dedk4.s[2]++, (cov_127u9dedk4.b[0][0]++, user.id) || (cov_127u9dedk4.b[0][1]++, user.user_id));
+      cov_127u9dedk4.s[3]++;
+      window.location = "/performance/kpi-editor/emp/".concat(id);
     },
     onSearch: function onSearch(query) {
-      cov_127u9dedk4.s[11]++;
+      cov_127u9dedk4.s[4]++;
       this.getSearchResultUsersAction(query);
     },
     addHistoryUser: function addHistoryUser(user) {
-      cov_127u9dedk4.s[12]++;
+      cov_127u9dedk4.s[5]++;
       // Press search result will add user to history
       this.addHistoryUserAction({
         user: user,
@@ -65712,16 +65668,16 @@ var _default = {
     search_user_container: _search_user_container_show_default.default
   },
   created: function created() {
-    cov_127u9dedk4.s[13]++;
+    cov_127u9dedk4.s[6]++;
 
     /* below should be bundle into a component builder*/
     // eslint-disable-next-line no-underscore-dangle
     if (!(STORE_KEY in this.$store._modules.root._children)) {
-      cov_127u9dedk4.b[2][0]++;
-      cov_127u9dedk4.s[14]++;
+      cov_127u9dedk4.b[1][0]++;
+      cov_127u9dedk4.s[7]++;
       this.$store.registerModule(STORE_KEY, _store.default);
     } else {
-      cov_127u9dedk4.b[2][1]++;
+      cov_127u9dedk4.b[1][1]++;
     }
     /* end this */
 
@@ -65730,38 +65686,37 @@ var _default = {
     var _mounted = (0, _asyncToGenerator2.default)(
     /*#__PURE__*/
     regeneratorRuntime.mark(function _callee() {
-      var currentFocusUserId;
+      var _this = this;
+
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              cov_127u9dedk4.s[15]++;
+              cov_127u9dedk4.s[8]++;
               _context.next = 3;
-              return this.$store.dispatch("initialize");
+              return this.$store.dispatch("initialize").then(function () {
+                cov_127u9dedk4.f[0]++;
+                cov_127u9dedk4.s[9]++;
+
+                /**
+                * Determine userid
+                * Fetch data
+                */
+                // Get subordinate of target id
+                _this.getSubordinateAction(); // get boss of target id
+
+
+                cov_127u9dedk4.s[10]++;
+
+                _this.getBossUserAction(); // Get history of current logged user
+
+
+                cov_127u9dedk4.s[11]++;
+
+                _this.getHistoryUserAcion();
+              });
 
             case 3:
-              /**
-               * Determine userid
-               * Fetch data
-               */
-              currentFocusUserId = (cov_127u9dedk4.s[16]++, getTargetId(this.userActor.user)); // // Check current focus user
-              // if (currentFocusUserId !== this.userActor.user) {
-              //   /**
-              //    * Call network service
-              //    */
-              // }
-              // Get subordinate of target id
-
-              cov_127u9dedk4.s[17]++;
-              this.getSubordinateAction(currentFocusUserId); // // get boss of target id
-
-              cov_127u9dedk4.s[18]++;
-              this.getBossUserAction(currentFocusUserId); // // Get history of current logged user
-
-              cov_127u9dedk4.s[19]++;
-              this.getHistoryUserAcion(this.userActor.user);
-
-            case 10:
             case "end":
               return _context.stop();
           }
@@ -67111,6 +67066,17 @@ exports.default = _default;
 var core = module.exports = { version: '2.5.7' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
+
+/***/ }),
+
+/***/ "840f":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_style_index_0_id_6c2895a9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("52c0");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_style_index_0_id_6c2895a9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_style_index_0_id_6c2895a9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_style_index_0_id_6c2895a9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -69032,17 +68998,6 @@ component.options.__file = "search_user_container_no_show_default.vue"
 
 /***/ }),
 
-/***/ "918a":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_form_view_list_quarter_vue_vue_type_style_index_0_id_237ba7dd_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("23b0");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_form_view_list_quarter_vue_vue_type_style_index_0_id_237ba7dd_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_form_view_list_quarter_vue_vue_type_style_index_0_id_237ba7dd_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_form_view_list_quarter_vue_vue_type_style_index_0_id_237ba7dd_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "92e0":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -69266,6 +69221,17 @@ var states = (cov_1nak3xsny.s[0]++, {
 });
 var _default = states;
 exports.default = _default;
+
+/***/ }),
+
+/***/ "959c":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_todopage_vue_vue_type_style_index_0_id_87763f20_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9edf");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_todopage_vue_vue_type_style_index_0_id_87763f20_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_todopage_vue_vue_type_style_index_0_id_87763f20_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_todopage_vue_vue_type_style_index_0_id_87763f20_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -70335,13 +70301,6 @@ module.exports = __webpack_require__.p + "img/close_icon.e22e537e.svg";
 
 /***/ }),
 
-/***/ "9910":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "9aa9":
 /***/ (function(module, exports) {
 
@@ -70501,6 +70460,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_thread_loader_dist_cjs_js_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_thread_loader_dist_cjs_js_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_thread_loader_dist_cjs_js_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_thread_loader_dist_cjs_js_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
  /* harmony default export */ __webpack_exports__["default"] = (_node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_thread_loader_dist_cjs_js_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_main_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "9edf":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -71849,17 +71815,6 @@ Schema.messages = messages_messages;
 
 /***/ }),
 
-/***/ "a242":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_teampage_vue_vue_type_style_index_0_id_5d874602_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("3566");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_teampage_vue_vue_type_style_index_0_id_5d874602_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_teampage_vue_vue_type_style_index_0_id_5d874602_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_teampage_vue_vue_type_style_index_0_id_5d874602_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "a25f":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -72914,6 +72869,17 @@ for (var collections = getKeys(DOMIterables), i = 0; i < collections.length; i++
 
 /***/ }),
 
+/***/ "aca2":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_form_view_list_quarter_vue_vue_type_style_index_0_id_87385896_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c361");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_form_view_list_quarter_vue_vue_type_style_index_0_id_87385896_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_form_view_list_quarter_vue_vue_type_style_index_0_id_87385896_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_form_view_list_quarter_vue_vue_type_style_index_0_id_87385896_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "aebd":
 /***/ (function(module, exports) {
 
@@ -73475,6 +73441,13 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "b6de":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "b837":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -73893,10 +73866,10 @@ module.exports = function (C, x) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _homepage_vue_vue_type_template_id_643e4e10_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("2aaf");
+/* harmony import */ var _homepage_vue_vue_type_template_id_3e6325c8_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("ca02");
 /* harmony import */ var _homepage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("33fc");
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _homepage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _homepage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _homepage_vue_vue_type_style_index_0_id_643e4e10_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("74c8");
+/* harmony import */ var _homepage_vue_vue_type_style_index_0_id_3e6325c8_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("1a69");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("2877");
 
 
@@ -73908,11 +73881,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(
   _homepage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _homepage_vue_vue_type_template_id_643e4e10_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
-  _homepage_vue_vue_type_template_id_643e4e10_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
+  _homepage_vue_vue_type_template_id_3e6325c8_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
+  _homepage_vue_vue_type_template_id_3e6325c8_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
   false,
   null,
-  "643e4e10",
+  "3e6325c8",
   null
   
 )
@@ -75372,6 +75345,13 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 
 /***/ }),
 
+/***/ "c361":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "c366":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -75440,23 +75420,6 @@ Iterators.Arguments = Iterators.Array;
 addToUnscopables('keys');
 addToUnscopables('values');
 addToUnscopables('entries');
-
-
-/***/ }),
-
-/***/ "c382":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/cloudjet_search_user_textbox/components/minor_components/search_user_container_show_default/search_user_container_show_default.vue?vue&type=template&id=3e273df4&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"search-user-container"},[_c('search_user_textbox',{attrs:{"onFocus":_vm.textboxOnFocus,"onBlur":_vm.textBoxOnBlur,"onSearch":_vm.textBoxOnSearch,"onEmpty":_vm.textBoxOnEmpty,"placeHolder":_vm.textBoxPlaceHolder}}),(_vm.isShowListSearchResult)?_c('div',{staticClass:"search-user-container__list-wrapper"},[(!_vm.isShowSearchMode)?_c('div',{staticClass:"search-user-container__default-mode"},[(_vm.historySearchUsers.length>0)?_c('div',{staticClass:"search-user-container__history-list-wrapper"},[_c('search_user_result_list',{staticClass:"search-user-container__list search-user-container__history-list",attrs:{"header":_vm._f("transle")('Lịch sử'),"users":_vm.historySearchUsers},on:{"click":_vm.listItemOnClick}}),_c('button',{staticClass:"search-user-container__delete-history-btn",on:{"mousedown":_vm.onDeleteHistory}},[_vm._v("\n                  Xóa lịch sử\n              ")])],1):_vm._e(),_c('search_user_result_list',{staticClass:"search-user-container__list",attrs:{"header":_vm._f("transle")('Cấp trên'),"users":_vm.transformBossUser},on:{"click":_vm.listItemOnClick}}),_c('search_user_result_list',{staticClass:"search-user-container__list",attrs:{"header":_vm._f("transle")('Cấp dưới'),"users":_vm.subordinateUsers},on:{"click":_vm.listItemOnClick}})],1):_c('div',{staticClass:"search-user-container__search-result-wrapper"},[_c('search_user_result_list',{attrs:{"users":_vm.searchResultUsers},on:{"click":_vm.listItemSearchResultOnClick}}),(_vm.searchResultUsers.length===0)?_c('div',{staticClass:"search-user-container__no-result-found"},[_vm._v("\n              "+_vm._s(_vm._f("translate")('Không tìm thấy kết quả'))+"\n          ")]):_vm._e()],1)]):_vm._e()],1)}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/templates/components/cloudjet_search_user_textbox/components/minor_components/search_user_container_show_default/search_user_container_show_default.vue?vue&type=template&id=3e273df4&scoped=true&
-/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
-/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
 
 
 /***/ }),
@@ -76328,6 +76291,23 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "ca02":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/cloudjet_search_user_textbox/components/main/homepage.vue?vue&type=template&id=3e6325c8&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('search_user_container',{attrs:{"subordinateUsers":_vm.subordinateUsers,"searchResultUsers":_vm.searchResultUsers,"historySearchUsers":_vm.historySearchUsers,"bossUser":_vm.bossUser,"onSearch":_vm.getSearchResultUsersAction,"onDeleteHistory":_vm.deleteHistoryUser,"onAddHistory":_vm.addHistoryUser,"textBoxPlaceHolder":"Tìm kiếm nhân viên"},on:{"click":_vm.listItemOnClick}})}
+var staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/templates/components/cloudjet_search_user_textbox/components/main/homepage.vue?vue&type=template&id=3e6325c8&scoped=true&
+/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
+/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
+
+
+/***/ }),
+
 /***/ "ca5a":
 /***/ (function(module, exports) {
 
@@ -76402,23 +76382,6 @@ module.exports = function (it) {
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_search_user_result_list_vue_vue_type_style_index_0_id_6197b944_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_search_user_result_list_vue_vue_type_style_index_0_id_6197b944_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
  /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_search_user_result_list_vue_vue_type_style_index_0_id_6197b944_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
-/***/ "cc43":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/cloudjet_search_user_textbox/components/main/todopage.vue?vue&type=template&id=f5e9ecc8&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('search_user_container',{attrs:{"subordinateUsers":_vm.subordinateUsers,"searchResultUsers":_vm.searchResultUsers,"historySearchUsers":_vm.historySearchUsers,"bossUser":_vm.bossUser,"onSearch":_vm.getSearchResultUsersAction,"onDeleteHistory":_vm.deleteHistoryUser,"onAddHistory":_vm.addHistoryUser,"textBoxPlaceHolder":"Tìm nhân viên để xem công việc"},on:{"click":_vm.listItemOnClick}})}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/templates/components/cloudjet_search_user_textbox/components/main/todopage.vue?vue&type=template&id=f5e9ecc8&scoped=true&
-/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
-/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
-
 
 /***/ }),
 
@@ -76509,6 +76472,17 @@ module.exports = function (object, names) {
   return result;
 };
 
+
+/***/ }),
+
+/***/ "cfcd":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_teampage_vue_vue_type_style_index_0_id_68f2b880_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("41b0");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_teampage_vue_vue_type_style_index_0_id_68f2b880_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_teampage_vue_vue_type_style_index_0_id_68f2b880_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_teampage_vue_vue_type_style_index_0_id_68f2b880_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -76808,13 +76782,6 @@ module.exports = function (done, value) {
   return { value: value, done: !!done };
 };
 
-
-/***/ }),
-
-/***/ "d693":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -78175,7 +78142,7 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 
 var cov_16sxmo8del = function () {
   var path = "/home/nguyen/Downloads/cloudjet/cloudjet_ui/src/templates/components/cloudjet_search_user_textbox/components/main/teampage.vue",
-      hash = "86d56753cb0f546b3ea2c98c9842044ab3c1b9c2",
+      hash = "d42ae0089c4949d9deb0230b17daffdecf4db48d",
       Function = function () {}.constructor,
       global = new Function('return this')(),
       gcv = "__coverage__",
@@ -78183,66 +78150,6 @@ var cov_16sxmo8del = function () {
     path: "/home/nguyen/Downloads/cloudjet/cloudjet_ui/src/templates/components/cloudjet_search_user_textbox/components/main/teampage.vue",
     statementMap: {
       "0": {
-        start: {
-          line: 31,
-          column: 21
-        },
-        end: {
-          line: 31,
-          column: 41
-        }
-      },
-      "1": {
-        start: {
-          line: 39,
-          column: 16
-        },
-        end: {
-          line: 39,
-          column: 75
-        }
-      },
-      "2": {
-        start: {
-          line: 40,
-          column: 17
-        },
-        end: {
-          line: 40,
-          column: 39
-        }
-      },
-      "3": {
-        start: {
-          line: 42,
-          column: 2
-        },
-        end: {
-          line: 46,
-          column: 3
-        }
-      },
-      "4": {
-        start: {
-          line: 43,
-          column: 4
-        },
-        end: {
-          line: 43,
-          column: 21
-        }
-      },
-      "5": {
-        start: {
-          line: 45,
-          column: 4
-        },
-        end: {
-          line: 45,
-          column: 27
-        }
-      },
-      "6": {
         start: {
           line: 50,
           column: 18
@@ -78252,7 +78159,7 @@ var cov_16sxmo8del = function () {
           column: 31
         }
       },
-      "7": {
+      "1": {
         start: {
           line: 73,
           column: 6
@@ -78262,7 +78169,7 @@ var cov_16sxmo8del = function () {
           column: 45
         }
       },
-      "8": {
+      "2": {
         start: {
           line: 77,
           column: 6
@@ -78272,7 +78179,7 @@ var cov_16sxmo8del = function () {
           column: 8
         }
       },
-      "9": {
+      "3": {
         start: {
           line: 82,
           column: 6
@@ -78282,7 +78189,7 @@ var cov_16sxmo8del = function () {
           column: 28
         }
       },
-      "10": {
+      "4": {
         start: {
           line: 110,
           column: 4
@@ -78292,7 +78199,7 @@ var cov_16sxmo8del = function () {
           column: 5
         }
       },
-      "11": {
+      "5": {
         start: {
           line: 111,
           column: 6
@@ -78302,118 +78209,75 @@ var cov_16sxmo8del = function () {
           column: 51
         }
       },
-      "12": {
+      "6": {
         start: {
           line: 117,
           column: 4
         },
         end: {
-          line: 117,
-          column: 45
+          line: 140,
+          column: 6
         }
       },
-      "13": {
-        start: {
-          line: 122,
-          column: 31
-        },
-        end: {
-          line: 122,
-          column: 63
-        }
-      },
-      "14": {
+      "7": {
         start: {
           line: 133,
-          column: 4
+          column: 8
         },
         end: {
           line: 133,
-          column: 49
+          column: 35
         }
       },
-      "15": {
+      "8": {
         start: {
           line: 136,
-          column: 4
+          column: 8
         },
         end: {
           line: 136,
-          column: 46
+          column: 32
         }
       },
-      "16": {
+      "9": {
         start: {
           line: 139,
-          column: 4
+          column: 8
         },
         end: {
           line: 139,
-          column: 49
+          column: 34
         }
       }
     },
     fnMap: {
       "0": {
-        name: "getTargetId",
+        name: "(anonymous_0)",
         decl: {
           start: {
-            line: 27,
-            column: 16
+            line: 117,
+            column: 50
           },
           end: {
-            line: 27,
-            column: 27
+            line: 117,
+            column: 51
           }
         },
         loc: {
           start: {
-            line: 27,
-            column: 45
+            line: 117,
+            column: 55
           },
           end: {
-            line: 47,
-            column: 1
+            line: 140,
+            column: 5
           }
         },
-        line: 27
+        line: 117
       }
     },
     branchMap: {
       "0": {
-        loc: {
-          start: {
-            line: 42,
-            column: 2
-          },
-          end: {
-            line: 46,
-            column: 3
-          }
-        },
-        type: "if",
-        locations: [{
-          start: {
-            line: 42,
-            column: 2
-          },
-          end: {
-            line: 46,
-            column: 3
-          }
-        }, {
-          start: {
-            line: 42,
-            column: 2
-          },
-          end: {
-            line: 46,
-            column: 3
-          }
-        }],
-        line: 42
-      },
-      "1": {
         loc: {
           start: {
             line: 110,
@@ -78457,21 +78321,13 @@ var cov_16sxmo8del = function () {
       "6": 0,
       "7": 0,
       "8": 0,
-      "9": 0,
-      "10": 0,
-      "11": 0,
-      "12": 0,
-      "13": 0,
-      "14": 0,
-      "15": 0,
-      "16": 0
+      "9": 0
     },
     f: {
       "0": 0
     },
     b: {
-      "0": [0, 0],
-      "1": [0, 0]
+      "0": [0, 0]
     },
     _coverageSchema: "332fd63041d2c1bcb487cc26dd0d5f7d97098a6c"
   },
@@ -78490,7 +78346,6 @@ var _interopRequireDefault = __webpack_require__("496d");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getTargetId = getTargetId;
 exports.default = void 0;
 
 __webpack_require__("96cf");
@@ -78509,36 +78364,29 @@ var _mutations = __webpack_require__("0b17");
 
 var _store = _interopRequireDefault(__webpack_require__("13a3"));
 
-function getTargetId(currentLoggedId) {
-  cov_16sxmo8del.f[0]++;
-  // Get url
-  // Parse url using regular expression
-  // If match -> Extract id from
-  var currentUrl = (cov_16sxmo8del.s[0]++, window.location.href);
-  /**
-   * Matching pattern:
-   * second section expect domain should be
-   * /kpi-editor/emp/<uid>/
-   * https://jsbin.com/yupobepucu/edit?js,console
-   */
-
-  var regex = (cov_16sxmo8del.s[1]++, /^http(s)?:\/\/[^/]+\/performance\/kpi-editor\/emp\/(\d+)/g);
-  var result = (cov_16sxmo8del.s[2]++, regex.exec(currentUrl));
-  cov_16sxmo8del.s[3]++;
-
-  if (result !== null) {
-    cov_16sxmo8del.b[0][0]++;
-    cov_16sxmo8del.s[4]++;
-    return result[2];
-  } else {
-    cov_16sxmo8del.b[0][1]++;
-    cov_16sxmo8del.s[5]++;
-    return currentLoggedId;
-  }
-} // Đặt store key ngoài đâys
-
-
-var STORE_KEY = (cov_16sxmo8del.s[6]++, "$searchUser");
+// export function getTargetId(currentLoggedId) {
+//   // Get url
+//   // Parse url using regular expression
+//   // If match -> Extract id from
+//   const currentUrl = window.location.href;
+//
+//   /**
+//    * Matching pattern:
+//    * second section expect domain should be
+//    * /kpi-editor/emp/<uid>/
+//    * https://jsbin.com/yupobepucu/edit?js,console
+//    */
+//   const regex = /^http(s)?:\/\/[^/]+\/performance\/kpi-editor\/emp\/(\d+)/g;
+//   const result = regex.exec(currentUrl);
+//
+//   if (result !== null) {
+//     return result[2];
+//   } else {
+//     return currentLoggedId;
+//   }
+// }
+// Đặt store key ngoài đâys
+var STORE_KEY = (cov_16sxmo8del.s[0]++, "$searchUser");
 var _default = {
   name: "main",
   props: {
@@ -78548,16 +78396,16 @@ var _default = {
   },
   methods: (0, _objectSpread2.default)({}, (0, _vuex.mapActions)(STORE_KEY, [_actions.getSubordinateAction, _actions.getSearchResultUsersAction, _actions.addHistoryUserAction, _actions.getHistoryUserAcion, _actions.getBossUserAction]), (0, _vuex.mapMutations)(STORE_KEY, [_mutations.removeHistoryUserMutation]), {
     onSearch: function onSearch(query) {
-      cov_16sxmo8del.s[7]++;
+      cov_16sxmo8del.s[1]++;
       this.getSearchResultUsersAction(query);
     },
     addHistoryUser: function addHistoryUser(user) {
-      cov_16sxmo8del.s[8]++;
+      cov_16sxmo8del.s[2]++;
       this.addHistoryUserAction({
         user: user,
         userId: this.userActor.user
       });
-      cov_16sxmo8del.s[9]++;
+      cov_16sxmo8del.s[3]++;
       listItemOnClick(user);
     }
   }),
@@ -78574,16 +78422,16 @@ var _default = {
     search_user_container: _search_user_container_no_show_default.default
   },
   created: function created() {
-    cov_16sxmo8del.s[10]++;
+    cov_16sxmo8del.s[4]++;
 
     /* below should be bundle into a component builder*/
     // eslint-disable-next-line no-underscore-dangle
     if (!(STORE_KEY in this.$store._modules.root._children)) {
-      cov_16sxmo8del.b[1][0]++;
-      cov_16sxmo8del.s[11]++;
+      cov_16sxmo8del.b[0][0]++;
+      cov_16sxmo8del.s[5]++;
       this.$store.registerModule(STORE_KEY, _store.default);
     } else {
-      cov_16sxmo8del.b[1][1]++;
+      cov_16sxmo8del.b[0][1]++;
     }
     /* end this */
 
@@ -78592,38 +78440,44 @@ var _default = {
     var _mounted = (0, _asyncToGenerator2.default)(
     /*#__PURE__*/
     regeneratorRuntime.mark(function _callee() {
-      var currentFocusUserId;
+      var _this = this;
+
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              cov_16sxmo8del.s[12]++;
+              cov_16sxmo8del.s[6]++;
               _context.next = 3;
-              return this.$store.dispatch("initialize");
+              return this.$store.dispatch("initialize").then(function () {
+                cov_16sxmo8del.f[0]++;
+                cov_16sxmo8del.s[7]++;
+
+                /**
+                 * Determine userid
+                 * Fetch data
+                 */
+                //const currentFocusUserId = getTargetId(this.userActor.user);
+                // // Check current focus user
+                // if (currentFocusUserId !== this.userActor.user) {
+                //   /**
+                //    * Call network service
+                //    */
+                // }
+                // Get subordinate of target id
+                _this.getSubordinateAction(); // // get boss of target id
+
+
+                cov_16sxmo8del.s[8]++;
+
+                _this.getBossUserAction(); // // Get history of current logged user
+
+
+                cov_16sxmo8del.s[9]++;
+
+                _this.getHistoryUserAcion();
+              });
 
             case 3:
-              /**
-               * Determine userid
-               * Fetch data
-               */
-              currentFocusUserId = (cov_16sxmo8del.s[13]++, getTargetId(this.userActor.user)); // // Check current focus user
-              // if (currentFocusUserId !== this.userActor.user) {
-              //   /**
-              //    * Call network service
-              //    */
-              // }
-              // Get subordinate of target id
-
-              cov_16sxmo8del.s[14]++;
-              this.getSubordinateAction(currentFocusUserId); // // get boss of target id
-
-              cov_16sxmo8del.s[15]++;
-              this.getBossUserAction(currentFocusUserId); // // Get history of current logged user
-
-              cov_16sxmo8del.s[16]++;
-              this.getHistoryUserAcion(this.userActor.user);
-
-            case 10:
             case "end":
               return _context.stop();
           }
@@ -78925,17 +78779,6 @@ var staticRenderFns = []
 /* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
 /* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
 
-
-/***/ }),
-
-/***/ "e33a":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_search_user_container_show_default_vue_vue_type_style_index_0_id_3e273df4_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("f2c6");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_search_user_container_show_default_vue_vue_type_style_index_0_id_3e273df4_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_search_user_container_show_default_vue_vue_type_style_index_0_id_3e273df4_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_search_user_container_show_default_vue_vue_type_style_index_0_id_3e273df4_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -79688,6 +79531,23 @@ var global = module.exports = typeof window != 'undefined' && window.Math == Mat
   // eslint-disable-next-line no-new-func
   : Function('return this')();
 if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
+
+/***/ }),
+
+/***/ "e5fb":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e5e247fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/templates/components/list_emp_and_score/components/form_view_list_quarter/form_view_list_quarter.vue?vue&type=template&id=87385896&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form',{staticClass:"form-horizontal",attrs:{"id":"score-report-form","action":"/performance/score/","method":"get"}},[_c('div',{staticClass:"form-group mg-bt-0"},[_c('label',{staticClass:"col-sm-3 control-label"},[_vm._v("Đợt đánh giá:")]),_c('div',{staticClass:"col-sm-8"},[_c('select',{staticClass:"form-control ELS_DDL_SCHEDULE",attrs:{"name":"quarter_id","id":"quarter_name"}},_vm._l((_vm.quarters),function(q){return (_vm.currentQuarter.id==q.id)?_c('option',{attrs:{"selected":"selected","date":q.due_date},domProps:{"value":q.id}},[_vm._v("\n                    "+_vm._s(q.quarter_name)+" ( "+_vm._s(_vm._f("dateTimeFormatStandard")(q.due_date))+" )\n                ")]):_c('option',{attrs:{"date":q.due_date},domProps:{"value":q.id}},[_vm._v("\n                    "+_vm._s(q.quarter_name)+" ( "+_vm._s(_vm._f("dateTimeFormatStandard")(q.due_date))+" )\n                ")])}))])]),_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"col-sm-offset-3 col-sm-8"},[_c('div',{staticClass:"checkbox "},[_c('input',{staticClass:"ELS_CBX_SUB",attrs:{"type":"checkbox","checked":"","name":"user_id","id":"id_check_user_id"},domProps:{"value":_vm.userActor.user}}),_c('label',{attrs:{"for":"id_check_user_id"}},[_vm._v("\n                    Xuất báo cáo cho những nhân viên cấp dưới của ["+_vm._s(_vm.userActor.display_name)+"]\n                ")])])])]),_c('input',{attrs:{"type":"hidden","name":"report_type","id":"tin-report-type","value":"score"}})])}
+var staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/templates/components/list_emp_and_score/components/form_view_list_quarter/form_view_list_quarter.vue?vue&type=template&id=87385896&scoped=true&
+/* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
+/* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
 
 
 /***/ }),
@@ -81691,13 +81551,6 @@ exports.default = {
 
 /***/ }),
 
-/***/ "f2c6":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "f3ad":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -82770,10 +82623,10 @@ exports.default = _default2;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _search_user_container_show_default_vue_vue_type_template_id_3e273df4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c382");
+/* harmony import */ var _search_user_container_show_default_vue_vue_type_template_id_11217e50_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("0b05");
 /* harmony import */ var _search_user_container_show_default_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("f648");
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _search_user_container_show_default_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _search_user_container_show_default_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _search_user_container_show_default_vue_vue_type_style_index_0_id_3e273df4_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("e33a");
+/* harmony import */ var _search_user_container_show_default_vue_vue_type_style_index_0_id_11217e50_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("751c");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("2877");
 
 
@@ -82785,11 +82638,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(
   _search_user_container_show_default_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _search_user_container_show_default_vue_vue_type_template_id_3e273df4_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
-  _search_user_container_show_default_vue_vue_type_template_id_3e273df4_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
+  _search_user_container_show_default_vue_vue_type_template_id_11217e50_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
+  _search_user_container_show_default_vue_vue_type_template_id_11217e50_scoped_true___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
   false,
   null,
-  "3e273df4",
+  "11217e50",
   null
   
 )

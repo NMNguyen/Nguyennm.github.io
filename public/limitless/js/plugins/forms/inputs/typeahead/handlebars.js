@@ -2678,7 +2678,7 @@ var __module11__ = (function(__dependency1__, __dependency2__) {
     " char final native synchronized" +
     " class float package throws" +
     " const goto private transient" +
-    " debugger implements protected volatile" +
+    "  implements protected volatile" +
     " double import public let yield"
   ).split(" ");
 
