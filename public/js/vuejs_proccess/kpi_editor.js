@@ -1109,7 +1109,7 @@ var v = new Vue({
             return found;
         },
         getListGroup: function(){
-            //debugger;
+            //;
             var listGroup ={};
             var count = 0;
             var tmp = [];
@@ -1151,7 +1151,7 @@ var v = new Vue({
         },
 
         getListGroupV2: function(){
-            //debugger;
+            //;
             var self = this;
             var listGroup = {};
 

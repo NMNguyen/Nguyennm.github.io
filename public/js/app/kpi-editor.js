@@ -367,7 +367,7 @@ function load_comment_counter(container) {
     if (kpi_ids) {
         //$.post("{{ request.path }}", kpi_ids, function (res) {
         $.post("", kpi_ids, function (res) {
-//                    debugger;
+//                    ;
             if (typeof res == 'object') {
                 for (i in res) {
                     if (res[i].count_comments > 0) {
