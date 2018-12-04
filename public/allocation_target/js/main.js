@@ -157,18 +157,6 @@ Vue.component('modal-edit-target', {
             //            this.$off('dismiss')
         },
         methods: {
-            check_paste: function (evt) {
-                evt.preventDefault();
-                evt.stopPropagation();
-            },
-            check_number: function(e){
-                var _number = String.fromCharCode(e.keyCode);
-                if ('0123456789.'.indexOf(_number) !== -1) {
-                    return _number;
-                }
-                e.preventDefault();
-                return false;
-            },
             disableToEditTargetKpi: function (quarter_to_edit) {
                 if (quarter_to_edit < this.edit_target_data.current_quarter) return true
                 return this.edit_target_data.disable_edit
@@ -405,10 +393,6 @@ var targetPage = new Vue({
         },
     },
     methods: {
-        check_paste: function (evt) {
-            evt.preventDefault();
-            evt.stopPropagation();
-        },
         check_number: function(e){
             var _number = String.fromCharCode(e.keyCode);
             if ('0123456789.'.indexOf(_number) !== -1) {

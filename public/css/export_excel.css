@@ -699,23 +699,4 @@ div[id^='modalCreateFilter'] .left{
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.text-ellipsis{
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-.button-select-filter{
-    max-width: 300px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-.el-tooltip__popper.is-dark{
-    max-width:300px;
-}
-
-.autocomplete_search_manager .el-select-dropdown__item{
-    min-height:60px;
-}
-.white-space-pre{
-    white-space: pre;
-}
 /*[END]------------performance/templates/report/report-score-excel.html------------[END]*/

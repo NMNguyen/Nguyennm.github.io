@@ -33,12 +33,7 @@ Vue.component('edit-import-kpi-modal', {
         showmodal: function (val) {
             this.showmodal = val
         },
-         extractEmails: function (email) {
-             if (email) {
-                 return /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi.test(email);
-             }
-        return false;
-    },
+
 
     },
     beforeDestroy: function () {
@@ -59,7 +54,13 @@ Vue.component('edit-import-kpi-modal', {
         trigger_confirm_edit_kpi: function () {
             var self = this
                 self.$emit('comfirm',self.data_edit_kpi)
-        }
+        },
+        extractEmails: function (email) {
+             if (email) {
+                 return /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi.test(email);
+             }
+            return false;
+        },
     }
 })
 
@@ -544,7 +545,7 @@ methods: {
 
                     }, 1000)
                     //that.workbook = workbook;
-                    //;
+                    //debugger;
                 };
                 reader.readAsBinaryString(f);
             }

@@ -10,6 +10,8 @@
     font-weight: bold;
 }
 
+
+
 .kpi-rating {
     /*margin-left: 20px;*/
     min-width: 130px;
@@ -900,7 +902,6 @@ ul#content-nav > li.active[data-href="#tab-other"] ~ li.nav-color-style {
     text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
     -ms-text-overflow: ellipsis;
-    overflow-wrap: break-word;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -2200,7 +2201,6 @@ span.bonus-score {
 
 .toolbar .toolbar-right {
     position: relative;
-    text-align: right;
     float: right;
     margin-left: 10px;
 }
@@ -4359,6 +4359,9 @@ button.close{
 .transparent-color{
     background: transparent;
 }
+#modal-order-quarter-kpi .modal-body table{
+   text-align: left;
+}
 #modal-order-quarter-kpi .modal-body .table-size{
     width: 100%;
 }
@@ -4371,6 +4374,9 @@ button.close{
     box-shadow:none;
     border-radius:3px;
     margin-right:-15px;
+}
+#edit-all-weight-modal tbody{
+    border:none;
 }
 #edit-all-weight-modal .modal-header .title{
     font-size:20px;
@@ -4395,6 +4401,9 @@ button.close{
 }
 #edit-all-weight-modal .modal-content .modal-footer .btn-save{
     padding:5px 10px;
+}
+#edit-all-weight-modal .modal-content .modal-footer .btn-save:focus{
+    color:white;
 }
 #list-kpi{
     border-collapse: collapse;
@@ -5308,14 +5317,14 @@ button.close{
 .add-kpi{
     margin-top: 5px;
 }
-#exscore-select-control{
+#exscore-select-control {
     background: darkcyan;
     color: white;
     min-width: 85px;
     height: 30px;
     margin-left: 20px;
     border: 1px solid aliceblue;
-
+}
 .warning-del-card .el-message-box{
     width: 465px;
 }
@@ -5358,4 +5367,11 @@ button.close{
     background:transparent!important;
     color: #008b8b!important;
     vertical-align: unset!important;
+}
+
+.kpi-inp-incharge .autocomplete__results{
+    position: relative!important;
+}
+.autocomplete__inputs .input-change-owner {
+    height: 36px;
 }
