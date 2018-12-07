@@ -242,66 +242,6 @@
 
 
 
-[data-v-42e8ef3c] .el-table--enable-row-hover .el-table__body tr:hover > td{
-    background-color:inherit;
-}
-[data-v-42e8ef3c] .el-table--border th.gutter:last-of-type{
-    display:none;
-}
-[data-v-42e8ef3c] .el-button--default{
-    margin-left:10px;
-}
-[data-v-42e8ef3c] .el-button--default:hover{
-    background:#e4e4e4;
-    color:#333;
-    border-color: #dcdfe6;
-}
-[data-v-42e8ef3c] .el-button--primary{
-    border:none;
-}
-[data-v-42e8ef3c] .el-dialog__footer{
-    padding-top:0px;
-}
-[data-v-42e8ef3c] .el-table{
-    margin-top:10px!important;
-    margin-bottom:10px!important;
-}
-[data-v-42e8ef3c] .warning-cell{
-    background-color: #ffeabc;
-}
-[data-v-42e8ef3c] .el-dialog__header{
-    padding-top:10px;
-}
-[data-v-42e8ef3c] .el-dialog__body{
-    padding-top:5px!important;
-}
-
-
-[data-v-fc2cb0bc] .el-dialog__body{
-    padding:15px 20px;
-}
-[data-v-fc2cb0bc] .el-select{
-    max-width: 120px;
-    margin-right:10px;
-}
-[data-v-fc2cb0bc] .el-table{
-    margin-bottom:15px;
-}
-[data-v-fc2cb0bc] .el-table thead{
-    font-weight:bold;
-    color:#333;
-}
-[data-v-fc2cb0bc] .el-table .cell{
-    color:#333;
-    word-break: break-word;
-}
-[data-v-fc2cb0bc] .custom-column-button-remove{
-    text-align: center;
-}
-[data-v-fc2cb0bc] .el-dialog__footer{
-    font-size:14px;
-}
-
 
 
 

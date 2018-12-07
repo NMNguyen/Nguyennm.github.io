@@ -71,7 +71,7 @@ module.controller('PeopleListCtrl', ['$scope', '$http', '$filter', '$sce', '$tim
 
     $scope.allow_delay = false;
     $http.get('/api/organization/').success(function (response) {
-        //  debugger;
+        //  ;
 
         $scope.allow_delay = response.allow_delay_kpi;
         $scope.child_allow_delay = response.allow_delay_kpi;
@@ -81,7 +81,7 @@ module.controller('PeopleListCtrl', ['$scope', '$http', '$filter', '$sce', '$tim
 
     $scope.get_profile = function () {
         $http.get('/api/profile/').success(function (response) {
-            //  debugger;
+            //  ;
 
             $scope.profile = response;
 

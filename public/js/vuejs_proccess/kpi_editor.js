@@ -127,16 +127,17 @@ function total_old_weight_on_level(val, parent_id) {
     });
     return total_old_weight;
 }
-function setToolTipKPI(el, content){
-    $(el).qtip({
-        content: {
-            text: content.replace(/(?:\r\n|\r|\n)/g, '<br/>')
-        },
-        style: {
-            classes: 'qtip-green'
-        },
-    });
-}
+// function setToolTipKPI(el, content){
+//     $(el).qtip({
+//         content: {
+//             text: content.replace(/(?:\r\n|\r|\n)/g, '<br/>')
+//         },
+//         style: {
+//             classes: 'qtip-green'
+//         },
+//     });
+// }
+
 function collapse_kpi_group(kpi_id, refer_to_id, get_kpi_refer_group, is_search_page) {
 
     if ($('#kpi-wrapper-' + refer_to_id).length == 0 && is_search_page != 'True') {
@@ -461,7 +462,6 @@ Vue.mixin({
             //this.kpi_list[kpi_id]
 
         },
-
         compile: function(content, refs){
             //   // alert('inside compile');
             // var tmp = Vue.extend({
@@ -488,6 +488,7 @@ Vue.mixin({
             // temp_vm.$destroy()
 
         },
+
         track_component_created:function(track_obj, key){
             var that = this;
 
@@ -515,6 +516,7 @@ Vue.mixin({
             }
 
         },
+
         calert: function(){
             // alert('Çalışıyor');
         },
@@ -1381,14 +1383,20 @@ Vue.component('tag-search', {
 });
 
 
-Vue.directive('settooltip', {
-    bind: function (el, binding, value) {
-        setToolTipKPI($(el), binding.value);
-    },
-    update: function (el, binding, value) {
-        setToolTipKPI($(el), binding.value);
-    }
-})
+
+
+// Vue.directive('settooltipkpi', {
+//     params: ['content'],
+//     paramWatchers: {
+//         content: function (val, oldVal) {
+//             setToolTipKPI($(this.el),this.params.content);
+//         }
+//     },
+//     bind:function () {
+//         setToolTipKPI($(this.el),this.params.content);
+//     }
+// });
+
 
 Vue.component('kpi-editable', {
     delimiters: ["{$", "$}"],
@@ -2090,6 +2098,9 @@ Vue.component('kpi-progressbar', {
         update_quarter_target_and_ready:function(kpi, controller_prefix, ready){
             this.$root.$emit('update_quarter_target_and_ready_event', kpi, controller_prefix, ready);
         },
+        update_score_calculation_type_and_ready:function(kpi, controller_prefix, ready){
+            this.$root.$emit('update_score_calculation_type_and_ready_event', kpi, controller_prefix, ready);
+        },
 
 
         // use kpi.can_add_child_kpi instead
@@ -2156,6 +2167,7 @@ Vue.component('group-kpi', {
     updated: function(){
         this.track_component_updated(COMMON.groups, this.group.slug);
     },
+
     mounted:function(){
 
 
@@ -2953,6 +2965,10 @@ var v = new Vue({
         this.$on('update_quarter_target_and_ready_event', function(kpi, controller_prefix, ready) {
             that.update_quarter_target_and_ready(kpi, controller_prefix, ready);
         });
+        this.$on('update_score_calculation_type_and_ready_event', function(kpi, controller_prefix, ready) {
+            that.update_score_calculation_type_and_ready(kpi, controller_prefix, ready);
+        });
+
         this.$on('change_category', function(kpi_id) {
             that.change_category(kpi_id);
         });
@@ -3272,7 +3288,7 @@ var v = new Vue({
 
             var jqXhr=this.add_kpi(false, kpi_data);
             // additional success callback function
-            jqXhr.success(function(){
+            jqXhr.done(function(){
                 that.$set(that.kpi_list[parent_kpi_id], 'has_child', true);
                 that.$set(that.kpi_list[parent_kpi_id], 'children_data', {'parent_score_auto': true});
                 // $('#btn-kpi-toggle'+kpi).children('i.fa').removeClass("fa-angle-double-right").addClass("fa-angle-double-down");
@@ -3950,6 +3966,25 @@ var v = new Vue({
             return data;
 
         },
+        resetErrorWhenShow: function() {
+            $('#error-input-1').css('display','none');
+            $('#error-input-2').css('display','none');
+            $('#error-input-3').css('display','none');
+            $('#error-input-4').css('display','none');
+        },
+        check_number: function(e){
+            var charCode = e.which || e.keyCode; //It will work in chrome and firefox.
+            var _number = String.fromCharCode(charCode);
+            if (e.key !== undefined && e.charCode === 0) {
+                // FireFox key Del - Supr - Up - Down - Left - Right
+                return;
+            }
+            if ('0123456789.'.indexOf(_number) !== -1) {
+                return _number;
+            }
+            e.preventDefault();
+            return false;
+        },
         update_adjusting_chart: function () {
             var self = this;
             console.log('triggered')
@@ -4149,7 +4184,76 @@ var v = new Vue({
             self.init_adjust(kpi_id);
             console.log(self.adjusting_kpi)
             $('#performance-level-adjust').modal();
-            resetErrorWhenShow();
+            self.resetErrorWhenShow();
+        },
+        checkInput1: function (input_1,target) {
+            var id = $('.row.col-sm-12.evaluate-chart').attr('id');
+            if(input_1 >= target || input_1 < 0 ) {
+                if( id == '<=')
+                    $('#error-input-1').css('display','');
+                else
+                    $('#error-input-3').css('display','');
+            }
+            else {
+                if( id == '<=')
+                    $('#error-input-1').css('display','none');
+                else
+                    $('#error-input-3').css('display','none');
+            }
+        },
+        check_paste: function (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+        },
+        checkInput3: function(input_3,target) {
+            var id = $('.row.col-sm-12.evaluate-chart').attr('id');
+            if(input_3 <= target ) {
+                if( id == '<=')
+                    $('#error-input-2').css('display','');
+                else
+                    $('#error-input-4').css('display','');
+            }
+            else {
+                if( id == '<=')
+                    $('#error-input-2').css('display','none');
+                else
+                    $('#error-input-4').css('display','none');
+            }
+        },
+        triggerClickTab: function(current_tab,e){
+            var self = this
+            self.$set('adjusting_kpi.adjusting_month',current_tab);
+            self.update_adjusting_chart();
+            self.checkConditon(e);
+        },
+        checkConditionInput1: function() {
+            var self = this
+            var current_tab = $('.row.col-sm-12.evaluate-chart').find('.tab-pane.fade.in.active');
+            var target = parseFloat(current_tab.find('#input-2').val());
+            var input_1 =  parseFloat(current_tab.find('#input-1').val());
+            self.checkInput1(input_1,target);
+            self.update_adjusting_chart()
+        },
+        checkConditionInput3: function() {
+            var self = this
+            var current_tab = $('.row.col-sm-12.evaluate-chart').find('.tab-pane.fade.in.active');
+            var target = parseFloat(current_tab.find('#input-2').val());
+            var input_3 = parseFloat(current_tab.find('#input-3').val());
+            self.checkInput3(input_3,target);
+            self.update_adjusting_chart()
+        },
+        checkConditon: function (e) {
+            var self = this
+            $('#error-input-1').css('display','none');
+            $('#error-input-2').css('display','none');
+            $('#error-input-3').css('display','none');
+            $('#error-input-4').css('display','none');
+            var id = $(e).find('a').attr('href');
+            var input_1 = parseFloat($(id).find('#input-1').val());
+            var target = parseFloat($(id).find('#input-2').val());
+            var input_3 = parseFloat($(id).find('#input-3').val());
+            self.checkInput1(input_1,target);
+            self.checkInput3(input_3,target);
         },
         formatTime: function (time) {
             if (COMMON.LanguageCode == 'en'){
@@ -4874,7 +4978,6 @@ var v = new Vue({
                     contentType: false,
                     success: function (response) {
                         console.log(response);
-                        that.refresh_form_action_plan();
                         var mesage = gettext("Post action plan successfully!");
                         alert(mesage);
                         // The unshift() method adds new items to the beginning of an array, and returns the new length.
@@ -4883,24 +4986,20 @@ var v = new Vue({
                         that.list_action_plan_file[0].actor = COMMON.UserDisplayName;
                         // var tmp = that.evidences[that.evidence_id][that.month];
                         // that.$set(that.$data, 'evidences[' + that.evidence_id + '][' + that.month + ']', tmp + 1);
+                        console.log(tmp);
                     },
                     error: function () {
                         // alert("error");
                     }
-                    }).done(function () {
-                        // $('#save-evidence').attr('disabled', 'disabled');
-                        // $('#file-upload-action-plan-input').val('');
-                        // that.action_plan_filename = '';
-                        // $("#board-upload-action-plan .action-plan-descr").val('');
-                        // $('#kpi_action_plan-modal .form-start').show();
-                    });
+                }).done(function () {
+                    // $('#save-evidence').attr('disabled', 'disabled');
+                    $('#file-upload-action-plan-input').val('');
+                    that.action_plan_filename = '';
+                    $("#board-upload-action-plan .action-plan-descr").val('');
+                    $('#kpi_action_plan-modal .form-start').show();
+                });
             }
             else alert(gettext('Please select a file!'));
-        },
-        refresh_form_action_plan: function(){
-            this.action_plan_filename = '';
-            $("#kpi_action_plan-modal .form-start").show();
-            $("#file-upload-action-plan-form")[0].reset();
         },
         postEvidence: function () {
             var formData = new FormData();
@@ -5346,14 +5445,12 @@ var v = new Vue({
         },
         update_quarter_target: function (kpi, callback = null) {
             var that = this;
-            kpi.command = 'update_quarter_target';
             cloudjetRequest.ajax({
                 type: "POST",
-                url: COMMON.LinkKPISevices,
+                url: `/api/v2/kpi/${kpi.id}/update-quarter-target/`,
                 data: JSON.stringify(kpi),
                 success: function (data) {
                     that.kpi_list[kpi.id] = Object.assign(that.kpi_list[kpi.id], data);
-                    that.get_current_employee_performance();
 
                     for (i = 1; i <= 4; i++) {
                         $('#qtip' + kpi.id + '_' + i).qtip({
@@ -5374,7 +5471,24 @@ var v = new Vue({
                 callback();
             }
         },
+        update_score_calculation_type: function (kpi, callback = null) {
+            var that = this;
+            cloudjetRequest.ajax({
+                type: "POST",
+                url: `/api/v2/kpi/${kpi.id}/update-score-calculation-type/`,
+                data: JSON.stringify(kpi),
+                success: function (data) {
+                    that.kpi_list[kpi.id] = Object.assign(that.kpi_list[kpi.id], data);
+                    that.get_current_employee_performance();
 
+                    success_requestcenter(gettext("Update successful!"));
+                },
+                contentType: "application/json"
+            });
+            if (typeof callback === 'function') {
+                callback();
+            }
+        },
         set_month_target_from_last_quarter_three_months_result: function (kpi_id, user_id, kpi_unique_key, last_quarter_id) {
             // Khang build this function
             //       Pace.start(); // Monitor ajax
@@ -5553,11 +5667,13 @@ var v = new Vue({
                             //$('.kpiprogressreview-wrapper').tooltip();
                             that.$set(that.kpi_list[kpi.id], 'latest_score', data.score)
                             that.$set(that.kpi_list[kpi.id], 'real', data.real)
+                            that.kpi_list[kpi.id].target = data.kpi.target;
 
                             that.kpi_list[kpi.id].latest_score = data.score; //JSON.parse(data);
                             that.kpi_list[kpi.id].real = data.real; //JSON.parse(data);
                             that.get_current_employee_performance();
                             that.triggeredReloadTargetPerformance(kpi.id)
+                            that.reload_kpi(kpi.id)
 
                             success_requestcenter(gettext("Update successful!"));
                         },
@@ -6242,6 +6358,10 @@ var v = new Vue({
         },
         update_quarter_target_and_ready: function(kpi, controller_prefix, ready) {
             this.update_quarter_target(kpi);
+            this.kpi_ready(kpi.id, controller_prefix, ready);
+        },
+        update_score_calculation_type_and_ready: function (kpi, controller_prefix, ready) {
+            this.update_score_calculation_type(kpi);
             this.kpi_ready(kpi.id, controller_prefix, ready);
         },
 

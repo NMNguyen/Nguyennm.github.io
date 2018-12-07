@@ -117,6 +117,7 @@ span.badge {
 
 .tooltiptext {
     display: none;
+    white-space: pre-wrap;
 }
 
 .required_class {
@@ -1492,7 +1493,9 @@ ul.success {
 }
 
 .width35 {
-    width: 50px !important;
+    /*width: 50px !important;*/
+    /*use percent to fix bug in firefox*/
+    width: 5% !important;
 }
 
 .group-header {

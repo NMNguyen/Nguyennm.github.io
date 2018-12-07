@@ -1398,3 +1398,14 @@ label.error{
     height:50px;
     width:50px;
 }
+#tabs-people >li.active>a, #tabs-people>li.active>a:hover, #tabs-people>li.active>a:focus{
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #008b8b;
+    border: 1px solid transparent;
+}
+#tabs-people >li > a{
+    font-size: 16px;
+    font-weight: bolder;
+    color: #666666;
+}

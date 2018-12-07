@@ -545,7 +545,7 @@ methods: {
 
                     }, 1000)
                     //that.workbook = workbook;
-                    //debugger;
+                    //;
                 };
                 reader.readAsBinaryString(f);
             }

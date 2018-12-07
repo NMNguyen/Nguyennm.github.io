@@ -7036,7 +7036,7 @@ function compile$1 (
 var prohibitedKeywordRE = new RegExp('\\b' + (
   'do,if,for,let,new,try,var,case,else,with,await,break,catch,class,const,' +
   'super,throw,while,yield,delete,export,import,return,switch,default,' +
-  'extends,finally,continue,debugger,function,arguments'
+  'extends,finally,continue,,function,arguments'
 ).split(',').join('\\b|\\b') + '\\b');
 // check valid identifier for v-for
 var identRE = /[A-Za-z_$][\w$]*/;
