@@ -726,4 +726,7 @@ div[id^='modalCreateFilter'] .left{
 .white-space-pre{
     white-space: pre;
 }
+#pane-first{
+    max-height: calc(100vh - 210px);
+}
 /*[END]------------performance/templates/report/report-score-excel.html------------[END]*/
