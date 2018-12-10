@@ -2670,7 +2670,7 @@ var v = new Vue({
 
             var jqXhr=this.add_kpi(false, kpi_data);
             // additional success callback function
-            jqXhr.success(function(){
+            jqXhr.done(function(){
                 that.$set(that.kpi_list[parent_kpi_id], 'has_child', true);
                 that.$set(that.kpi_list[parent_kpi_id], 'children_data', {'parent_score_auto': true});
                 // $('#btn-kpi-toggle'+kpi).children('i.fa').removeClass("fa-angle-double-right").addClass("fa-angle-double-down");
