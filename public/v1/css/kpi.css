@@ -1126,7 +1126,7 @@ div.btn-wrapper .btn {
 #container {
     background-color: #FFF;
     border-top: 1px solid transparent;
-/ / overflow: overlay;
+    /*overflow: overlay;*/
 }
 
 #header.navbar-inverse .navbar-nav > li > a {
