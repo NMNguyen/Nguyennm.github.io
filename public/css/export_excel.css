@@ -727,6 +727,6 @@ div[id^='modalCreateFilter'] .left{
     white-space: pre;
 }
 .el-table--small{
-    height: calc(100vh - 250px);
+    height: calc(100vh - 250px)!important;
 }
 /*[END]------------performance/templates/report/report-score-excel.html------------[END]*/
