@@ -941,45 +941,47 @@ function search_person(id) {
 
     if (name) {
         var found = false;
-        st.graph.eachNode(function (node) {
-            if (node.data.user_id == name) {
-                found = true;
-                st.onClick(node.id);
-                // neu ten ton trai tren cay co san, thi se click vao node do
-                init_node(node);
-                $('.symbol_loading').hide();
-                $('.mango_search_input').focus();
-                return;
-            }
-        });
-        // if no node matched
-        // do get node line up, trigger existed node st.onClick(node.id)--> get node until reach searched node
-        if (!found) {
-            node_ids = [];
-            cloudjetRequest.ajax({
-                type: 'get',
-                async: false,
-                url: '/performance/people/node/?lineup=' + name,
-                success: function (res) {
-                    console.log(res)
-
-                    // node_ids=res.reverse();
-                    node_ids = res;
-                    //node_search_list = [1355, 1354, 1353, 99]
-                    node_search_list = res;
-                    node_search_list = adjust_node_ids(node_search_list);
-                    reach_node(node_search_list);
-
-
-                },
-                error: function () {
-
+        $("#infovis").html('');
+        init();
+        setTimeout(function() {
+            st.graph.eachNode(function (node) {
+                if (node.data.user_id == name) {
+                    found = true;
+                    st.onClick(node.id);
+                    // neu ten ton trai tren cay co san, thi se click vao node do
+                    init_node(node);
+                    $('.symbol_loading').hide();
+                    $('.mango_search_input').focus();
+                    return;
                 }
             });
+            // if no node matched
+            // do get node line up, trigger existed node st.onClick(node.id)--> get node until reach searched node
+            if (!found) {
+                node_ids = [];
+                cloudjetRequest.ajax({
+                    type: 'get',
+                    async: false,
+                    url: '/performance/people/node/?lineup=' + name,
+                    success: function (res) {
+                        console.log(res)
 
-        }
+                        // node_ids=res.reverse();
+                        node_ids = res;
+                        //node_search_list = [1355, 1354, 1353, 99]
+                        node_search_list = res;
+                        node_search_list = adjust_node_ids(node_search_list);
+                        reach_node(node_search_list);
 
 
+                    },
+                    error: function () {
+
+                    }
+                });
+
+            }
+        }, 1000)
     } else {
         alert(gettext("Emloyee's name field cannot be empty or is incorrect"));
         $(".mango_search_input").focus();
