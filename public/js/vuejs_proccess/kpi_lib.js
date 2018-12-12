@@ -45,9 +45,6 @@ $('#input-search-kpi').focusout(function () {
 // }
 
 $('body').on('mouseover', '.dropdown-func-cate .el-cascader-menu__item', function () {
-    $(this).on('hidden.bs.tooltip', function(){
-         $(this).tooltip('destroy');
-    });
     $(this).tooltip({
         title: $(this).html(),
         container: 'body'
@@ -1170,7 +1167,7 @@ Vue.component('kpilib', {
         get_data_kpilib: function(page=1){
             //get all kpi in kpilib when query_kpilib: ' ',
             var self = this;
-            var url =`/api/v2/kpilib/?lang=${self.LANGUAGE_CODE}`;
+            var url = '/api/v2/kpilib/';
             if(page && page != 1 && self.next_url_kpi_lib){
                 url = updateQueryStringParameter(self.next_url_kpi_lib,'page', page);
             }

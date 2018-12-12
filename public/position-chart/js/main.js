@@ -177,6 +177,11 @@ var importKpiPosition = new Vue({
             return str
         }
     },
+    computed: {
+        table_height: function () {
+            return screen.height > 768 ? 800: 500
+        }
+    },
     methods: {
         hideUnusedTableHead: function () {
             console.log("triggered this hiding function")
@@ -574,7 +579,7 @@ var importKpiPosition = new Vue({
                                 }
                                 that.kpis.forEach(function (kpi, index) {
                                     kpi.index = index
-                                    that.validate_kpi(index);
+                                    that.validate_kpi(kpi);
                                     console.log(that.kpis[index]);
                                     return kpi
                                 })
@@ -763,15 +768,16 @@ var importKpiPosition = new Vue({
             }
             return kpi
         },
-        validate_kpi: function (index) {
+        validate_kpi: function (kpi, show_error=true) {
             var self = this
             var operator = ['<=', '>=', '='];
             var scores = ['q1', 'q2', 'q3', 'q4'];
-            var months = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 't11', 't12']
-            if (index == undefined) {
-                return;
+            var months = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 't11', 't12'];
+
+            if($.isEmptyObject(kpi)){
+                return
             }
-            var kpi = self.kpis[index];
+
             kpi.bsc_category = kpi.type_kpi == null? kpi.type_kpi :kpi.type_kpi.toString();
             kpi.weight = kpi.weight.toString()
             if (!kpi.score_calculation_type) {
@@ -923,13 +929,14 @@ var importKpiPosition = new Vue({
             }
             kpi.msg = kpi.msg.trim();
 
-            console.log(kpi.msg)
-            if (kpi.msg != '') {
+            console.log(kpi.msg);
+
+            if (kpi.msg != '' && show_error) {
                 self.addRowError(kpi._uuid)
             } else {
                 self.removeRowError(kpi._uuid)
             }
-            self.$set(self.kpis, index, kpi);
+            // show_error && self.$set(self.kpis, index, kpi);
             self.$set(self.data_edit_kpi, 'msg', kpi.msg);
             try {
                 // auto scroll to error messages
@@ -939,7 +946,7 @@ var importKpiPosition = new Vue({
             } catch (err) {
 
             }
-            self.$set(self.kpis, index, kpi);
+            //self.$set(self.kpis, index, kpi);
         },
         to_string: function (value) {
             return value != null ? value.toString() : null;
@@ -987,11 +994,10 @@ var importKpiPosition = new Vue({
         },
         confirm_edit_kpi: function (kpi) {
             var self = this;
-            self.resetErrorMsg(kpi.data)
-            self.kpis[kpi.index] = kpi.data;
+            self.resetErrorMsg(kpi.data);
             kpi.data.msg = '';
-            self.validate_kpi(kpi.index)
-            self.data_edit_kpi.data = self.kpis[kpi.index]
+            self.data_edit_kpi.data = kpi.data;
+            self.validate_kpi(kpi.data, false);
             setTimeout(function () {
                 if (!$('.text-muted').length) {
                     $("body.bg-sm").removeAttr("style");
@@ -1002,10 +1008,11 @@ var importKpiPosition = new Vue({
                     $('#edit-import-kpi-position-chart').modal('hide');
                     setTimeout(function () {
                         self.import_kpi_position_message_obj.show_message = false
-                    },2000)
+                    },2000);
+                    self.$set(self.kpis, kpi.index, kpi.data);
                     return;
                 }
-            }, 1000)
+            }, 100);
 
             if (self.method.indexOf(kpi.data.score_calculation_type.trim().toLowerCase()) != -1) kpi.data.score_calculation_type = self.trans_method(kpi.data.score_calculation_type);
 

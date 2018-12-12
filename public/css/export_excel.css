@@ -86,11 +86,9 @@ body {
 }
 
 #content {
-    margin-top: 0px !important;
+    margin-top: 40px !important;
 }
-#container{
-    background: none!important;
-}
+
 .el-header {
     background-color: #ffffff;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
@@ -700,33 +698,5 @@ div[id^='modalCreateFilter'] .left{
     max-width: 225px;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-.text-ellipsis{
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-.button-select-filter{
-    max-width: 300px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-.el-tooltip__popper.is-dark{
-    max-width:300px;
-}
-
-.autocomplete_search_manager .el-select-dropdown__item{
-    min-height:60px;
-}
-
-.el-progress--circle .el-progress__text{
-    font-weight:bold;
-    font-size: 12px!important;
-    color:black;
-}
-.white-space-pre{
-    white-space: pre;
-}
-.el-table--small{
-    height: calc(100vh - 250px)!important;
 }
 /*[END]------------performance/templates/report/report-score-excel.html------------[END]*/
