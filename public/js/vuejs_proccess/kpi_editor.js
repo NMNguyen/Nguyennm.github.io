@@ -407,6 +407,11 @@ Vue.mixin({
 
     },
     methods: {
+        can_add_or_remove_exscore: function(month){
+            var is_person_have_permission = (COMMON.IsManager === 'True' || this.is_user_system === true)
+            var is_month_can_do = (this.organization.monthly_review_lock === 'allow_all' || this.organization.monthly_review_lock === month);
+            return (is_person_have_permission === true || is_month_can_do === true)
+        },
         get_child_kpis_from_kpi_list:function(kpi_id){
 
             var that =  this;
@@ -560,6 +565,840 @@ Vue.mixin({
     }
 });
 
+
+var completeReviewModal = Vue.extend({
+    delimiters: ["${", "}$"],
+    template: $('#detail-task-layout-assessment-1').html(),
+    props: {
+        userdata: {},
+        kpi_approval: null
+    },
+    data : function (){
+        return {
+            organization: {},
+            employee_performance: {},
+            month_1_name: "M1",
+            month_2_name: "M2",
+            month_3_name: "M3",
+            quarter:"",
+            table_evaluation_kpis: [],
+            user_id: '',
+            quarter_by_id: '',
+            COMMON: COMMON,
+            total_weight_by_user: {},
+            loading: false,
+        }
+    },
+    filters: {
+        scoreDisplay: function (val){
+            // model -> view
+            // formats the value when updating the input element.
+                try {
+                    return typeof(val) == 'number' ? (val == 0 ? "0%" : (val.toFixed(2) + "%")) : "0%";
+                }
+                catch (err) {
+                    return "0%";
+                }
+            // view -> model
+            // formats the value when writing to the data.
+                var number = +val.replace(/[^\d.]/g, '');
+                return isNaN(number) ? 0 : parseFloat(number.toFixed(2))
+        }
+    },
+    watch: {
+        userdata: {
+            handler: function (val) {
+                if (val) {
+                    this.organization = val.organization;
+                    this.employee_performance = val.employee_performance;
+                    this.month_1_name = val.month_1_name;
+                    this.month_2_name = val.month_2_name;
+                    this.month_3_name = val.month_3_name;
+                    this.total_weight_by_user = val.total_weight_by_user;
+                    this.user_id = val.user_id;
+                    this.quarter_by_id =  val.quarter_by_id;
+                    this.current_quarter = val.current_quarter;
+                    this.getKPIApprovalStatus();
+                    this.count_zero_score_kpi();
+                }
+            },
+            deep: true
+        }
+    },
+    created: function(){
+        window._kpi_approve = this;
+    },
+    methods:{
+        count_zero_score_kpi: function (recheck) {
+            var user_id = COMMON.OrgUserId;
+
+            var that = this;
+            that.table_evaluation_kpis = [];
+            var quarter_id = getUrlVars()['quarter_id'];
+            var url = COMMON.LinkKPIParentAPI + '?user_id=' + user_id;
+            url += (quarter_id != undefined) ? '&quarter_id=' + quarter_id : '';
+            if (recheck == true) {
+                url += "&recheck=true"
+            }
+
+            cloudjetRequest.ajax({
+                url: url,
+                type: 'post',
+                success: function (results) {
+                    results = results.filter(function (kpi){
+                            return kpi.weight > 0;
+                    });
+                    results.forEach(function (item) {
+                        // Update lai weight KPI
+                        var value_weight = parseFloat(item.weight*100/that.total_weight_by_user[user_id]);
+                        item.weight_percentage = value_weight;
+
+                    });
+                    that.$set(that.$data, 'table_evaluation_kpis', results);
+                    if (recheck == true) {
+                        location.reload();
+                    }
+
+                },
+                error: function () {
+                    alert('Load Kpis Error');
+                }
+            });
+
+        },
+        is_user: function(){
+            return COMMON.UserViewedId == COMMON.UserId;
+        },
+        is_manager: function() {
+            return COMMON.ManagerIdOfVieweedUser == COMMON.UserId;
+        },
+        manager_approved: function(){
+            // Quan ly da approved
+            if (!$.isEmptyObject(this.kpi_approval) && this.kpi_approval.manager){
+                return true
+            }
+            return false
+        },
+        user_can_approve: function(){
+            if (!this.is_manager() && this.is_user() && !this.kpi_approval) {
+                return true;
+            }
+            return false;
+        },
+        manager_can_approve: function () {
+            //khong phai la manger
+            if (this.is_manager()) {
+                if (!$.isEmptyObject(this.kpi_approval) && this.kpi_approval.finished_date && !this.kpi_approval.confirmed_date) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        show_status_review:function () {
+            //Nhan vien da approved => show status review
+            if (COMMON.UserId == COMMON.UserViewedId && this.kpi_approval) {
+                return true;
+            }
+            //Quan ly da approval => show status review
+            if (COMMON.UserId == COMMON.ManagerIdOfVieweedUser && this.kpi_approval && this.kpi_approval.confirmed_date) {
+                return true;
+            }
+            return false
+        },
+        getKPIApprovalStatus: function(){
+            var that = this;
+            that.loading = true;
+            cloudjetRequest.ajax({
+                type: 'GET',
+                url: `/api/v2/user/${COMMON.UserViewedId}/approve/?month=${that.get_month()}`,
+                success: function(data){
+                    if (data){
+                        that.kpi_approval = data;
+                    }
+                    that.loading = false;
+                }
+            })
+        },
+
+        checkKpiNotReview: function(month){
+            var kpi_not_review = true
+            for (var i=0; i < this.table_evaluation_kpis.length; i++ ){
+                kpi_not_review = this.table_evaluation_kpis[i]["month_"+ month +"_score"] != null && kpi_not_review
+            }
+            return !kpi_not_review
+        },
+        checkKpiForMonthActive: function(){
+            var self = this
+            var warning_kpi_not_review
+            if(self.organization.monthly_review_lock == '1'){
+                warning_kpi_not_review = self.checkKpiNotReview('1')
+            }else if(self.organization.monthly_review_lock == '2'){
+                warning_kpi_not_review = self.checkKpiNotReview('2')
+            }else if(self.organization.monthly_review_lock == '3'){
+                warning_kpi_not_review = self.checkKpiNotReview('3')
+            }else{
+                warning_kpi_not_review = self.checkKpiNotReview('1') || self.checkKpiNotReview('2') || self.checkKpiNotReview('3')
+            }
+            return warning_kpi_not_review
+        },
+        check_month_kpiapproval: function(month){
+            return this.get_month() == month || this.get_month() == 'allow_all'
+        },
+        management_approval_kpi_evaluation: function() {
+           this.update_kpi_approval();
+        },
+        update_kpi_approval: function(){
+            var that = this;
+            cloudjetRequest.ajax({
+                type: 'post',
+                url: `/api/v2/user/${COMMON.UserViewedId}/approve/?month=${that.get_month()}`,
+                data:{
+                  month: that.get_month(),
+                  quarter_period: v.current_quarter.id
+                },
+                success: function(data){
+                    if (data){
+                        that.$root.$emit('set_kpi_approval',data);
+                    }
+                }
+            })
+        },
+        we_complete_review_confirm: function () {
+            this.create_kpi_approval();
+            this.complete_review_confirm();
+            vue_support.show_rate_nps()
+        },
+        get_month: function(){
+            var month = this.organization.monthly_review_lock;
+            var months = {
+               '1': 1,
+               '2': 2,
+               '3': 3,
+            };
+           return months[month] || null;
+        },
+        create_kpi_approval: function() {
+            var that = this;
+             cloudjetRequest.ajax({
+                url: '/api/v2/kpi_approval/',
+                type: 'post',
+                data: {
+                    user: '{{ user.id }}',
+                    month: that.get_month(),
+                    quarter_period: v.current_quarter.id
+                },
+                success: function (data) {
+                    that.$root.$emit('set_kpi_approval', data);
+                }
+            });
+        },
+        complete_review_confirm: function () {
+            that = this;
+            $('#complate-review-modal').modal();
+            var temp = $('#btn-complete-review').html();
+            $('#btn-complete-review').html(gettext('Đảng tải! Vui lòng chờ ...'));
+            cloudjetRequest.ajax({
+                type: 'post',
+                url: COMMON.LinkRDisAPI + "?key=confirm-kpi-quarter" + that.quarter_by_id.id,
+                data: {value: new Date()},
+                success: function (res) {
+                    that.complete_review = res['value'];
+                    console.log(res['value']);
+                    v.complete_review = res['value'];
+                },
+                error: function (res) {
+                }
+            });
+            cloudjetRequest.ajax({
+                type: 'post',
+                url: COMMON.LinkNotifyAPI,
+                data: {
+                    user_id: COMMON.OrgUserId,
+                    notification_type: 'complete_review'
+                },
+                success: function (res) {
+                    v.complete_review = res['value'];
+                },
+                error: function (res) {
+                }
+            });
+            window.open("/performance/report/#/?user_id=" + COMMON.OrgUserId + "&quarter_id=" + that.quarter_by_id.id);
+            $("#complate-review-modal").on("hidden.bs.modal", function () {
+
+                html2canvas(document.body, {
+                    onrendered: function (canvas) {
+                        $('#btn-complete-review').html(temp);
+                        var a = document.createElement('a');
+                        a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
+                        a.download = 'KPIs ' + (new Date()) + '.jpg';
+                        a.click();
+                    }
+                });
+            });
+        },
+    },
+});
+Vue.component('complete-review-modal' , completeReviewModal);
+
+
+var Bonus = Vue.extend({
+    delimiters: ['{$', '$}'],
+    type: 'bonus-component',
+    // template: $('div.bonus-wrapper').html(), // Fuck tap lam moi ra cho nay <3,
+    template: $('#bonus-template').html(), // Fuck tap lam moi ra cho nay <3,
+    props:[
+        'month',
+        'current_user_profile',
+        'current_quarter',
+        'lib_data_dict',
+        'exscore_user_data',
+    ],
+    data: function () {
+        return {
+            filter_text: '',
+            // current_user_profile: null, // used props instead
+            user_data_dict: null,
+            // lib_data_dict: null, // used props
+            bonus_ready: false,
+            render_lib_data_list : [],
+            render_user_data_list : [],
+            dictionary: {
+                plus: gettext('EXTRA') + " (" + gettext("UP TO 20") + "%)",
+                minus: gettext('MINUS'),
+                zero: gettext('ZERO')
+            },
+            // month_name: '', // used computed
+            // current_quarter: {},
+            total_score:{}
+        }
+    },
+    created:function(){
+
+        // removed. Because we passed current_quarter to props and used computed for month_name
+        // this.$on('fetch_current_quarter', function(current_quarter){
+        //     var that = this
+        //     if(that.month == 1){
+        //         that.month_name = that.$parent.month_1_name.toUpperCase()
+        //     }
+        //     if(that.month == 2){
+        //         that.month_name = that.$parent.month_2_name.toUpperCase()
+        //     }
+        //     if(that.month == 3){
+        //         that.month_name = that.$parent.month_3_name.toUpperCase()
+        //     }
+        //     that.$set(that.$data, 'current_quarter',current_quarter)
+        // });
+
+
+        // removed. used watch instead
+        // this.$on('fetch_exscore_lib', function(){
+        //     var that = this
+        //     // Fetch data from $parent
+        //     // that.$set(that.$data, 'lib_data_dict',that.$parent.exscore_lib_data) # removed. Because passed to props
+        //     // that.render_exscore_lib(); // used watch changed of lib_data_dict to render_exscore_lib
+        //     // that.$emit('fetch_user_exscore_group')// used method instead
+        // });
+
+
+        // moved to watch of exscore_user_data
+        // this.$on('fetch_exscore', function(){
+        //     alert('fetch_exscore function');
+        //     var that = this
+        //     // Fetch data from $parent
+        //     // that.$set(that.$data, 'user_data_dict',that.$parent.exscore_user_data[that.month]) // set by watch change of exscore_user_data
+        //     // Process render data
+        //     // that.render_exscore_user()
+        //     // setTimeout(function(){
+        //     //     if (that.bonus_ready == false){
+        //     //         that.$set(that.$data, 'bonus_ready',true)
+        //     //     }
+        //     // },2000);
+        //     // that.$emit('fetch_user_exscore_group')
+        // });
+
+        // removed. used props instead
+        // this.$on('fetch_user_profile_from_parent', function(){
+        //     var that = this
+        //     // that.$set(that.$data, 'current_user_profile',that.$parent.current_user_profile) // used props instead
+        // });
+
+
+
+        // this.$on('fetch_user_exscore_group', function() {
+        //     var that = this
+        //     if(that.lib_data_dict != null && that.user_data_dict != null){
+        //
+        //         for(var key in that.user_data_dict){
+        //             that.user_data_dict[key].map(function(user_exscore_elem){
+        //
+        //                 // Get lib index
+        //                 var group_id_list = that.lib_data_dict[key].map(function(lib_exscore_elem){
+        //                     return lib_exscore_elem.id
+        //                 })
+        //                 var group_index = group_id_list.indexOf(user_exscore_elem.exscore_lib)
+        //                 // Get group
+        //                 user_exscore_elem.group = that.lib_data_dict[key][group_index].group
+        //             })
+        //         }
+        //         that.render_exscore_user()
+        //     }
+        // });
+
+        // moved to methods
+        // this.$on('fetch_user_id',function(){
+        //     var that = this
+        //     that.$set(that.$data, 'user_id',that.$parent.user_id)
+        // });
+
+    },
+    events: {
+        // 'fetch_current_quarter': function(current_quarter){
+        //     var that = this
+        //     if(that.month == 1){
+        //         that.month_name = that.$parent.month_1_name.toUpperCase()
+        //     }
+        //     if(that.month == 2){
+        //         that.month_name = that.$parent.month_2_name.toUpperCase()
+        //     }
+        //     if(that.month == 3){
+        //         that.month_name = that.$parent.month_3_name.toUpperCase()
+        //     }
+        //     that.$set(that.$data, 'current_quarter',current_quarter)
+        // },
+        // 'fetch_exscore_lib': function(){
+        //     var that = this
+        //     // Fetch data from $parent
+        //     that.$set(that.$data, 'lib_data_dict',that.$parent.exscore_lib_data)
+        //     that.render_exscore_lib()
+        //     that.$emit('fetch_user_exscore_group')
+        // },
+        // 'fetch_exscore': function(){
+        //     alert('fetch_exscore function');
+        //     var that = this
+        //     // Fetch data from $parent
+        //     that.$set(that.$data, 'user_data_dict',that.$parent.exscore_user_data[that.month])
+        //     // Process render data
+        //     that.render_exscore_user()
+        //     setTimeout(function(){
+        //         if (that.bonus_ready == false){
+        //             that.$set(that.$data, 'bonus_ready',true)
+        //         }
+        //     },2000)
+        //     that.$emit('fetch_user_exscore_group')
+        // },
+        // 'fetch_user_profile_from_parent': function(){
+        //     var that = this
+        //     that.$set(that.$data, 'current_user_profile',that.$parent.current_user_profile)
+        // },
+        // 'fetch_user_exscore_group': function() {
+        //     var that = this
+        //     if(that.lib_data_dict != null && that.user_data_dict != null){
+        //
+        //         for(var key in that.user_data_dict){
+        //             that.user_data_dict[key].map(function(user_exscore_elem){
+        //
+        //                 // Get lib index
+        //                 var group_id_list = that.lib_data_dict[key].map(function(lib_exscore_elem){
+        //                     return lib_exscore_elem.id
+        //                 })
+        //                 var group_index = group_id_list.indexOf(user_exscore_elem.exscore_lib)
+        //                 // Get group
+        //                 user_exscore_elem.group = that.lib_data_dict[key][group_index].group
+        //             })
+        //         }
+        //         that.render_exscore_user()
+        //     }
+        // },
+        // 'fetch_user_id': function(){
+        //     var that = this
+        //     that.$set(that.$data, 'user_id',that.$parent.user_id)
+        // }
+    },
+    mounted: function(){
+        if(window.exscore_app === undefined){
+            window.exscore_app = []
+        }
+        window.exscore_app.push(this)
+        this.$nextTick(function () {
+            // code that assumes this.$el is in-document
+
+        });
+        // this.$emit('fetch_current_user_profile') // removed, because we already fetch current user profile in main Vue instance
+        // this.$emit('fetch_user_id') // no need, get user_id from mixin
+    },
+    watch: {
+
+        'total_score': {
+            handler: function(value, old_value){
+                // https://vuejs.org/v2/guide/migration.html#dispatch-and-broadcast-replaced
+                // https://stackoverflow.com/questions/40923555/vue-js-whats-the-difference-of-emit-and-dispatch
+                // this.$emit('update_exscore',this.month,value)
+                this.$root.$emit('update_exscore',this.month,value);
+            }
+        },
+        'bonus_ready': {
+            handler: function(newVal,oldVal){
+                if(newVal == true){
+                    $('div#bonus-ready').hide()
+                    $('div#bonus-modal-header').show()
+                }
+            }
+        },
+        'render_user_data_list': {
+            handler: function(val,oldValue){
+
+                var that = this
+                var data = that.calculate_final_score();
+                that.$set(that, 'total_score',data)
+            },
+            deep: true
+        },
+        'filter_text': {
+            handler: function(newVal,oldVal){
+                var that = this
+                that.restoreExscoreLib()
+                that.searchExscoreLib()
+            }
+        },
+
+        'lib_data_dict': function(newVal){
+            this.render_exscore_lib(newVal);
+            this.fetch_user_exscore_group();
+        },
+        'exscore_user_data': {
+            handler: function(val){
+                this.user_data_dict = this.exscore_user_data[this.month];
+                this.render_exscore_user();
+                this.bonus_ready = true;
+                // setTimeout(function(){
+                //     if (that.bonus_ready == false){
+                //         that.$set(that.$data, 'bonus_ready',true)
+                //     }
+                // },2000);
+                this.fetch_user_exscore_group();
+            }
+        }
+    },
+    computed:{
+        month_name:function(){
+            var name = '';
+            var that = this;
+            if(that.month == 1){
+                // that.month_name = that.$parent.month_1_name.toUpperCase()
+                name = that.month_1_name.toUpperCase();
+            }
+            else if(that.month == 2){
+                name = that.month_2_name.toUpperCase();
+            }
+            if(that.month == 3){
+                name = that.month_3_name.toUpperCase();
+            }
+            return name;
+            // that.$set(that.$data, 'current_quarter',current_quarter)
+        },
+    },
+
+    methods: {
+        // removed because this is constant variable, set at mixin
+        // we can always access user_id by this.user_id
+        //
+        // fetch_user_id: function(){
+        //     var that = this
+        //     that.$set(that.$data, 'user_id',that.$parent.user_id)
+        // },
+
+        fetch_user_exscore_group: function() {
+            var that = this;
+            if(that.lib_data_dict && that.user_data_dict){
+
+                for(var key in that.user_data_dict){
+                    that.user_data_dict[key].map(function(user_exscore_elem){
+
+                        // Get lib index
+                        var group_id_list = that.lib_data_dict[key].map(function(lib_exscore_elem){
+                            return lib_exscore_elem.id
+                        });
+                        var group_index = group_id_list.indexOf(user_exscore_elem.exscore_lib)
+                        // Get group
+                        user_exscore_elem.group = that.lib_data_dict[key][group_index].group
+                    })
+                }
+                that.render_exscore_user();
+            }
+        },
+
+
+        render_exscore_user: function(){
+            var that = this
+            var render_data_index = 0
+            // Ánh xạ sang lib_data_dict để lấy group
+            for (var key in that.user_data_dict){
+
+                var temp_dict = {
+                    slug: key,
+                    text: that.dictionary[key],
+                    lan: gettext("Language"),
+                    data: that.extract_exscore_v2(that.user_data_dict[key]),
+                    sum_score: that.get_sum_exscore(that.user_data_dict[key],key)
+                }
+                // that.$set(that.$data, 'render_user_data_list['+(render_data_index++)+']',temp_dict)
+                that.$set(that.render_user_data_list, (render_data_index++),temp_dict);
+            }
+        },
+        render_exscore_lib: function(lib_data_dict){
+            var that = this
+            // Process render data
+            var render_data_index = 0
+            for (var key in lib_data_dict){
+                var temp_dict = {
+                    slug: key,
+                    text: that.dictionary[key],
+                    data: that.extract_exscore_v2(lib_data_dict[key]),
+                }
+                // that.$set(that.$data, 'render_lib_data_list['+(render_data_index++)+']',temp_dict)
+                that.$set(that.render_lib_data_list, (render_data_index++) ,temp_dict);
+            }
+        },
+        restoreExscoreLib: function(){
+            var that = this;
+            // that.$emit('fetch_exscore_lib')
+            this.render_exscore_lib(that.lib_data_dict);
+            this.fetch_user_exscore_group();
+        },
+        searchExscoreLib: function(){
+            var that = this
+            if (that.filter_text != '') {
+                console.log('starting searching with ' + that.filter_text)
+                // First is to restore original data
+                // Now to filter
+                var data = Object.assign({},that.lib_data_dict)
+                for (var key in data){
+                    var _data = data[key].filter(function(elem){
+                        return (
+                            // Search co dau
+                            (
+                                elem.name.toLowerCase().indexOf(that.filter_text.trim().toLowerCase()) != -1 || // co dau
+                                elem.code.toLowerCase().indexOf(that.filter_text.trim().toLowerCase()) != -1
+                            )
+                            ||
+                            // Search khong dau
+                            (
+                                latinize(elem.name.toLowerCase()).indexOf(that.filter_text.trim().toLowerCase()) != -1 || // co dau
+                                latinize(elem.code.toLowerCase()).indexOf(that.filter_text.trim().toLowerCase()) != -1
+                            )
+
+                        )
+                    })
+                    data[key] = _data
+                }
+
+
+                that.render_exscore_lib(data)
+            }
+        },
+        removeExscore: function(month,render_data_index,type,index_in_user_data_dict){
+            var that = this;
+            // Remove element in real dict
+            var data = that.user_data_dict[type][index_in_user_data_dict]
+
+            cloudjetRequest.ajax({
+                type: 'DELETE',
+                url: '/api/v2/exscore/' + data.id + '/',
+                data: {},
+                success: function(res){
+                    that.user_data_dict[type].splice(index_in_user_data_dict,1) // Remove in frontend
+                    // that.$emit('fetch_user_exscore')
+                    that.$root.$emit('fetch_user_exscore')
+                }
+            })
+        },
+        calculate_final_score: function(){
+            console.log('triggered calculate_final_score')
+            var that = this;
+            var zero_score = that.get_sum_exscore(that.user_data_dict['zero'],'zero')
+            var minus_score = that.get_sum_exscore(that.user_data_dict['minus'],'minus')
+            var plus_score = that.get_sum_exscore(that.user_data_dict['plus'],'plus')
+            var data = {
+
+                zero: zero_score > 0 ? true : false,
+                score: plus_score - minus_score
+            }
+            return data
+        },
+        get_sum_exscore: function(list_data, score_type){
+
+            var score = list_data.reduce(function(a,b){
+                if(score_type=='zero') return a + 1
+                return a + b.employee_points;
+            },0);
+            if(score_type == 'plus'){
+                score = score <= 20 ? score: 20
+            }
+            return score;
+        },
+        addExscore: function(month,exscore){
+            var that = this;
+            var data = {
+                month: that.month,
+                user_id: that.user_id,
+                exscore_lib_id: exscore.id,
+                group: exscore.group
+            }
+            // Remove element in real dict
+            cloudjetRequest.ajax({
+                type: 'POST',
+                url: '/api/v2/exscore/',
+                data: JSON.stringify(data),
+                contentType:'application/json',
+                success: function(res){
+                    that.$root.$emit('fetch_user_exscore');
+                }
+            })
+        },
+        extract_lib_exscore: function(title,sum_list){
+            // Clone to new object
+
+            var sum_list_res = jQuery.extend(true, {}, sum_list); // Cloning is required
+
+            var that = this
+            // Extract exscore with lib
+            var exscore_lib_list = [{
+                order: 'I',
+                is_exscore: false,
+                name: 'Điểm ' + title + ' chung',
+                category: 'first'
+            }];
+            var exscore_list = [{
+                order: 'II',
+                is_exscore: false,
+                name: 'Điểm ' + title + ' chuyên môn',
+                category: 'first'
+            }];
+            for(var item in sum_list_res){
+                sum_list_res[item].index = item;
+                exscore_lib_list.push(sum_list_res[item])
+            }
+            // Sort into category
+            exscore_lib_list = that.sort_with_group(exscore_lib_list);
+            exscore_lib_list = exscore_lib_list.slice(1,exscore_lib_list.length);
+
+            exscore_list = that.sort_with_group(exscore_list);
+            exscore_list = exscore_list.slice(1,exscore_list.length);
+
+
+            sum_list_res = exscore_lib_list.concat(exscore_list);
+            return sum_list_res;
+        },
+        extract_exscore_v2: function(sum_list){
+            var that = this
+            var sum_list_res = jQuery.extend(true, [], sum_list); // Cloning is required
+            for(var item in sum_list_res){
+                sum_list_res[item].index = item;
+            }
+            sum_list_res = that.sort_with_group(sum_list_res);
+            return sum_list_res
+        },
+        extract_exscore: function(title,sum_list){
+            // Clone to new object
+
+            var sum_list_res = jQuery.extend(true, {}, sum_list); // Cloning is required
+
+            var that = this
+            // Extract exscore with lib
+            var exscore_lib_list = [{
+                order: 'I',
+                is_exscore: false,
+                name: 'Điểm ' + title + ' chung',
+                category: 'first'
+            }];
+            var exscore_list = [{
+                order: 'II',
+                is_exscore: false,
+                name: 'Điểm ' + title + ' chuyên môn',
+                category: 'first'
+            }];
+            for(var item in sum_list_res){
+                sum_list_res[item].index = item;
+                if(sum_list_res[item].exscore_lib == null){
+                    exscore_list.push(sum_list_res[item])
+                }else{
+                    exscore_lib_list.push(sum_list_res[item])
+                }
+            }
+            // Sort into category
+            exscore_lib_list = that.sort_with_group(exscore_lib_list);
+            exscore_lib_list = exscore_lib_list.slice(1,exscore_lib_list.length);
+
+            exscore_list = that.sort_with_group(exscore_list);
+            exscore_list = exscore_list.slice(1,exscore_list.length);
+
+
+            sum_list_res = exscore_lib_list.concat(exscore_list);
+            return sum_list_res;
+        },
+        sort_with_group: function(list_data){
+            var that = this;
+            var group_container = {};
+            var _sum_list = [];
+            var sum_list = [];
+            // Extract exscore with category
+
+            // Get unique group list
+            var _sum_list_index = 0;
+            var cloned_list_data = Object.assign([],list_data)
+            cloned_list_data.map(function(elem,index,_cloned_list_data){
+                // Set flag is_exscore for exscore
+                elem.is_exscore = true
+                if(!(elem.group in group_container) && elem.group){
+                    if(typeof group_container[elem.group] == 'undefined'){
+                        group_container[elem.group] = {}
+                    }
+                    group_container[elem.group].ready = true
+                    group_container[elem.group].index = _sum_list_index
+                    _sum_list[_sum_list_index] = []
+                    _sum_list[_sum_list_index++].push({
+                        name: elem.group,
+                        is_exscore: false,
+                        category: 'second'
+                    });
+                }
+            })
+            // Filter with group
+            for (var group in group_container){
+                var list = cloned_list_data.filter(function(elem){
+                    return elem.group == group
+                })
+                _sum_list[group_container[group].index] = _sum_list[group_container[group].index].concat(list)
+            }
+            // Return rendered data
+            _sum_list.map(function(elem){
+                sum_list = sum_list.concat(elem)
+            })
+
+            return sum_list;
+        },
+        sort_with_group_to_dict: function(list_data){
+            var data_container = {};
+            var new_list = list_data.map(function(elem,index,array){
+                var key = elem.category.replace(/\s+/g, '_');
+
+                if(key in data_container){
+                    data_container[key].push(elem);
+                }
+                else{
+                    data_container[key]= [];
+                    data_container[key].push(elem);
+                }
+                return elem;
+            });
+            return data_container;
+        }
+    }
+});
+Vue.component('bonus',Bonus);
+// https://vuejs.org/v2/guide/components.html#Using-v-model-on-Components
+// https://stackoverflow.com/questions/49712404/numeric-input-component-for-vue-js
+// Define a new component called decimal-input
 Vue.component('decimal-input', {
     props: [
         'id',
@@ -647,8 +1486,6 @@ Vue.component('evidence-button', {
         'kpi_id',
         'list_evidences',
         'title',
-        'disabled'
-
     ],
     data:function(){
         return {
@@ -660,7 +1497,6 @@ Vue.component('evidence-button', {
     template: `  
         <button
         v-bind:title="title"
-        v-bind:disabled="disabled"
         v-bind:class="'btn btn-default KPI_BTN_EVD ' + (evidence_count ? ' evidence-exist btn-evidences-2': ' btn-evidences-1')"
         v-on:click="showModal_e(month, kpi_id)"
         >
@@ -886,6 +1722,7 @@ Vue.component('kpi-editable', {
                 data: JSON.stringify(data),
                 success: function (data) {
                     _this.kpi[_this.field] = data[_this.field];
+                    _this.kpi['is_approved'] = data.is_approved;
                 }
             })
 
@@ -992,11 +1829,11 @@ Vue.component('kpi-config', {
 
                             swal(gettext("Success"), gettext("KPI is successfully deleted"), "success");
                             that.$root.$emit('kpi_removed', kpi_id);
-                            that.$root.$emit('get_employee_performance',COMMON.OrgUserId);
+
+
                         } else {
                             swal(gettext("Unsuccess"), jqXHR.responseJSON.message, "error");
                         }
-
                     },
                     error: function (jqXHR, settings, errorThrown) {
                         swal(gettext("Unsuccess"), jqXHR.responseJSON.message, "error");
@@ -1294,8 +2131,6 @@ Vue.component('kpi-owner', {
                 return false;
             }
 
-            this.update_assigned_user_data(selected_item);
-            // assign/kpi/
             var data={
                 user: to_user_id
             };
@@ -1349,12 +2184,13 @@ Vue.component('kpi-progressbar', {
         'month_3_name',
         'evidences',
         'is_parent_kpi',
+        'kpi_approval'
         // 'is_user_system',
 
     ],
     data:function(){
         return {
-
+            confirm_complete: false,
         }
     },
     template: $('#kpi-progressbar-template').html(),
@@ -1428,7 +2264,7 @@ Vue.component('kpi-progressbar', {
                                     if (!(!kpi_month_value.enable_review || !disable.enable_month_2_review) || !(!kpi_month_value.enable_review || !disable.enable_month_3_review)) {
                                         message = gettext("You forget review the result") + ' ' + month_name;
                                     }
-                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_1 != null) {
+                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_1 != null && !this.is_admin()) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
@@ -1441,7 +2277,7 @@ Vue.component('kpi-progressbar', {
                                     if (!(!kpi_month_value.enable_review || !disable.enable_month_3_review)) {
                                         message = gettext("You forget review the result") + ' ' + month_name;
                                     }
-                                } else if ((kpi_month_value.month_1 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_2 != null) {
+                                } else if ((kpi_month_value.month_1 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_2 != null && !this.is_admin()) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
@@ -1451,7 +2287,7 @@ Vue.component('kpi-progressbar', {
                                     message = gettext("You forget review the result") + ' ' + month_name;
                                 } else if ((kpi_month_value.month_2 == null || kpi_month_value.month_1 == null) && kpi_month_value.month_3 == null) {
                                     message = gettext("You can not to review the result earlier than the specified time") + ' ' + month_name;
-                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_1 != null) && kpi_month_value.month_3 != null) {
+                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_1 != null) && kpi_month_value.month_3 != null && !this.is_admin()) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
@@ -1473,15 +2309,44 @@ Vue.component('kpi-progressbar', {
             }
             return message;
         },
+        is_admin: function(){
+            if(COMMON.IsAdmin == "True"){
+                return true
+            }else if(COMMON.IsSupperUser == "True"){
+                return true
+            }else {
+                return false
+            }
+        },
+
+        check_disable_result: function(){
+            var that = this;
+            if (!that.kpi_approval) {
+                that.confirm_complete = false;
+                return false;
+            }
+
+            if(that.is_admin()) {
+                that.confirm_complete = false
+            }else if (COMMON.ManagerIdOfVieweedUser == COMMON.UserId && that.kpi_approval.confirmed_date){
+                that.confirm_complete = true
+            }else if(COMMON.UserId == COMMON.UserViewedId && that.kpi_approval.finished_date ){
+                that.confirm_complete = true
+            }else {
+                that.confirm_complete = false
+            }
+        },
         disable_review_kpi: function(parent_id, current_month){
+            // Truong hop user hoac quan ly da xac nhan thi khong cho phep chinh sua
+            this.check_disable_result();
             if (this.is_user_system) return false;
             var is_manager = COMMON.UserId != COMMON.UserViewedId;
             var current_month_locked = !(this.can_edit_current_month(current_month, this.organization.monthly_review_lock));
             if (is_manager){ // if current Login user is parent of user viewed
-                return ( !this.organization.allow_manager_review || current_month_locked ) // manager can edit if enable_to_edit not pass
+                return ( !this.organization.allow_manager_review || current_month_locked ) || this.confirm_complete; // manager can edit if enable_to_edit not pass
             }
             else {
-                return ( !this.organization.allow_employee_review || current_month_locked ) // employee can edit(review) kpi only if not pass self_review_date
+                return ( !this.organization.allow_employee_review || current_month_locked ) || this.confirm_complete; // employee can edit(review) kpi only if not pass self_review_date
             }
         },
 
@@ -1583,7 +2448,7 @@ Vue.component('group-kpi', {
         "month_1_name",
         "month_2_name",
         "month_3_name",
-
+        "kpi_approval"
 
     ],
     data:function(){
@@ -1680,7 +2545,7 @@ Vue.component('kpi-row', {
         'company_params',
         'evidences',
         'is_parent_kpi',
-
+        'kpi_approval'
         // 'is_user_system',
 
     ],
@@ -1958,7 +2823,7 @@ var v = new Vue({
         content: '',
         kpi_list: {},
         list_group: {},
-        // total_weight: {},
+        total_weight: {},
         total_weight_by_user: {},
         toggle_states: {},
         total_weight_bygroup: {'A': 0, 'B': 0, 'C': 0, 'O': 0, 'G': 0},
@@ -1998,8 +2863,8 @@ var v = new Vue({
             user_id: 0,
             version: "",
         },
-        total_zero_score_kpis: [],
         complete_review: '',
+        data_complete_review: null,
         search: false,
         A_CHANGE: false,
         B_CHANGE: false,
@@ -2123,8 +2988,10 @@ var v = new Vue({
         visible: false,
         // end data temp for kpi lib
         organization:[],
-        fetch_data_exscore_user:[],
         parent_score_auto:true,
+        postponed_button: true,
+        kpi_approval: null,
+        confirm_complete: false,
     },
     validators: {
         numeric: { // `numeric` custom validator local registration
@@ -2181,6 +3048,24 @@ var v = new Vue({
             }
             return self.kpi_list;
         },
+        exscore_score_orderBy_key:function (){
+            var that = this;
+            // http://whitfin.io/sorting-object-recursively-node-jsjavascript/
+            var keys = _.keys(this.exscore_score);
+            // _.sortBy(this.exscore_score, 'key')
+            var sortedKeys = _.sortBy(keys, function(key){
+                return key;
+            });
+
+            var sortedObj = {};
+
+            // Underscore
+            _.each(keys, function(key) {
+                sortedObj[key] = that.exscore_score[key];
+            });
+            return sortedObj;
+            // return this.exscore_score;
+        },
     },
     mounted: function () {
 
@@ -2208,6 +3093,7 @@ var v = new Vue({
         //     moreLink: '<a href="#"> <i class="fa fa-angle-double-right"></i> ' + gettext("Read more") + '</a>',
         //     lessLink: '<a href="#"> <i class="fa fa-angle-double-up"></i> ' + gettext("Less") + '</a>'
         // });
+        this.fetch_exscore_lib();
         this.fetch_exscore();
         this.fetch_current_user_profile();
         var p = JSON.parse(localStorage.getItem('history_search_u'));
@@ -2326,6 +3212,15 @@ var v = new Vue({
                 })
             }
         },
+        'exscore_score.current': {
+            handler: function (val, old) {
+                console.log(' =====================> select value is: ' + val)
+                $('#month-1').hide().parent().removeClass('active')
+                $('#month-2').hide().parent().removeClass('active')
+                $('#month-3').hide().parent().removeClass('active')
+                $('#month-' + val).show().parent().addClass('active')
+            }
+        },
         'organization': {
             handler: function (newVal, oldVal) {
                 // alert('organization changed');
@@ -2412,9 +3307,44 @@ var v = new Vue({
             that.change_group(kpi);
         });
 
+
+
+        this.$on('update_lock_exscore_review', function (option) {
+            var that = this;
+            console.log('triggered update_lock_exscore_review')
+            if (option == 'allow_all') {
+                $('select#exscore-select-control').prop('disabled', false)
+                // that.$set(that.$data, 'exscore_score.current', '---')
+                that.$set(that.exscore_score, 'current', '---')
+            } else {
+                // that.$set(that.$data, 'exscore_score.current', option);
+                that.$set(that.exscore_score, 'current', option);
+                // $('#month-' + option).show()
+                $('select#exscore-select-control').prop('disabled', true)
+            }
+        });
+        this.$on('update_exscore', function (month, data) {
+            console.log('triggered update_exscore')
+            //var that = this;
+            var score = data.score;
+            console.log(data);
+            if (data.zero || (score + that.employee_performance['month_' + month + '_score'] < 0)) {
+                score = -that.employee_performance['month_' + month + '_score']
+            }
+            // that.$set(that.$data, 'exscore_score[' + month + '].score', score)
+            that.$set(that.exscore_score[month], 'score', score);
+        });
         this.$on('fetch_user_exscore', function () {
+            console.log('triggered fetch_user_exscore')
             that.fetch_exscore();
         });
+
+        this.$on('set-current-kpi', function(kpi){
+            that.current_kpi = kpi;
+        })
+        this.$on('change_approve_edit_kpi_field', function(kpi_id){
+            that.kpi_list[kpi_id].is_approved = true;
+        })
 
 
         this.$on('show__add_kpi_methods_modal', function () {
@@ -2451,10 +3381,6 @@ var v = new Vue({
             that.update_kpi(kpi, show_blocking_modal, callback);
         });
 
-        this.$on('get_employee_performance', function (emp_id, callback) {
-            that.get_employee_performance(emp_id);
-        });
-
         this.$root.$on("adjust_performance_level", function(kpi_id) {
             that.adjust_performance_level(kpi_id)
         })
@@ -2468,8 +3394,24 @@ var v = new Vue({
         this.$on('toggle_weight_kpi', function (kpi_id) {
             that.toggle_weight_kpi(kpi_id);
         });
+        this.$on('get_kpi_approval', function () {
+            that.getKPIApproval();
+        });
+        this.$on('set_kpi_approval', function (approval) {
+            that.$set(this, 'kpi_approval', approval);
+        })
     },
     methods: {
+        getKPIApproval: function(){
+            var that = this;
+            cloudjetRequest.ajax({
+                type: 'GET',
+                url: `/api/v2/user/${COMMON.UserViewedId}/approve/?month=${that.organization.monthly_review_lock}`,
+                success: function(data){
+                    that.kpi_approval = data;   // get data kpi_approval
+                }
+            })
+        },
         to_percent: function (val, total) {
             if (total > 0) {
                 return val * 100 / total;
@@ -2673,7 +3615,6 @@ var v = new Vue({
             jqXhr.done(function(){
                 that.$set(that.kpi_list[parent_kpi_id], 'has_child', true);
                 that.$set(that.kpi_list[parent_kpi_id], 'children_data', {'parent_score_auto': true});
-                $('.reviewing' + that.kpi_list[parent_kpi_id].id).toggleClass('hide')
                 // $('#btn-kpi-toggle'+kpi).children('i.fa').removeClass("fa-angle-double-right").addClass("fa-angle-double-down");
             });
 
@@ -2894,6 +3835,23 @@ var v = new Vue({
                     window.location.reload(true);
                 },
             })
+        },
+        is_manager: function(){
+            var is_manager = COMMON.ManagerIdOfVieweedUser == COMMON.UserId;
+            return is_manager
+        },
+        is_admin: function(){
+            if(COMMON.IsAdmin == "True"){
+                return true
+            }else if(COMMON.IsSupperUser == "True"){
+                return true
+            }else {
+                return false
+            }
+        },
+        is_user: function(){
+            var is_user = COMMON.UserViewedId == COMMON.UserId;
+            return is_user
         },
 
         hide_modal: function (modal_id) {
@@ -3683,10 +4641,23 @@ var v = new Vue({
                 }
             });
         },
+        fetch_exscore_lib: function () {
+            var that = this;
+            cloudjetRequest.ajax({
+                type: 'GET',
+                url: '/api/v2/exscore/lib/',
+                success: function (data) {
+                    // alert('fetch_exscore_lib successful!');
+                    that.$set(that, 'exscore_lib_data', data);
+                    that.$children.map(function (elem, index, children) {
+                        elem.$emit('fetch_exscore_lib')
+                    })
+                }
 
+            })
+        },
         fetch_exscore: function () {
             var that = this;
-            that.fetch_data_exscore_user = [];
             cloudjetRequest.ajax({
                 type: 'GET',
                 url: '/api/v2/exscore/',
@@ -3694,47 +4665,10 @@ var v = new Vue({
                     user_id: that.user_id,
                 },
                 success: function (data) {
-                    var minus = [];
-                    var plus = [];
-                    var zero = [];
-                    for(i=1;i<4;i++){
-                        minus[i] = 0;
-                        plus[i] = 0;
-
-                        // Push điểm trừ
-                        data[i]['minus'].forEach(function(e){
-                            minus[i] -= e.employee_points;
-                            e.month = i;
-                            that.fetch_data_exscore_user.push(e);
-                        })
-
-                        // Push điểm cộng
-                        data[i]['plus'].forEach(function(e){
-                            plus[i] += e.employee_points
-                            if (plus[i] >= 20){
-                                plus[i]  = 20
-                            }
-                            e.month = i;
-                            that.fetch_data_exscore_user.push(e);
-                        })
-
-                        // Push tháng có liệt
-                        // Nếu có điểm liệt == điểm hiệu suất tháng đó của user
-                        var zero_score = 0;
-                        data[i]['zero'].forEach(function (e){
-                           zero_score = parseFloat(that.employee_performance['month_'+i+'_score']);
-                           e.month = i;
-                           e.employee_points = -zero_score;
-                           minus[i] = -zero_score ;
-                           plus[i] = 0;
-                           that.fetch_data_exscore_user.push(e);
-                        })
-                        // Tổng điểm
-                        that.exscore_score[i]['score'] = plus[i] + minus[i];
-                    }
-                    that.exscore_score[1]['month_name'] = that.month_1_name;
-                    that.exscore_score[2]['month_name'] = that.month_2_name;
-                    that.exscore_score[3]['month_name'] = that.month_3_name;
+                    that.$set(that, 'exscore_user_data', data);
+                    that.$children.map(function (elem, index, children) {
+                        elem.$emit('fetch_exscore')
+                    })
                 }
             });
 
@@ -4177,7 +5111,6 @@ var v = new Vue({
 
         showModal_e: function (month_number, kpi_id) {
             var that = this;
-            console.log("KPI ID:" + kpi_id);
             var month_name = month_number == 1 ? v.month_1_name : month_number == 2 ? v.month_2_name : month_number == 3 ? v.month_3_name : '';
             this.month_name = month_name;
             this.month = month_number;
@@ -4193,36 +5126,12 @@ var v = new Vue({
                 },
                 success: function (response) {
                     that.$set(that.$data, 'list_evidence', response);
-                    console.log("stopped here");
-                    if (that.list_evidence.length > 0) {
-                        that.list_evidence.forEach(function (el, index) {
-                            cloudjetRequest.ajax({
-                                url: '/api/v2/profile/' + el.user + '/',
-                                type: 'get',
-                                success: function (data) {
-                                    var key1 = 'avatar';
-                                    var key2 = 'actor';
-                                    // that.$set(that.$data, 'list_evidence[' + index + '].avatar', data.get_avatar);
-                                    // that.$set(that.$data, 'list_evidence[' + index + '].avatar', data.get_avatar);
-                                    that.$set(that.list_evidence[index], 'avatar', data.get_avatar);
-                                    that.$set(that.list_evidence[index], 'actor', data.display_name);
-                                    console.log('new evidence:' + that.list_evidence[index].avatar);
-
-                                }
-                            })
-                        });
-                    }
-                    console.log('passed here');
-
                 },
                 error: function () {
                     alert("error");
                 },
             }).done(function () {
-                console.log('DONE!!!!!');
                 $('#evidence-modal').modal('show');
-                console.log(that.list_evidence)
-                console.log("shown!")
             });
 
         },
@@ -4385,7 +5294,6 @@ var v = new Vue({
                     contentType: false,
                     success: function (response) {
                         console.log(response);
-                        that.refresh_form_action_plan();
                         var mesage = gettext("Post action plan successfully!");
                         alert(mesage);
                         // The unshift() method adds new items to the beginning of an array, and returns the new length.
@@ -4394,24 +5302,20 @@ var v = new Vue({
                         that.list_action_plan_file[0].actor = COMMON.UserDisplayName;
                         // var tmp = that.evidences[that.evidence_id][that.month];
                         // that.$set(that.$data, 'evidences[' + that.evidence_id + '][' + that.month + ']', tmp + 1);
+                        console.log(tmp);
                     },
                     error: function () {
                         // alert("error");
                     }
-                    }).done(function () {
-                        // $('#save-evidence').attr('disabled', 'disabled');
-                        // $('#file-upload-action-plan-input').val('');
-                        // that.action_plan_filename = '';
-                        // $("#board-upload-action-plan .action-plan-descr").val('');
-                        // $('#kpi_action_plan-modal .form-start').show();
-                    });
+                }).done(function () {
+                    // $('#save-evidence').attr('disabled', 'disabled');
+                    $('#file-upload-action-plan-input').val('');
+                    that.action_plan_filename = '';
+                    $("#board-upload-action-plan .action-plan-descr").val('');
+                    $('#kpi_action_plan-modal .form-start').show();
+                });
             }
             else alert(gettext('Please select a file!'));
-        },
-        refresh_form_action_plan: function(){
-            this.action_plan_filename = '';
-            $("#kpi_action_plan-modal .form-start").show();
-            $("#file-upload-action-plan-form")[0].reset();
         },
         postEvidence: function () {
             var formData = new FormData();
@@ -4662,6 +5566,9 @@ var v = new Vue({
                     that.employee_performance=res;
                     that.get_backups_list(true);
                     // console.log('jahskjfkjsdaasdh');
+                    that.$children.map(function (elem, index, children_array) {
+                        elem.$emit('fetch_exscore')
+                    })
                 },
                 error: function (res) {
                 }
@@ -4704,50 +5611,6 @@ var v = new Vue({
             });
         },
 
-        count_zero_score_kpi: function (recheck) {
-            var user_id = COMMON.OrgUserId;
-
-            var that = this;
-            that.total_zero_score_kpis = [];
-            var quarter_id = getUrlVars()['quarter_id'];
-            var url = COMMON.LinkKPIParentAPI + '?user_id=' + user_id;
-            url += (quarter_id != undefined) ? '&quarter_id=' + quarter_id : '';
-            if (recheck == true) {
-                url += "&recheck=true"
-            }
-
-            cloudjetRequest.ajax({
-                url: url,
-                type: 'post',
-                success: function (results) {
-                    results = results.filter(function (kpi){
-                            return kpi.weight > 0;
-                    });
-//                         results = jQuery.grep(results, function(item){
-//                            return (item.month_1_score ==0 || item.month_2_score ==0 || item.month_3_score==0 || item.latest_score==0)
-//                         });
-                    results.forEach(function (item) {
-                        // var value_weight = $('.kpi-rating[data-id=' + item.id + ']').find('span.weighting_score>span').text();
-                        // value_weight = parseFloat(value_weight.slice(1, -2));
-                        // item.weight_percentage = value_weight;//use jquery to locate to weight percenatge in kpi-editor relative to kpi
-
-                        // Update lai weight KPI
-                        var value_weight = parseFloat(item.weight*100/that.total_weight_by_user[user_id]);
-                        item.weight_percentage = value_weight;
-
-                    })
-                    that.$set(that.$data, 'total_zero_score_kpis', results);
-                    if (recheck == true) {
-                        location.reload();
-                    }
-
-                },
-                error: function () {
-                    alert('Load Kpis Error');
-                }
-            });
-
-        },
 
         get_children: function (kpi_id) {
             // Pace.start();
@@ -4913,7 +5776,8 @@ var v = new Vue({
                     url: "/api/v2/user/" + user_id + "/kpis",
                     data: {
                         unique_key: kpi_unique_key,
-                        quarter_period_id: last_quarter_id
+                        quarter_period_id: last_quarter_id,
+                        include_childs: true,
                     },
                     success: function (kpi_result_list) {
                         if (kpi_result_list.length) {
@@ -4967,7 +5831,6 @@ var v = new Vue({
                     success: function (data) {
                         //   console.log(data);
                         that.kpi_list[kpi.id] = Object.assign(that.kpi_list[kpi.id], data);
-
                         that.get_current_employee_performance();
 
                         success_requestcenter(gettext("Update successful!"));
@@ -5075,14 +5938,14 @@ var v = new Vue({
                             //that.$set(that.$data, 'kpi_list[' + kpi.id + ']', data.kpi);
                             //$('.kpiprogressreview-wrapper').tooltip();
                             that.$set(that.kpi_list[kpi.id], 'latest_score', data.score)
-                            that.$set(that.kpi_list[kpi.id], 'real', data.real)
                             that.kpi_list[kpi.id].target = data.kpi.target;
 
                             that.kpi_list[kpi.id].latest_score = data.score; //JSON.parse(data);
-                            that.kpi_list[kpi.id].real = data.real; //JSON.parse(data);
+                            that.$set(that.kpi_list[kpi.id], 'real', data.real)
+
                             that.get_current_employee_performance();
                             that.triggeredReloadTargetPerformance(kpi.id)
-                            that.reload_kpi(kpi.id)
+                            that.reload_kpi(kpi.id);
 
                             success_requestcenter(gettext("Update successful!"));
                         },
@@ -5104,8 +5967,18 @@ var v = new Vue({
         },
 
         complete_review_modal: function () {
+            this.data_complete_review = {};
+            this.data_complete_review.user_id = this.user_id;
+            this.data_complete_review.month_1_name = this.month_1_name;
+            this.data_complete_review.month_2_name = this.month_2_name;
+            this.data_complete_review.month_3_name = this.month_3_name;
+            this.data_complete_review.quarter = this.quarter;
+            this.data_complete_review.quarter_by_id = this.quarter_by_id;
+            this.data_complete_review.total_weight_by_user = this.total_weight_by_user;
+            this.data_complete_review.employee_performance = this.employee_performance;
+            this.data_complete_review.organization = this.organization;
+            this.data_complete_review.current_quarter = this.current_quarter;
             $('#complate-review-modal').modal();
-            this.count_zero_score_kpi();
         },
 
         edit_weight_modal: function (){
@@ -5447,10 +6320,6 @@ var v = new Vue({
                 }
             })
         },
-        we_complete_review_confirm: function () {
-            this.complete_review_confirm();
-            vue_support.show_rate_nps()
-        },
 
         setCookie: function (cname, cvalue) {
             var now = new Date(); // now
@@ -5540,64 +6409,6 @@ var v = new Vue({
                 error: function (res) {
                     $(".btn-align-up-kpi").button("reset");
                 }
-            });
-        },
-
-        complete_review_confirm: function () {
-            that = this;
-            $('#complate-review-modal').modal('hide');
-            var temp = $('#btn-complete-review').html();
-            $('#btn-complete-review').html(gettext('Downloading! Please wait ... '));
-            cloudjetRequest.ajax({
-                type: 'post',
-                url: COMMON.LinkRDisAPI + "?key=confirm-kpi-quarter" + that.quarter_by_id.id,
-                data: {value: new Date()},
-                success: function (res) {
-                    that.$set(that.$data, 'complete_review', res['value']);
-                    console.log(res['value']);
-                },
-                error: function (res) {
-                }
-            });
-            cloudjetRequest.ajax({
-                type: 'post',
-                url: COMMON.LinkNotifyAPI,
-                data: {
-                    user_id: COMMON.OrgUserId,
-                    notification_type: 'complete_review'
-                },
-                success: function (res) {
-                    that.$set(that.$data, 'complete_review', res['value']);
-                },
-                error: function (res) {
-                }
-            });
-
-            // $('<form></form>').attr('action', "{% url 'SimpleExport' org_user.id %}").appendTo('body').submit().remove();
-
-            this.capture_and_download();
-        },
-
-        capture_and_download: function(){
-            that = this;
-            var temp = $('#btn-complete-review').html();
-
-            var wd = window.open("/performance/report/#/?user_id=" + COMMON.OrgUserId + "&quarter_id=" + that.quarter_by_id.id);
-
-            $("#complate-review-modal").on("hidden.bs.modal", function () {
-                html2canvas(document.body, {
-                    onrendered: function (canvas) {
-                        $('#btn-complete-review').html(temp);
-
-                        var a = document.createElement('a');
-                        // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
-                        a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
-                        // a.download = (new Date()) + '-kpi.jpg';
-                        a.download = 'KPIs ' + (new Date()) + '.jpg';
-                        a.click();
-                    }
-
-                });
             });
         },
 
@@ -5736,7 +6547,10 @@ var v = new Vue({
             cloudjetRequest.ajax({
                 url: '/api/v2/user/'+this.user_id+'/kpis/',
                 type: 'GET',
-                data: {quarter_id: quarter_id},
+                data: {
+                    quarter_id: quarter_id,
+                    include_childs: true,
+                },
                 success: function (data) {
                     console.log("=======>>>>--------------")
                     console.log(data)
@@ -5749,6 +6563,7 @@ var v = new Vue({
                     that.$set(that.$data, 'kpi_list', dictResult);
                     // that.parentKPIs = JSON.parse(JSON.stringify(dictResult));
                     console.log(that.kpi_list);
+                    that.postponed_button = false;
                 },
                 error: function (a, b, c) {
 
@@ -5759,13 +6574,11 @@ var v = new Vue({
         update_score_and_ready: function(kpi, controller_prefix, ready){
             this.update_score(kpi);
             this.kpi_ready(kpi.id, controller_prefix, ready);
-            this.get_employee_performance(COMMON.OrgUserId);
         },
 
         update_month_target_and_ready: function (kpi, check_disabled, controller_prefix, ready) {
             this.update_month_target(kpi, check_disabled);
             this.kpi_ready(kpi.id, controller_prefix, ready);
-            this.get_employee_performance(COMMON.OrgUserId);
         },
         update_quarter_target_and_ready: function(kpi, controller_prefix, ready) {
             this.update_quarter_target(kpi);
