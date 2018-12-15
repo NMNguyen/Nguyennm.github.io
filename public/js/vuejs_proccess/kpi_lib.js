@@ -45,9 +45,6 @@ $('#input-search-kpi').focusout(function () {
 // }
 
 $('body').on('mouseover', '.dropdown-func-cate .el-cascader-menu__item', function () {
-    $(this).on('hidden.bs.tooltip', function(){
-         $(this).tooltip('destroy');
-    });
     $(this).tooltip({
         title: $(this).html(),
         container: 'body'

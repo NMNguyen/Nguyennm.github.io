@@ -1126,7 +1126,7 @@ div.btn-wrapper .btn {
 #container {
     background-color: #FFF;
     border-top: 1px solid transparent;
-    /*overflow: overlay;*/
+/ / overflow: overlay;
 }
 
 #header.navbar-inverse .navbar-nav > li > a {
@@ -3282,7 +3282,6 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
     padding: 5px 10px 4px;
     white-space: pre-wrap;
     text-align: left;
-    max-width:500px;
 }
 
 .tooltip.vue-tooltip-theme .tooltip-arrow {

@@ -1493,9 +1493,7 @@ ul.success {
 }
 
 .width35 {
-    /*width: 50px !important;*/
-    /*use percent to fix bug in firefox*/
-    width: 5% !important;
+    width: 50px !important;
 }
 
 .group-header {

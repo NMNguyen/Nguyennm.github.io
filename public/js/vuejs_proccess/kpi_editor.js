@@ -407,6 +407,11 @@ Vue.mixin({
 
     },
     methods: {
+        can_add_or_remove_exscore: function(month){
+            var is_person_have_permission = (COMMON.IsManager === 'True' || this.is_user_system === true)
+            var is_month_can_do = (this.organization.monthly_review_lock === 'allow_all' || this.organization.monthly_review_lock === month);
+            return (is_person_have_permission === true || is_month_can_do === true)
+        },
         get_child_kpis_from_kpi_list:function(kpi_id){
 
             var that =  this;
@@ -560,6 +565,568 @@ Vue.mixin({
     }
 });
 
+
+
+
+
+var Bonus = Vue.extend({
+    delimiters: ['{$', '$}'],
+    type: 'bonus-component',
+    // template: $('div.bonus-wrapper').html(), // Fuck tap lam moi ra cho nay <3,
+    template: $('#bonus-template').html(), // Fuck tap lam moi ra cho nay <3,
+    props:[
+        'month',
+        'current_user_profile',
+        'current_quarter',
+        'lib_data_dict',
+        'exscore_user_data',
+    ],
+    data: function () {
+        return {
+            filter_text: '',
+            // current_user_profile: null, // used props instead
+            user_data_dict: null,
+            // lib_data_dict: null, // used props
+            bonus_ready: false,
+            render_lib_data_list : [],
+            render_user_data_list : [],
+            dictionary: {
+                plus: gettext('EXTRA') + " (" + gettext("UP TO 20") + "%)",
+                minus: gettext('MINUS'),
+                zero: gettext('ZERO')
+            },
+            // month_name: '', // used computed
+            // current_quarter: {},
+            total_score:{}
+        }
+    },
+    created:function(){
+
+        // removed. Because we passed current_quarter to props and used computed for month_name
+        // this.$on('fetch_current_quarter', function(current_quarter){
+        //     var that = this
+        //     if(that.month == 1){
+        //         that.month_name = that.$parent.month_1_name.toUpperCase()
+        //     }
+        //     if(that.month == 2){
+        //         that.month_name = that.$parent.month_2_name.toUpperCase()
+        //     }
+        //     if(that.month == 3){
+        //         that.month_name = that.$parent.month_3_name.toUpperCase()
+        //     }
+        //     that.$set(that.$data, 'current_quarter',current_quarter)
+        // });
+
+
+        // removed. used watch instead
+        // this.$on('fetch_exscore_lib', function(){
+        //     var that = this
+        //     // Fetch data from $parent
+        //     // that.$set(that.$data, 'lib_data_dict',that.$parent.exscore_lib_data) # removed. Because passed to props
+        //     // that.render_exscore_lib(); // used watch changed of lib_data_dict to render_exscore_lib
+        //     // that.$emit('fetch_user_exscore_group')// used method instead
+        // });
+
+
+        // moved to watch of exscore_user_data
+        // this.$on('fetch_exscore', function(){
+        //     alert('fetch_exscore function');
+        //     var that = this
+        //     // Fetch data from $parent
+        //     // that.$set(that.$data, 'user_data_dict',that.$parent.exscore_user_data[that.month]) // set by watch change of exscore_user_data
+        //     // Process render data
+        //     // that.render_exscore_user()
+        //     // setTimeout(function(){
+        //     //     if (that.bonus_ready == false){
+        //     //         that.$set(that.$data, 'bonus_ready',true)
+        //     //     }
+        //     // },2000);
+        //     // that.$emit('fetch_user_exscore_group')
+        // });
+
+        // removed. used props instead
+        // this.$on('fetch_user_profile_from_parent', function(){
+        //     var that = this
+        //     // that.$set(that.$data, 'current_user_profile',that.$parent.current_user_profile) // used props instead
+        // });
+
+
+
+        // this.$on('fetch_user_exscore_group', function() {
+        //     var that = this
+        //     if(that.lib_data_dict != null && that.user_data_dict != null){
+        //
+        //         for(var key in that.user_data_dict){
+        //             that.user_data_dict[key].map(function(user_exscore_elem){
+        //
+        //                 // Get lib index
+        //                 var group_id_list = that.lib_data_dict[key].map(function(lib_exscore_elem){
+        //                     return lib_exscore_elem.id
+        //                 })
+        //                 var group_index = group_id_list.indexOf(user_exscore_elem.exscore_lib)
+        //                 // Get group
+        //                 user_exscore_elem.group = that.lib_data_dict[key][group_index].group
+        //             })
+        //         }
+        //         that.render_exscore_user()
+        //     }
+        // });
+
+        // moved to methods
+        // this.$on('fetch_user_id',function(){
+        //     var that = this
+        //     that.$set(that.$data, 'user_id',that.$parent.user_id)
+        // });
+
+    },
+    events: {
+        // 'fetch_current_quarter': function(current_quarter){
+        //     var that = this
+        //     if(that.month == 1){
+        //         that.month_name = that.$parent.month_1_name.toUpperCase()
+        //     }
+        //     if(that.month == 2){
+        //         that.month_name = that.$parent.month_2_name.toUpperCase()
+        //     }
+        //     if(that.month == 3){
+        //         that.month_name = that.$parent.month_3_name.toUpperCase()
+        //     }
+        //     that.$set(that.$data, 'current_quarter',current_quarter)
+        // },
+        // 'fetch_exscore_lib': function(){
+        //     var that = this
+        //     // Fetch data from $parent
+        //     that.$set(that.$data, 'lib_data_dict',that.$parent.exscore_lib_data)
+        //     that.render_exscore_lib()
+        //     that.$emit('fetch_user_exscore_group')
+        // },
+        // 'fetch_exscore': function(){
+        //     alert('fetch_exscore function');
+        //     var that = this
+        //     // Fetch data from $parent
+        //     that.$set(that.$data, 'user_data_dict',that.$parent.exscore_user_data[that.month])
+        //     // Process render data
+        //     that.render_exscore_user()
+        //     setTimeout(function(){
+        //         if (that.bonus_ready == false){
+        //             that.$set(that.$data, 'bonus_ready',true)
+        //         }
+        //     },2000)
+        //     that.$emit('fetch_user_exscore_group')
+        // },
+        // 'fetch_user_profile_from_parent': function(){
+        //     var that = this
+        //     that.$set(that.$data, 'current_user_profile',that.$parent.current_user_profile)
+        // },
+        // 'fetch_user_exscore_group': function() {
+        //     var that = this
+        //     if(that.lib_data_dict != null && that.user_data_dict != null){
+        //
+        //         for(var key in that.user_data_dict){
+        //             that.user_data_dict[key].map(function(user_exscore_elem){
+        //
+        //                 // Get lib index
+        //                 var group_id_list = that.lib_data_dict[key].map(function(lib_exscore_elem){
+        //                     return lib_exscore_elem.id
+        //                 })
+        //                 var group_index = group_id_list.indexOf(user_exscore_elem.exscore_lib)
+        //                 // Get group
+        //                 user_exscore_elem.group = that.lib_data_dict[key][group_index].group
+        //             })
+        //         }
+        //         that.render_exscore_user()
+        //     }
+        // },
+        // 'fetch_user_id': function(){
+        //     var that = this
+        //     that.$set(that.$data, 'user_id',that.$parent.user_id)
+        // }
+    },
+    mounted: function(){
+        if(window.exscore_app === undefined){
+            window.exscore_app = []
+        }
+        window.exscore_app.push(this)
+        this.$nextTick(function () {
+            // code that assumes this.$el is in-document
+
+        });
+        // this.$emit('fetch_current_user_profile') // removed, because we already fetch current user profile in main Vue instance
+        // this.$emit('fetch_user_id') // no need, get user_id from mixin
+    },
+    watch: {
+
+        'total_score': {
+            handler: function(value, old_value){
+                // https://vuejs.org/v2/guide/migration.html#dispatch-and-broadcast-replaced
+                // https://stackoverflow.com/questions/40923555/vue-js-whats-the-difference-of-emit-and-dispatch
+                // this.$emit('update_exscore',this.month,value)
+                this.$root.$emit('update_exscore',this.month,value);
+            }
+        },
+        'bonus_ready': {
+            handler: function(newVal,oldVal){
+                if(newVal == true){
+                    $('div#bonus-ready').hide()
+                    $('div#bonus-modal-header').show()
+                }
+            }
+        },
+        'render_user_data_list': {
+            handler: function(val,oldValue){
+
+                var that = this
+                var data = that.calculate_final_score();
+                that.$set(that, 'total_score',data)
+            },
+            deep: true
+        },
+        'filter_text': {
+            handler: function(newVal,oldVal){
+                var that = this
+                that.restoreExscoreLib()
+                that.searchExscoreLib()
+            }
+        },
+
+        'lib_data_dict': function(newVal){
+            this.render_exscore_lib(newVal);
+            this.fetch_user_exscore_group();
+        },
+        'exscore_user_data': {
+            handler: function(val){
+                this.user_data_dict = this.exscore_user_data[this.month];
+                this.render_exscore_user();
+                this.bonus_ready = true;
+                // setTimeout(function(){
+                //     if (that.bonus_ready == false){
+                //         that.$set(that.$data, 'bonus_ready',true)
+                //     }
+                // },2000);
+                this.fetch_user_exscore_group();
+            }
+        }
+    },
+    computed:{
+        month_name:function(){
+            var name = '';
+            var that = this;
+            if(that.month == 1){
+                // that.month_name = that.$parent.month_1_name.toUpperCase()
+                name = that.month_1_name.toUpperCase();
+            }
+            else if(that.month == 2){
+                name = that.month_2_name.toUpperCase();
+            }
+            if(that.month == 3){
+                name = that.month_3_name.toUpperCase();
+            }
+            return name;
+            // that.$set(that.$data, 'current_quarter',current_quarter)
+        },
+    },
+
+    methods: {
+        // removed because this is constant variable, set at mixin
+        // we can always access user_id by this.user_id
+        //
+        // fetch_user_id: function(){
+        //     var that = this
+        //     that.$set(that.$data, 'user_id',that.$parent.user_id)
+        // },
+
+        fetch_user_exscore_group: function() {
+            var that = this;
+            if(that.lib_data_dict && that.user_data_dict){
+
+                for(var key in that.user_data_dict){
+                    that.user_data_dict[key].map(function(user_exscore_elem){
+
+                        // Get lib index
+                        var group_id_list = that.lib_data_dict[key].map(function(lib_exscore_elem){
+                            return lib_exscore_elem.id
+                        });
+                        var group_index = group_id_list.indexOf(user_exscore_elem.exscore_lib)
+                        // Get group
+                        user_exscore_elem.group = that.lib_data_dict[key][group_index].group
+                    })
+                }
+                that.render_exscore_user();
+            }
+        },
+
+
+        render_exscore_user: function(){
+            var that = this
+            var render_data_index = 0
+            // Ánh xạ sang lib_data_dict để lấy group
+            for (var key in that.user_data_dict){
+
+                var temp_dict = {
+                    slug: key,
+                    text: that.dictionary[key],
+                    lan: gettext("Language"),
+                    data: that.extract_exscore_v2(that.user_data_dict[key]),
+                    sum_score: that.get_sum_exscore(that.user_data_dict[key],key)
+                }
+                // that.$set(that.$data, 'render_user_data_list['+(render_data_index++)+']',temp_dict)
+                that.$set(that.render_user_data_list, (render_data_index++),temp_dict);
+            }
+        },
+        render_exscore_lib: function(lib_data_dict){
+            var that = this
+            // Process render data
+            var render_data_index = 0
+            for (var key in lib_data_dict){
+                var temp_dict = {
+                    slug: key,
+                    text: that.dictionary[key],
+                    data: that.extract_exscore_v2(lib_data_dict[key]),
+                }
+                // that.$set(that.$data, 'render_lib_data_list['+(render_data_index++)+']',temp_dict)
+                that.$set(that.render_lib_data_list, (render_data_index++) ,temp_dict);
+            }
+        },
+        restoreExscoreLib: function(){
+            var that = this;
+            // that.$emit('fetch_exscore_lib')
+            this.render_exscore_lib(that.lib_data_dict);
+            this.fetch_user_exscore_group();
+        },
+        searchExscoreLib: function(){
+            var that = this
+            if (that.filter_text != '') {
+                console.log('starting searching with ' + that.filter_text)
+                // First is to restore original data
+                // Now to filter
+                var data = Object.assign({},that.lib_data_dict)
+                for (var key in data){
+                    var _data = data[key].filter(function(elem){
+                        return (
+                            // Search co dau
+                            (
+                                elem.name.toLowerCase().indexOf(that.filter_text.trim().toLowerCase()) != -1 || // co dau
+                                elem.code.toLowerCase().indexOf(that.filter_text.trim().toLowerCase()) != -1
+                            )
+                            ||
+                            // Search khong dau
+                            (
+                                latinize(elem.name.toLowerCase()).indexOf(that.filter_text.trim().toLowerCase()) != -1 || // co dau
+                                latinize(elem.code.toLowerCase()).indexOf(that.filter_text.trim().toLowerCase()) != -1
+                            )
+
+                        )
+                    })
+                    data[key] = _data
+                }
+
+
+                that.render_exscore_lib(data)
+            }
+        },
+        removeExscore: function(month,render_data_index,type,index_in_user_data_dict){
+            var that = this;
+            // Remove element in real dict
+            var data = that.user_data_dict[type][index_in_user_data_dict]
+
+            cloudjetRequest.ajax({
+                type: 'DELETE',
+                url: '/api/v2/exscore/' + data.id + '/',
+                data: {},
+                success: function(res){
+                    that.user_data_dict[type].splice(index_in_user_data_dict,1) // Remove in frontend
+                    // that.$emit('fetch_user_exscore')
+                    that.$root.$emit('fetch_user_exscore')
+                }
+            })
+        },
+        calculate_final_score: function(){
+            console.log('triggered calculate_final_score')
+            var that = this;
+            var zero_score = that.get_sum_exscore(that.user_data_dict['zero'],'zero')
+            var minus_score = that.get_sum_exscore(that.user_data_dict['minus'],'minus')
+            var plus_score = that.get_sum_exscore(that.user_data_dict['plus'],'plus')
+            var data = {
+
+                zero: zero_score > 0 ? true : false,
+                score: plus_score - minus_score
+            }
+            return data
+        },
+        get_sum_exscore: function(list_data, score_type){
+
+            var score = list_data.reduce(function(a,b){
+                if(score_type=='zero') return a + 1
+                return a + b.employee_points;
+            },0);
+            if(score_type == 'plus'){
+                score = score <= 20 ? score: 20
+            }
+            return score;
+        },
+        addExscore: function(month,exscore){
+            var that = this;
+            var data = {
+                month: that.month,
+                user_id: that.user_id,
+                exscore_lib_id: exscore.id,
+                group: exscore.group
+            }
+            // Remove element in real dict
+            cloudjetRequest.ajax({
+                type: 'POST',
+                url: '/api/v2/exscore/',
+                data: JSON.stringify(data),
+                contentType:'application/json',
+                success: function(res){
+                    that.$root.$emit('fetch_user_exscore');
+                }
+            })
+        },
+        extract_lib_exscore: function(title,sum_list){
+            // Clone to new object
+
+            var sum_list_res = jQuery.extend(true, {}, sum_list); // Cloning is required
+
+            var that = this
+            // Extract exscore with lib
+            var exscore_lib_list = [{
+                order: 'I',
+                is_exscore: false,
+                name: 'Điểm ' + title + ' chung',
+                category: 'first'
+            }];
+            var exscore_list = [{
+                order: 'II',
+                is_exscore: false,
+                name: 'Điểm ' + title + ' chuyên môn',
+                category: 'first'
+            }];
+            for(var item in sum_list_res){
+                sum_list_res[item].index = item;
+                exscore_lib_list.push(sum_list_res[item])
+            }
+            // Sort into category
+            exscore_lib_list = that.sort_with_group(exscore_lib_list);
+            exscore_lib_list = exscore_lib_list.slice(1,exscore_lib_list.length);
+
+            exscore_list = that.sort_with_group(exscore_list);
+            exscore_list = exscore_list.slice(1,exscore_list.length);
+
+
+            sum_list_res = exscore_lib_list.concat(exscore_list);
+            return sum_list_res;
+        },
+        extract_exscore_v2: function(sum_list){
+            var that = this
+            var sum_list_res = jQuery.extend(true, [], sum_list); // Cloning is required
+            for(var item in sum_list_res){
+                sum_list_res[item].index = item;
+            }
+            sum_list_res = that.sort_with_group(sum_list_res);
+            return sum_list_res
+        },
+        extract_exscore: function(title,sum_list){
+            // Clone to new object
+
+            var sum_list_res = jQuery.extend(true, {}, sum_list); // Cloning is required
+
+            var that = this
+            // Extract exscore with lib
+            var exscore_lib_list = [{
+                order: 'I',
+                is_exscore: false,
+                name: 'Điểm ' + title + ' chung',
+                category: 'first'
+            }];
+            var exscore_list = [{
+                order: 'II',
+                is_exscore: false,
+                name: 'Điểm ' + title + ' chuyên môn',
+                category: 'first'
+            }];
+            for(var item in sum_list_res){
+                sum_list_res[item].index = item;
+                if(sum_list_res[item].exscore_lib == null){
+                    exscore_list.push(sum_list_res[item])
+                }else{
+                    exscore_lib_list.push(sum_list_res[item])
+                }
+            }
+            // Sort into category
+            exscore_lib_list = that.sort_with_group(exscore_lib_list);
+            exscore_lib_list = exscore_lib_list.slice(1,exscore_lib_list.length);
+
+            exscore_list = that.sort_with_group(exscore_list);
+            exscore_list = exscore_list.slice(1,exscore_list.length);
+
+
+            sum_list_res = exscore_lib_list.concat(exscore_list);
+            return sum_list_res;
+        },
+        sort_with_group: function(list_data){
+            var that = this;
+            var group_container = {};
+            var _sum_list = [];
+            var sum_list = [];
+            // Extract exscore with category
+
+            // Get unique group list
+            var _sum_list_index = 0;
+            var cloned_list_data = Object.assign([],list_data)
+            cloned_list_data.map(function(elem,index,_cloned_list_data){
+                // Set flag is_exscore for exscore
+                elem.is_exscore = true
+                if(!(elem.group in group_container) && elem.group){
+                    if(typeof group_container[elem.group] == 'undefined'){
+                        group_container[elem.group] = {}
+                    }
+                    group_container[elem.group].ready = true
+                    group_container[elem.group].index = _sum_list_index
+                    _sum_list[_sum_list_index] = []
+                    _sum_list[_sum_list_index++].push({
+                        name: elem.group,
+                        is_exscore: false,
+                        category: 'second'
+                    });
+                }
+            })
+            // Filter with group
+            for (var group in group_container){
+                var list = cloned_list_data.filter(function(elem){
+                    return elem.group == group
+                })
+                _sum_list[group_container[group].index] = _sum_list[group_container[group].index].concat(list)
+            }
+            // Return rendered data
+            _sum_list.map(function(elem){
+                sum_list = sum_list.concat(elem)
+            })
+
+            return sum_list;
+        },
+        sort_with_group_to_dict: function(list_data){
+            var data_container = {};
+            var new_list = list_data.map(function(elem,index,array){
+                var key = elem.category.replace(/\s+/g, '_');
+
+                if(key in data_container){
+                    data_container[key].push(elem);
+                }
+                else{
+                    data_container[key]= [];
+                    data_container[key].push(elem);
+                }
+                return elem;
+            });
+            return data_container;
+        }
+    }
+});
+Vue.component('bonus',Bonus);
+// https://vuejs.org/v2/guide/components.html#Using-v-model-on-Components
+// https://stackoverflow.com/questions/49712404/numeric-input-component-for-vue-js
+// Define a new component called decimal-input
 Vue.component('decimal-input', {
     props: [
         'id',
@@ -992,11 +1559,11 @@ Vue.component('kpi-config', {
 
                             swal(gettext("Success"), gettext("KPI is successfully deleted"), "success");
                             that.$root.$emit('kpi_removed', kpi_id);
-                            that.$root.$emit('get_employee_performance',COMMON.OrgUserId);
+
+
                         } else {
                             swal(gettext("Unsuccess"), jqXHR.responseJSON.message, "error");
                         }
-
                     },
                     error: function (jqXHR, settings, errorThrown) {
                         swal(gettext("Unsuccess"), jqXHR.responseJSON.message, "error");
@@ -2123,7 +2690,6 @@ var v = new Vue({
         visible: false,
         // end data temp for kpi lib
         organization:[],
-        fetch_data_exscore_user:[],
         parent_score_auto:true,
     },
     validators: {
@@ -2181,6 +2747,24 @@ var v = new Vue({
             }
             return self.kpi_list;
         },
+        exscore_score_orderBy_key:function (){
+            var that = this;
+            // http://whitfin.io/sorting-object-recursively-node-jsjavascript/
+            var keys = _.keys(this.exscore_score);
+            // _.sortBy(this.exscore_score, 'key')
+            var sortedKeys = _.sortBy(keys, function(key){
+                return key;
+            });
+
+            var sortedObj = {};
+
+            // Underscore
+            _.each(keys, function(key) {
+                sortedObj[key] = that.exscore_score[key];
+            });
+            return sortedObj;
+            // return this.exscore_score;
+        },
     },
     mounted: function () {
 
@@ -2208,6 +2792,7 @@ var v = new Vue({
         //     moreLink: '<a href="#"> <i class="fa fa-angle-double-right"></i> ' + gettext("Read more") + '</a>',
         //     lessLink: '<a href="#"> <i class="fa fa-angle-double-up"></i> ' + gettext("Less") + '</a>'
         // });
+        this.fetch_exscore_lib();
         this.fetch_exscore();
         this.fetch_current_user_profile();
         var p = JSON.parse(localStorage.getItem('history_search_u'));
@@ -2326,6 +2911,15 @@ var v = new Vue({
                 })
             }
         },
+        'exscore_score.current': {
+            handler: function (val, old) {
+                console.log(' =====================> select value is: ' + val)
+                $('#month-1').hide().parent().removeClass('active')
+                $('#month-2').hide().parent().removeClass('active')
+                $('#month-3').hide().parent().removeClass('active')
+                $('#month-' + val).show().parent().addClass('active')
+            }
+        },
         'organization': {
             handler: function (newVal, oldVal) {
                 // alert('organization changed');
@@ -2412,7 +3006,35 @@ var v = new Vue({
             that.change_group(kpi);
         });
 
+
+
+        this.$on('update_lock_exscore_review', function (option) {
+            var that = this;
+            console.log('triggered update_lock_exscore_review')
+            if (option == 'allow_all') {
+                $('select#exscore-select-control').prop('disabled', false)
+                // that.$set(that.$data, 'exscore_score.current', '---')
+                that.$set(that.exscore_score, 'current', '---')
+            } else {
+                // that.$set(that.$data, 'exscore_score.current', option);
+                that.$set(that.exscore_score, 'current', option);
+                // $('#month-' + option).show()
+                $('select#exscore-select-control').prop('disabled', true)
+            }
+        });
+        this.$on('update_exscore', function (month, data) {
+            console.log('triggered update_exscore')
+            //var that = this;
+            var score = data.score;
+            console.log(data);
+            if (data.zero || (score + that.employee_performance['month_' + month + '_score'] < 0)) {
+                score = -that.employee_performance['month_' + month + '_score']
+            }
+            // that.$set(that.$data, 'exscore_score[' + month + '].score', score)
+            that.$set(that.exscore_score[month], 'score', score);
+        });
         this.$on('fetch_user_exscore', function () {
+            console.log('triggered fetch_user_exscore')
             that.fetch_exscore();
         });
 
@@ -2449,10 +3071,6 @@ var v = new Vue({
 
         this.$on('update_kpi', function (kpi, show_blocking_modal, callback) {
             that.update_kpi(kpi, show_blocking_modal, callback);
-        });
-
-        this.$on('get_employee_performance', function (emp_id, callback) {
-            that.get_employee_performance(emp_id);
         });
 
         this.$root.$on("adjust_performance_level", function(kpi_id) {
@@ -2670,10 +3288,9 @@ var v = new Vue({
 
             var jqXhr=this.add_kpi(false, kpi_data);
             // additional success callback function
-            jqXhr.done(function(){
+            jqXhr.success(function(){
                 that.$set(that.kpi_list[parent_kpi_id], 'has_child', true);
                 that.$set(that.kpi_list[parent_kpi_id], 'children_data', {'parent_score_auto': true});
-                $('.reviewing' + that.kpi_list[parent_kpi_id].id).toggleClass('hide')
                 // $('#btn-kpi-toggle'+kpi).children('i.fa').removeClass("fa-angle-double-right").addClass("fa-angle-double-down");
             });
 
@@ -3683,10 +4300,23 @@ var v = new Vue({
                 }
             });
         },
+        fetch_exscore_lib: function () {
+            var that = this;
+            cloudjetRequest.ajax({
+                type: 'GET',
+                url: '/api/v2/exscore/lib/',
+                success: function (data) {
+                    // alert('fetch_exscore_lib successful!');
+                    that.$set(that, 'exscore_lib_data', data);
+                    that.$children.map(function (elem, index, children) {
+                        elem.$emit('fetch_exscore_lib')
+                    })
+                }
 
+            })
+        },
         fetch_exscore: function () {
             var that = this;
-            that.fetch_data_exscore_user = [];
             cloudjetRequest.ajax({
                 type: 'GET',
                 url: '/api/v2/exscore/',
@@ -3694,47 +4324,10 @@ var v = new Vue({
                     user_id: that.user_id,
                 },
                 success: function (data) {
-                    var minus = [];
-                    var plus = [];
-                    var zero = [];
-                    for(i=1;i<4;i++){
-                        minus[i] = 0;
-                        plus[i] = 0;
-
-                        // Push điểm trừ
-                        data[i]['minus'].forEach(function(e){
-                            minus[i] -= e.employee_points;
-                            e.month = i;
-                            that.fetch_data_exscore_user.push(e);
-                        })
-
-                        // Push điểm cộng
-                        data[i]['plus'].forEach(function(e){
-                            plus[i] += e.employee_points
-                            if (plus[i] >= 20){
-                                plus[i]  = 20
-                            }
-                            e.month = i;
-                            that.fetch_data_exscore_user.push(e);
-                        })
-
-                        // Push tháng có liệt
-                        // Nếu có điểm liệt == điểm hiệu suất tháng đó của user
-                        var zero_score = 0;
-                        data[i]['zero'].forEach(function (e){
-                           zero_score = parseFloat(that.employee_performance['month_'+i+'_score']);
-                           e.month = i;
-                           e.employee_points = -zero_score;
-                           minus[i] = -zero_score ;
-                           plus[i] = 0;
-                           that.fetch_data_exscore_user.push(e);
-                        })
-                        // Tổng điểm
-                        that.exscore_score[i]['score'] = plus[i] + minus[i];
-                    }
-                    that.exscore_score[1]['month_name'] = that.month_1_name;
-                    that.exscore_score[2]['month_name'] = that.month_2_name;
-                    that.exscore_score[3]['month_name'] = that.month_3_name;
+                    that.$set(that, 'exscore_user_data', data);
+                    that.$children.map(function (elem, index, children) {
+                        elem.$emit('fetch_exscore')
+                    })
                 }
             });
 
@@ -4662,6 +5255,9 @@ var v = new Vue({
                     that.employee_performance=res;
                     that.get_backups_list(true);
                     // console.log('jahskjfkjsdaasdh');
+                    that.$children.map(function (elem, index, children_array) {
+                        elem.$emit('fetch_exscore')
+                    })
                 },
                 error: function (res) {
                 }
@@ -5759,13 +6355,11 @@ var v = new Vue({
         update_score_and_ready: function(kpi, controller_prefix, ready){
             this.update_score(kpi);
             this.kpi_ready(kpi.id, controller_prefix, ready);
-            this.get_employee_performance(COMMON.OrgUserId);
         },
 
         update_month_target_and_ready: function (kpi, check_disabled, controller_prefix, ready) {
             this.update_month_target(kpi, check_disabled);
             this.kpi_ready(kpi.id, controller_prefix, ready);
-            this.get_employee_performance(COMMON.OrgUserId);
         },
         update_quarter_target_and_ready: function(kpi, controller_prefix, ready) {
             this.update_quarter_target(kpi);
