@@ -6,7 +6,7 @@ Vue.component('edit-import-kpi-modal', {
         return {
             data_edit_kpi: {},
             list_kpi_id: ['f', 'c', 'p', 'l', 'o'],
-            method: ["sum", "average", "most_recent", "tổng", "trung bình", "tháng/quý gần nhất"],
+            method: ["sum", "average", "most_recent", "tính tổng", "trung bình", "tháng gần nhất"],
         }
     },
     mounted: function () {
@@ -54,26 +54,6 @@ Vue.component('edit-import-kpi-modal', {
         checkTypeKPI: function(type_kpi){
             return /^([fclopFCLOP]{1}[0-9]+)((\.[0-9]+)*)$/gi.test(type_kpi)
         },
-        check_number: function(e){
-            var _number = String.fromCharCode(e.keyCode);
-            if ('0123456789.'.indexOf(_number) !== -1) {
-                return _number;
-            }
-            e.preventDefault();
-            return false;
-        },
-        check_paste: function (evt) {
-                evt.preventDefault();
-                evt.stopPropagation();
-        },
-        valid_change: function (obj, prop) {
-            var val = parseFloat(obj[prop]);
-            if (isNaN(val)) {
-                Vue.set(obj, prop, null);
-            } else {
-                Vue.set(obj, prop, val);
-            }
-        },
     }
 })
 
@@ -118,7 +98,7 @@ data: function () {
         organization:{},
         file: {},
         check_total: 0,
-        method: ["sum", "average", "most_recent", "tổng", "trung bình", "tháng/quý gần nhất"],
+        method: ["sum", "average", "most_recent", "tính tổng", "trung bình", "tháng gần nhất"],
         method_save: '',
 
     }
@@ -475,21 +455,13 @@ methods: {
                                     } catch (err) {
                                         var email = '';
                                     }
-
-
-
-
-                                    // <check-duplicated>
-
-                                    // {#                                                    var duplicated_codes = that.kpis.filter(function (item) {#}
-                                    //     {#                                                        return item.code.toLowerCase().trim() == code.toLowerCase().trim()#}
-                                    //     {#                                                    });#}
-                                    // {#                                                    if (code != "" && duplicated_codes.length > 0) {#}
-                                    //     {#                                                        throw "Duplicated Code";#}
-                                    //     {#                                                    }#}
-
-                                    // </check-duplicated>
+                                    try {
+                                        var code = sheet["AD" + i].w;
+                                    } catch (err) {
+                                        var code = '';
+                                    }
                                     that.kpis.push({
+                                        "code": code,
                                         "kpi_id": kpi_id,
                                         "check_goal": check_goal,
                                         "goal": goal,
@@ -629,21 +601,15 @@ methods: {
         // Process conditions
 
         // year target bang voi tong target cac quy
-        var year_target_input = !$.isNumeric(kpi.year) ? null : parseFloat(kpi.year).toFixed(4)
-        year_target_input = parseFloat(year_target_input) || null
-        sum_q = !$.isNumeric(sum_q) ? null : parseFloat(sum_q).toFixed(4)
-        sum_q = parseFloat(sum_q) || null
+        kpi.year = !$.isNumeric(kpi.year)?null:parseFloat(kpi.year)
         var yearTargetValid =  kpi.year == sum_q
         if(!yearTargetValid){
             kpi.check_error_year = true
         }
         //bao loi khi thang khong theo phuong phap phan quy
         for(var i = 1;i<5; i++){
-            var quarter_target_input = !$.isNumeric(kpi['q' + i]) ? null : parseFloat(kpi['q' + i]).toFixed(4)
-            quarter_target_input = parseFloat(quarter_target_input) || null
-            totalQuarterArray[i - 1] = !$.isNumeric(totalQuarterArray[i - 1]) ? null : parseFloat(totalQuarterArray[i - 1]).toFixed(4)
-            totalQuarterArray[i - 1] = parseFloat(totalQuarterArray[i - 1]) || null
-            if (!(quarter_target_input == totalQuarterArray[i - 1])) {
+            kpi['q' + i] = !$.isNumeric(kpi['q' + i])?null:parseFloat(kpi['q' + i])
+            if(!(kpi['q' + i] == totalQuarterArray[i -1])){
                 kpi['check_error_quarter_' + i] = true
             }
         }
@@ -738,10 +704,10 @@ methods: {
         var self = this
         var operator = ['<=', '>=', '='];
         var scores = ['q1', 'q2', 'q3', 'q4'];
-        var months = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 't11', 't12'];
         var list_kpi_id = ['f', 'c', 'p', 'l', 'o']
         var list_field_name_kpi = ['code','kpi_id','unit','measurement','weight','goal','kpi','score_calculation_type','operator']
         var object_trans_field = {
+            'code':"Mã KPI",
             'kpi_id':"Loại KPI",
             'unit': "Đơn vị",
             'measurement': "Phương pháp đo lường",
@@ -772,6 +738,7 @@ methods: {
                     kpi.validated = true;
                     kpi.status = responseJSON['status'];
                     kpi.email_is_incorrect = false;
+                    kpi.code_kpi_existed = false;
                 } else {
                     kpi.status = responseJSON['status'];
                     kpi.validated = false;
@@ -780,6 +747,9 @@ methods: {
                         responseJSON['messages'].forEach(function (message) {
                             if(message.field_name == gettext("In charge Email")){
                                 kpi.email_is_incorrect = true
+                            }
+                            if(message.field_name == gettext("KPI Code")){
+                                kpi.code_kpi_existed = true
                             }
                             kpi.msg.push(
                                 {
@@ -825,46 +795,7 @@ methods: {
                         'message': ' không đúng định dạng'
                     });
                 }
-
-                kpi.year = kpi.year == null? kpi.year : kpi.year.toString().replace(/,/g, '')
-                if (isNaN(kpi.year) ) {
-                    kpi.validated = false;
-                    kpi.msg.push({
-                        'field_name': 'Điểm năm',
-                        'message': ' không đúng định dạng'
-                    });
-                }
-                scores.forEach(function (score) {
-                    kpi[score] = kpi[score]== null?kpi[score]:kpi[score].toString().replace(/,/g, '')
-                    if (isNaN(kpi[score])) {
-                        quarter_error.push(scores.indexOf(score)+1)
-                    }
-                })
-                months.forEach(function (month) {
-                    kpi[month] = kpi[month]== null?kpi[month]:kpi[month].toString().replace(/,/g, '')
-                    if (isNaN(kpi[month])) {
-                        months_error.push(months.indexOf(month)+1)
-                    }
-                })
-                if (quarter_error.length > 0 ) {
-                    kpi.validated = false;
-                    kpi.msg.push({
-                        'field_name': 'Điểm quý ' + quarter_error.join(', '),
-                        'message': " không đúng định dạng"
-                    });
-                }
-                if (months_error.length > 0 ) {
-                    kpi.validated = false;
-                    kpi.msg.push({
-                        'field_name': "Điểm tháng " + months_error.join(', '),
-                        'message': " không đúng định dạng"
-                    });
-                }
-
-                if (self.enable_allocation_target){
-                    kpi = self.validateTargetScoreFollowAllocationTarget(kpi)
-                }
-                kpi.weight = kpi.weight == null?kpi.weight :kpi.weight.replace(/,/g, '');
+                kpi.weight = kpi.weight.replace(',', '.');
                 if (isNaN(parseFloat(kpi.weight)) && kpi.weight) {
                     kpi.validated = false;
                     kpi.msg.push({
@@ -1075,6 +1006,7 @@ methods: {
             operator: kpi.operator,
             weight: parseFloat(kpi.weight) || null,
             email: kpi.email,
+            code: kpi.code,
             year_data: {
                 months_target: {
                     quarter_1: {
