@@ -172,7 +172,15 @@ function initModalHidden(modalSelector,callback){ // required jquery
     })
 
 }
-
+/* istanbul ignore next */
+function showTooltipPercentCompletedTask(id){
+    $(".tooltip-percent-completed-task").each(function() {
+         $(this).qtip({
+             content: $(this).attr('data-title'),
+             style: {'classes': 'qtip-dark custom'}
+         });
+    })
+}
 /* istanbul ignore next */
 // If we're running under Node,
 if (typeof exports !== 'undefined') {

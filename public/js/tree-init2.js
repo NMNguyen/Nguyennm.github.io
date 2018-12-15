@@ -318,7 +318,11 @@ function search_position(id) {
 
     if (name) {
         var found = false;
-        st.graph.eachNode(function (node) {
+        // reset tree
+        $("#org-chart").html('');
+        init();
+        setTimeout(function () {
+            st.graph.eachNode(function (node) {
             if (node.data.id == name) {
                 found = true;
                 st.onClick(node.id);
@@ -352,6 +356,7 @@ function search_position(id) {
                 }
             });
         }
+        }, 1000);
     } else {
         alert(gettext("Emloyee's name field cannot be empty or is incorrect"));
         $(".mango_search_input").focus();
