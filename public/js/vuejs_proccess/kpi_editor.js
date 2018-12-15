@@ -566,7 +566,279 @@ Vue.mixin({
 });
 
 
+var completeReviewModal = Vue.extend({
+    delimiters: ["${", "}$"],
+    template: $('#detail-task-layout-assessment-1').html(),
+    props: {
+        userdata: {},
+        kpi_approval: null
+    },
+    data : function (){
+        return {
+            organization: {},
+            employee_performance: {},
+            month_1_name: "M1",
+            month_2_name: "M2",
+            month_3_name: "M3",
+            quarter:"",
+            table_evaluation_kpis: [],
+            user_id: '',
+            quarter_by_id: '',
+            COMMON: COMMON,
+            total_weight_by_user: {},
+            loading: false,
+        }
+    },
+    filters: {
+        scoreDisplay: function (val){
+            // model -> view
+            // formats the value when updating the input element.
+                try {
+                    return typeof(val) == 'number' ? (val == 0 ? "0%" : (val.toFixed(2) + "%")) : "0%";
+                }
+                catch (err) {
+                    return "0%";
+                }
+            // view -> model
+            // formats the value when writing to the data.
+                var number = +val.replace(/[^\d.]/g, '');
+                return isNaN(number) ? 0 : parseFloat(number.toFixed(2))
+        }
+    },
+    watch: {
+        userdata: {
+            handler: function (val) {
+                if (val) {
+                    this.organization = val.organization;
+                    this.employee_performance = val.employee_performance;
+                    this.month_1_name = val.month_1_name;
+                    this.month_2_name = val.month_2_name;
+                    this.month_3_name = val.month_3_name;
+                    this.total_weight_by_user = val.total_weight_by_user;
+                    this.user_id = val.user_id;
+                    this.quarter_by_id =  val.quarter_by_id;
+                    this.current_quarter = val.current_quarter;
+                    this.getKPIApprovalStatus();
+                    this.count_zero_score_kpi();
+                }
+            },
+            deep: true
+        }
+    },
+    created: function(){
+        window._kpi_approve = this;
+    },
+    methods:{
+        count_zero_score_kpi: function (recheck) {
+            var user_id = COMMON.OrgUserId;
 
+            var that = this;
+            that.table_evaluation_kpis = [];
+            var quarter_id = getUrlVars()['quarter_id'];
+            var url = COMMON.LinkKPIParentAPI + '?user_id=' + user_id;
+            url += (quarter_id != undefined) ? '&quarter_id=' + quarter_id : '';
+            if (recheck == true) {
+                url += "&recheck=true"
+            }
+
+            cloudjetRequest.ajax({
+                url: url,
+                type: 'post',
+                success: function (results) {
+                    results = results.filter(function (kpi){
+                            return kpi.weight > 0;
+                    });
+                    results.forEach(function (item) {
+                        // Update lai weight KPI
+                        var value_weight = parseFloat(item.weight*100/that.total_weight_by_user[user_id]);
+                        item.weight_percentage = value_weight;
+
+                    });
+                    that.$set(that.$data, 'table_evaluation_kpis', results);
+                    if (recheck == true) {
+                        location.reload();
+                    }
+
+                },
+                error: function () {
+                    alert('Load Kpis Error');
+                }
+            });
+
+        },
+        is_user: function(){
+            return COMMON.UserViewedId == COMMON.UserId;
+        },
+        is_manager: function() {
+            return COMMON.ManagerIdOfVieweedUser == COMMON.UserId;
+        },
+        manager_approved: function(){
+            // Quan ly da approved
+            if (!$.isEmptyObject(this.kpi_approval) && this.kpi_approval.manager){
+                return true
+            }
+            return false
+        },
+        user_can_approve: function(){
+            if (!this.is_manager() && this.is_user() && !this.kpi_approval) {
+                return true;
+            }
+            return false;
+        },
+        manager_can_approve: function () {
+            //khong phai la manger
+            if (this.is_manager()) {
+                if (!$.isEmptyObject(this.kpi_approval) && this.kpi_approval.finished_date && !this.kpi_approval.confirmed_date) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        show_status_review:function () {
+            //Nhan vien da approved => show status review
+            if (COMMON.UserId == COMMON.UserViewedId && this.kpi_approval) {
+                return true;
+            }
+            //Quan ly da approval => show status review
+            if (COMMON.UserId == COMMON.ManagerIdOfVieweedUser && this.kpi_approval && this.kpi_approval.confirmed_date) {
+                return true;
+            }
+            return false
+        },
+        getKPIApprovalStatus: function(){
+            var that = this;
+            that.loading = true;
+            cloudjetRequest.ajax({
+                type: 'GET',
+                url: `/api/v2/user/${COMMON.UserViewedId}/approve/?month=${that.get_month()}`,
+                success: function(data){
+                    if (data){
+                        that.kpi_approval = data;
+                    }
+                    that.loading = false;
+                }
+            })
+        },
+
+        checkKpiNotReview: function(month){
+            var kpi_not_review = true
+            for (var i=0; i < this.table_evaluation_kpis.length; i++ ){
+                kpi_not_review = this.table_evaluation_kpis[i]["month_"+ month +"_score"] != null && kpi_not_review
+            }
+            return !kpi_not_review
+        },
+        checkKpiForMonthActive: function(){
+            var self = this
+            var warning_kpi_not_review
+            if(self.organization.monthly_review_lock == '1'){
+                warning_kpi_not_review = self.checkKpiNotReview('1')
+            }else if(self.organization.monthly_review_lock == '2'){
+                warning_kpi_not_review = self.checkKpiNotReview('2')
+            }else if(self.organization.monthly_review_lock == '3'){
+                warning_kpi_not_review = self.checkKpiNotReview('3')
+            }else{
+                warning_kpi_not_review = self.checkKpiNotReview('1') || self.checkKpiNotReview('2') || self.checkKpiNotReview('3')
+            }
+            return warning_kpi_not_review
+        },
+        check_month_kpiapproval: function(month){
+            return this.get_month() == month || this.get_month() == 'allow_all'
+        },
+        management_approval_kpi_evaluation: function() {
+           this.update_kpi_approval();
+        },
+        update_kpi_approval: function(){
+            var that = this;
+            cloudjetRequest.ajax({
+                type: 'post',
+                url: `/api/v2/user/${COMMON.UserViewedId}/approve/?month=${that.get_month()}`,
+                data:{
+                  month: that.get_month(),
+                  quarter_period: v.current_quarter.id
+                },
+                success: function(data){
+                    if (data){
+                        that.$root.$emit('set_kpi_approval',data);
+                    }
+                }
+            })
+        },
+        we_complete_review_confirm: function () {
+            this.create_kpi_approval();
+            this.complete_review_confirm();
+            vue_support.show_rate_nps()
+        },
+        get_month: function(){
+            var month = this.organization.monthly_review_lock;
+            var months = {
+               '1': 1,
+               '2': 2,
+               '3': 3,
+            };
+           return months[month] || null;
+        },
+        create_kpi_approval: function() {
+            var that = this;
+             cloudjetRequest.ajax({
+                url: '/api/v2/kpi_approval/',
+                type: 'post',
+                data: {
+                    user: '{{ user.id }}',
+                    month: that.get_month(),
+                    quarter_period: v.current_quarter.id
+                },
+                success: function (data) {
+                    that.$root.$emit('set_kpi_approval', data);
+                }
+            });
+        },
+        complete_review_confirm: function () {
+            that = this;
+            $('#complate-review-modal').modal();
+            var temp = $('#btn-complete-review').html();
+            $('#btn-complete-review').html(gettext('Đảng tải! Vui lòng chờ ...'));
+            cloudjetRequest.ajax({
+                type: 'post',
+                url: COMMON.LinkRDisAPI + "?key=confirm-kpi-quarter" + that.quarter_by_id.id,
+                data: {value: new Date()},
+                success: function (res) {
+                    that.complete_review = res['value'];
+                    console.log(res['value']);
+                    v.complete_review = res['value'];
+                },
+                error: function (res) {
+                }
+            });
+            cloudjetRequest.ajax({
+                type: 'post',
+                url: COMMON.LinkNotifyAPI,
+                data: {
+                    user_id: COMMON.OrgUserId,
+                    notification_type: 'complete_review'
+                },
+                success: function (res) {
+                    v.complete_review = res['value'];
+                },
+                error: function (res) {
+                }
+            });
+            window.open("/performance/report/#/?user_id=" + COMMON.OrgUserId + "&quarter_id=" + that.quarter_by_id.id);
+            $("#complate-review-modal").on("hidden.bs.modal", function () {
+
+                html2canvas(document.body, {
+                    onrendered: function (canvas) {
+                        $('#btn-complete-review').html(temp);
+                        var a = document.createElement('a');
+                        a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
+                        a.download = 'KPIs ' + (new Date()) + '.jpg';
+                        a.click();
+                    }
+                });
+            });
+        },
+    },
+});
+Vue.component('complete-review-modal' , completeReviewModal);
 
 
 var Bonus = Vue.extend({
@@ -1861,8 +2133,6 @@ Vue.component('kpi-owner', {
                 return false;
             }
 
-            this.update_assigned_user_data(selected_item);
-            // assign/kpi/
             var data={
                 user: to_user_id
             };
@@ -1916,12 +2186,13 @@ Vue.component('kpi-progressbar', {
         'month_3_name',
         'evidences',
         'is_parent_kpi',
+        'kpi_approval'
         // 'is_user_system',
 
     ],
     data:function(){
         return {
-
+            confirm_complete: false,
         }
     },
     template: $('#kpi-progressbar-template').html(),
@@ -2040,15 +2311,44 @@ Vue.component('kpi-progressbar', {
             }
             return message;
         },
+        is_admin: function(){
+            if(COMMON.IsAdmin == "True"){
+                return true
+            }else if(COMMON.IsSupperUser == "True"){
+                return true
+            }else {
+                return false
+            }
+        },
+
+        check_disable_result: function(){
+            var that = this;
+            if (!that.kpi_approval) {
+                that.confirm_complete = false;
+                return false;
+            }
+
+            if(that.is_admin()) {
+                that.confirm_complete = false
+            }else if (COMMON.ManagerIdOfVieweedUser == COMMON.UserId && that.kpi_approval.confirmed_date){
+                that.confirm_complete = true
+            }else if(COMMON.UserId == COMMON.UserViewedId && that.kpi_approval.finished_date ){
+                that.confirm_complete = true
+            }else {
+                that.confirm_complete = false
+            }
+        },
         disable_review_kpi: function(parent_id, current_month){
+            // Truong hop user hoac quan ly da xac nhan thi khong cho phep chinh sua
+            this.check_disable_result();
             if (this.is_user_system) return false;
             var is_manager = COMMON.UserId != COMMON.UserViewedId;
             var current_month_locked = !(this.can_edit_current_month(current_month, this.organization.monthly_review_lock));
             if (is_manager){ // if current Login user is parent of user viewed
-                return ( !this.organization.allow_manager_review || current_month_locked ) // manager can edit if enable_to_edit not pass
+                return ( !this.organization.allow_manager_review || current_month_locked ) || this.confirm_complete; // manager can edit if enable_to_edit not pass
             }
             else {
-                return ( !this.organization.allow_employee_review || current_month_locked ) // employee can edit(review) kpi only if not pass self_review_date
+                return ( !this.organization.allow_employee_review || current_month_locked ) || this.confirm_complete; // employee can edit(review) kpi only if not pass self_review_date
             }
         },
 
@@ -2150,7 +2450,7 @@ Vue.component('group-kpi', {
         "month_1_name",
         "month_2_name",
         "month_3_name",
-
+        "kpi_approval"
 
     ],
     data:function(){
@@ -2247,7 +2547,7 @@ Vue.component('kpi-row', {
         'company_params',
         'evidences',
         'is_parent_kpi',
-
+        'kpi_approval'
         // 'is_user_system',
 
     ],
@@ -2525,7 +2825,7 @@ var v = new Vue({
         content: '',
         kpi_list: {},
         list_group: {},
-        // total_weight: {},
+        total_weight: {},
         total_weight_by_user: {},
         toggle_states: {},
         total_weight_bygroup: {'A': 0, 'B': 0, 'C': 0, 'O': 0, 'G': 0},
@@ -2565,8 +2865,8 @@ var v = new Vue({
             user_id: 0,
             version: "",
         },
-        total_zero_score_kpis: [],
         complete_review: '',
+        data_complete_review: null,
         search: false,
         A_CHANGE: false,
         B_CHANGE: false,
@@ -2691,6 +2991,9 @@ var v = new Vue({
         // end data temp for kpi lib
         organization:[],
         parent_score_auto:true,
+        postponed_button: true,
+        kpi_approval: null,
+        confirm_complete: false,
     },
     validators: {
         numeric: { // `numeric` custom validator local registration
@@ -3038,6 +3341,13 @@ var v = new Vue({
             that.fetch_exscore();
         });
 
+        this.$on('set-current-kpi', function(kpi){
+            that.current_kpi = kpi;
+        })
+        this.$on('change_approve_edit_kpi_field', function(kpi_id){
+            that.kpi_list[kpi_id].is_approved = true;
+        })
+
 
         this.$on('show__add_kpi_methods_modal', function () {
             // show_modal_add_kpi
@@ -3086,8 +3396,24 @@ var v = new Vue({
         this.$on('toggle_weight_kpi', function (kpi_id) {
             that.toggle_weight_kpi(kpi_id);
         });
+        this.$on('get_kpi_approval', function () {
+            that.getKPIApproval();
+        });
+        this.$on('set_kpi_approval', function (approval) {
+            that.$set(this, 'kpi_approval', approval);
+        })
     },
     methods: {
+        getKPIApproval: function(){
+            var that = this;
+            cloudjetRequest.ajax({
+                type: 'GET',
+                url: `/api/v2/user/${COMMON.UserViewedId}/approve/?month=${that.organization.monthly_review_lock}`,
+                success: function(data){
+                    that.kpi_approval = data;   // get data kpi_approval
+                }
+            })
+        },
         to_percent: function (val, total) {
             if (total > 0) {
                 return val * 100 / total;
@@ -3288,7 +3614,7 @@ var v = new Vue({
 
             var jqXhr=this.add_kpi(false, kpi_data);
             // additional success callback function
-            jqXhr.success(function(){
+            jqXhr.done(function(){
                 that.$set(that.kpi_list[parent_kpi_id], 'has_child', true);
                 that.$set(that.kpi_list[parent_kpi_id], 'children_data', {'parent_score_auto': true});
                 // $('#btn-kpi-toggle'+kpi).children('i.fa').removeClass("fa-angle-double-right").addClass("fa-angle-double-down");
@@ -3511,6 +3837,23 @@ var v = new Vue({
                     window.location.reload(true);
                 },
             })
+        },
+        is_manager: function(){
+            var is_manager = COMMON.ManagerIdOfVieweedUser == COMMON.UserId;
+            return is_manager
+        },
+        is_admin: function(){
+            if(COMMON.IsAdmin == "True"){
+                return true
+            }else if(COMMON.IsSupperUser == "True"){
+                return true
+            }else {
+                return false
+            }
+        },
+        is_user: function(){
+            var is_user = COMMON.UserViewedId == COMMON.UserId;
+            return is_user
         },
 
         hide_modal: function (modal_id) {
@@ -4978,7 +5321,6 @@ var v = new Vue({
                     contentType: false,
                     success: function (response) {
                         console.log(response);
-                        that.refresh_form_action_plan();
                         var mesage = gettext("Post action plan successfully!");
                         alert(mesage);
                         // The unshift() method adds new items to the beginning of an array, and returns the new length.
@@ -4987,24 +5329,20 @@ var v = new Vue({
                         that.list_action_plan_file[0].actor = COMMON.UserDisplayName;
                         // var tmp = that.evidences[that.evidence_id][that.month];
                         // that.$set(that.$data, 'evidences[' + that.evidence_id + '][' + that.month + ']', tmp + 1);
+                        console.log(tmp);
                     },
                     error: function () {
                         // alert("error");
                     }
-                    }).done(function () {
-                        // $('#save-evidence').attr('disabled', 'disabled');
-                        // $('#file-upload-action-plan-input').val('');
-                        // that.action_plan_filename = '';
-                        // $("#board-upload-action-plan .action-plan-descr").val('');
-                        // $('#kpi_action_plan-modal .form-start').show();
-                    });
+                }).done(function () {
+                    // $('#save-evidence').attr('disabled', 'disabled');
+                    $('#file-upload-action-plan-input').val('');
+                    that.action_plan_filename = '';
+                    $("#board-upload-action-plan .action-plan-descr").val('');
+                    $('#kpi_action_plan-modal .form-start').show();
+                });
             }
             else alert(gettext('Please select a file!'));
-        },
-        refresh_form_action_plan: function(){
-            this.action_plan_filename = '';
-            $("#kpi_action_plan-modal .form-start").show();
-            $("#file-upload-action-plan-form")[0].reset();
         },
         postEvidence: function () {
             var formData = new FormData();
@@ -5300,50 +5638,6 @@ var v = new Vue({
             });
         },
 
-        count_zero_score_kpi: function (recheck) {
-            var user_id = COMMON.OrgUserId;
-
-            var that = this;
-            that.total_zero_score_kpis = [];
-            var quarter_id = getUrlVars()['quarter_id'];
-            var url = COMMON.LinkKPIParentAPI + '?user_id=' + user_id;
-            url += (quarter_id != undefined) ? '&quarter_id=' + quarter_id : '';
-            if (recheck == true) {
-                url += "&recheck=true"
-            }
-
-            cloudjetRequest.ajax({
-                url: url,
-                type: 'post',
-                success: function (results) {
-                    results = results.filter(function (kpi){
-                            return kpi.weight > 0;
-                    });
-//                         results = jQuery.grep(results, function(item){
-//                            return (item.month_1_score ==0 || item.month_2_score ==0 || item.month_3_score==0 || item.latest_score==0)
-//                         });
-                    results.forEach(function (item) {
-                        // var value_weight = $('.kpi-rating[data-id=' + item.id + ']').find('span.weighting_score>span').text();
-                        // value_weight = parseFloat(value_weight.slice(1, -2));
-                        // item.weight_percentage = value_weight;//use jquery to locate to weight percenatge in kpi-editor relative to kpi
-
-                        // Update lai weight KPI
-                        var value_weight = parseFloat(item.weight*100/that.total_weight_by_user[user_id]);
-                        item.weight_percentage = value_weight;
-
-                    })
-                    that.$set(that.$data, 'total_zero_score_kpis', results);
-                    if (recheck == true) {
-                        location.reload();
-                    }
-
-                },
-                error: function () {
-                    alert('Load Kpis Error');
-                }
-            });
-
-        },
 
         get_children: function (kpi_id) {
             // Pace.start();
@@ -5509,7 +5803,8 @@ var v = new Vue({
                     url: "/api/v2/user/" + user_id + "/kpis",
                     data: {
                         unique_key: kpi_unique_key,
-                        quarter_period_id: last_quarter_id
+                        quarter_period_id: last_quarter_id,
+                        include_childs: true,
                     },
                     success: function (kpi_result_list) {
                         if (kpi_result_list.length) {
@@ -5563,7 +5858,6 @@ var v = new Vue({
                     success: function (data) {
                         //   console.log(data);
                         that.kpi_list[kpi.id] = Object.assign(that.kpi_list[kpi.id], data);
-
                         that.get_current_employee_performance();
 
                         success_requestcenter(gettext("Update successful!"));
@@ -5671,14 +5965,14 @@ var v = new Vue({
                             //that.$set(that.$data, 'kpi_list[' + kpi.id + ']', data.kpi);
                             //$('.kpiprogressreview-wrapper').tooltip();
                             that.$set(that.kpi_list[kpi.id], 'latest_score', data.score)
-                            that.$set(that.kpi_list[kpi.id], 'real', data.real)
                             that.kpi_list[kpi.id].target = data.kpi.target;
 
                             that.kpi_list[kpi.id].latest_score = data.score; //JSON.parse(data);
-                            that.kpi_list[kpi.id].real = data.real; //JSON.parse(data);
+                            that.$set(that.kpi_list[kpi.id], 'real', data.real)
+
                             that.get_current_employee_performance();
                             that.triggeredReloadTargetPerformance(kpi.id)
-                            that.reload_kpi(kpi.id)
+                            that.reload_kpi(kpi.id);
 
                             success_requestcenter(gettext("Update successful!"));
                         },
@@ -5700,8 +5994,18 @@ var v = new Vue({
         },
 
         complete_review_modal: function () {
+            this.data_complete_review = {};
+            this.data_complete_review.user_id = this.user_id;
+            this.data_complete_review.month_1_name = this.month_1_name;
+            this.data_complete_review.month_2_name = this.month_2_name;
+            this.data_complete_review.month_3_name = this.month_3_name;
+            this.data_complete_review.quarter = this.quarter;
+            this.data_complete_review.quarter_by_id = this.quarter_by_id;
+            this.data_complete_review.total_weight_by_user = this.total_weight_by_user;
+            this.data_complete_review.employee_performance = this.employee_performance;
+            this.data_complete_review.organization = this.organization;
+            this.data_complete_review.current_quarter = this.current_quarter;
             $('#complate-review-modal').modal();
-            this.count_zero_score_kpi();
         },
 
         edit_weight_modal: function (){
@@ -6043,10 +6347,6 @@ var v = new Vue({
                 }
             })
         },
-        we_complete_review_confirm: function () {
-            this.complete_review_confirm();
-            vue_support.show_rate_nps()
-        },
 
         setCookie: function (cname, cvalue) {
             var now = new Date(); // now
@@ -6136,64 +6436,6 @@ var v = new Vue({
                 error: function (res) {
                     $(".btn-align-up-kpi").button("reset");
                 }
-            });
-        },
-
-        complete_review_confirm: function () {
-            that = this;
-            $('#complate-review-modal').modal('hide');
-            var temp = $('#btn-complete-review').html();
-            $('#btn-complete-review').html(gettext('Downloading! Please wait ... '));
-            cloudjetRequest.ajax({
-                type: 'post',
-                url: COMMON.LinkRDisAPI + "?key=confirm-kpi-quarter" + that.quarter_by_id.id,
-                data: {value: new Date()},
-                success: function (res) {
-                    that.$set(that.$data, 'complete_review', res['value']);
-                    console.log(res['value']);
-                },
-                error: function (res) {
-                }
-            });
-            cloudjetRequest.ajax({
-                type: 'post',
-                url: COMMON.LinkNotifyAPI,
-                data: {
-                    user_id: COMMON.OrgUserId,
-                    notification_type: 'complete_review'
-                },
-                success: function (res) {
-                    that.$set(that.$data, 'complete_review', res['value']);
-                },
-                error: function (res) {
-                }
-            });
-
-            // $('<form></form>').attr('action', "{% url 'SimpleExport' org_user.id %}").appendTo('body').submit().remove();
-
-            this.capture_and_download();
-        },
-
-        capture_and_download: function(){
-            that = this;
-            var temp = $('#btn-complete-review').html();
-
-            var wd = window.open("/performance/report/#/?user_id=" + COMMON.OrgUserId + "&quarter_id=" + that.quarter_by_id.id);
-
-            $("#complate-review-modal").on("hidden.bs.modal", function () {
-                html2canvas(document.body, {
-                    onrendered: function (canvas) {
-                        $('#btn-complete-review').html(temp);
-
-                        var a = document.createElement('a');
-                        // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
-                        a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
-                        // a.download = (new Date()) + '-kpi.jpg';
-                        a.download = 'KPIs ' + (new Date()) + '.jpg';
-                        a.click();
-                    }
-
-                });
             });
         },
 
@@ -6332,7 +6574,10 @@ var v = new Vue({
             cloudjetRequest.ajax({
                 url: '/api/v2/user/'+this.user_id+'/kpis/',
                 type: 'GET',
-                data: {quarter_id: quarter_id},
+                data: {
+                    quarter_id: quarter_id,
+                    include_childs: true,
+                },
                 success: function (data) {
                     console.log("=======>>>>--------------")
                     console.log(data)
@@ -6345,6 +6590,7 @@ var v = new Vue({
                     that.$set(that.$data, 'kpi_list', dictResult);
                     // that.parentKPIs = JSON.parse(JSON.stringify(dictResult));
                     console.log(that.kpi_list);
+                    that.postponed_button = false;
                 },
                 error: function (a, b, c) {
 
