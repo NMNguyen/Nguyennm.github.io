@@ -279,7 +279,7 @@ text-decoration: underline;
 .btn-delete{
   border:none;
   color:white;
-  width: 67px;
+  min-width: 67px;
   height: 34px;
   line-height:34px;
   border-radius: 3px;
@@ -567,9 +567,9 @@ text-decoration: underline;
     font-size:12px;
     margin-left:10px;
 }
-.btn-edit-position{
+.btn-edit-position, .btn-add-position {
     width: auto !important;
-    line-height: 31px;
+    line-height: 32px;
     margin-left:12px;
     margin-right:5px
 }
@@ -1102,4 +1102,29 @@ input[type="checkbox"]:after {
 }
 .list-group .assigned-person-row .col-pers-2 {
     flex-grow: 1;
+}
+#remove-employee-position .modal-footer {
+    padding-right:0px;
+    height:54px;
+    background:#f9f9f9;
+    margin-top:15px;
+}
+#remove-employee-position .modal-footer .btn-cancel {
+    border-radius:3px;
+    line-height: 34px;
+    margin-top:10px;
+    background:white;
+    width:67px;
+    height:34px;
+    color:#333;
+    border: 1px solid #e4e4e4;
+}
+#remove-employee-position .radio-inline {
+    padding-left: 30px;
+}
+#remove-employee-position .radio-inline input[type="radio"] {
+    margin: 2px -25px 0px;
+}
+#remove-employee-position .pos-row {
+    margin-bottom: 5px;
 }

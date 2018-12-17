@@ -1433,9 +1433,9 @@ Vue.component('decimal-input', {
         <input 
             type="text" v-model="model"
             v-bind:class="inputclass" 
-            v-bind:title="title"
             v-on:keypress="check_number"
             @paste.prevent
+            v-tooltip="model"
             v-bind:disabled="disabled"
             v-bind:data-lpignore="datalpignore">
     `,
@@ -1466,8 +1466,13 @@ Vue.component('decimal-input', {
     },
     methods: {
         check_number: function (e){
-            var _number = String.fromCharCode(e.keyCode);
-            if ('0123456789.'.indexOf(_number) !== -1) {
+            // With Firefox e.keyCode alway return 0
+            var charCode = e.which || e.keyCode;
+            var _number = String.fromCharCode(charCode);
+
+            // For firefox, include 'Arrow left, arrow right, backspace, delete'.
+            var controlKeyAllowPress = [37, 39, 8, 46];
+            if ('0123456789.'.indexOf(_number) !== -1 || controlKeyAllowPress.indexOf(charCode) !== -1) {
                 return _number;
             }
             e.preventDefault();
@@ -1486,8 +1491,6 @@ Vue.component('evidence-button', {
         'kpi_id',
         'list_evidences',
         'title',
-        'disabled'
-
     ],
     data:function(){
         return {
@@ -1498,7 +1501,7 @@ Vue.component('evidence-button', {
     },
     template: `  
         <button
-        v-bind:title="title"
+        v-tooltip="title"
         v-bind:disabled="disabled"
         v-bind:class="'btn btn-default KPI_BTN_EVD ' + (evidence_count ? ' evidence-exist btn-evidences-2': ' btn-evidences-1')"
         v-on:click="showModal_e(month, kpi_id)"
@@ -1725,6 +1728,7 @@ Vue.component('kpi-editable', {
                 data: JSON.stringify(data),
                 success: function (data) {
                     _this.kpi[_this.field] = data[_this.field];
+                    _this.kpi['is_approved'] = data.is_approved;
                 }
             })
 
@@ -2266,7 +2270,7 @@ Vue.component('kpi-progressbar', {
                                     if (!(!kpi_month_value.enable_review || !disable.enable_month_2_review) || !(!kpi_month_value.enable_review || !disable.enable_month_3_review)) {
                                         message = gettext("You forget review the result") + ' ' + month_name;
                                     }
-                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_1 != null) {
+                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_1 != null && !this.is_admin()) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
@@ -2279,7 +2283,7 @@ Vue.component('kpi-progressbar', {
                                     if (!(!kpi_month_value.enable_review || !disable.enable_month_3_review)) {
                                         message = gettext("You forget review the result") + ' ' + month_name;
                                     }
-                                } else if ((kpi_month_value.month_1 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_2 != null) {
+                                } else if ((kpi_month_value.month_1 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_2 != null && !this.is_admin()) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
@@ -2289,7 +2293,7 @@ Vue.component('kpi-progressbar', {
                                     message = gettext("You forget review the result") + ' ' + month_name;
                                 } else if ((kpi_month_value.month_2 == null || kpi_month_value.month_1 == null) && kpi_month_value.month_3 == null) {
                                     message = gettext("You can not to review the result earlier than the specified time") + ' ' + month_name;
-                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_1 != null) && kpi_month_value.month_3 != null) {
+                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_1 != null) && kpi_month_value.month_3 != null && !this.is_admin()) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
@@ -2593,6 +2597,7 @@ Vue.component('kpi-row', {
 
             var child_kpis = this.get_child_kpis_from_kpi_list(this.kpi.id);
             // alert('child_kpis inside kpi-row component changed: '+ child_kpis.length);
+            this.show_childs = child_kpis.length <= 0 ?false:this.show_childs
             return child_kpis;
         },
         btn_kpi_toggle_class:function(){
@@ -2668,9 +2673,14 @@ Vue.component('kpi-row', {
             var that = this;
             var jqXhr=null;
             // alert('get_children_kpis');
+                var child_kpis = this.get_child_kpis_from_kpi_list(that.kpi.id);
+                if (child_kpis.length > 0){
+                    this.is_child_kpis_loaded = true;
+                }else{
+                    this.is_child_kpis_loaded = false;
+                }
 
-            // this.show_childs = !this.show_childs;
-            if (this.is_child_kpis_loaded==true){
+            if (this.is_child_kpis_loaded == true){
                 // return this.child_kpis;
             }
             else{
@@ -3068,6 +3078,22 @@ var v = new Vue({
             return sortedObj;
             // return this.exscore_score;
         },
+        disable_upload_and_delete_document: function (){      //check disable upload file doi voi NV / QL / admin
+            var self = this;
+            if (!self.kpi_approval) {
+                return false;
+            }
+
+            if (self.is_admin()) {      // check admin toan quyen upload file
+                return false;
+            }else if(self.is_manager() && self.kpi_approval.confirmed_date){  // check quan ly da phe duyet => disable upload file
+                return true
+            }else if (self.is_user() && self.kpi_approval.finished_date){  // check nhan vien da hoan thanh danh gia => disable upload file
+                return true
+            } else {
+                return false
+            }
+        },
     },
     mounted: function () {
 
@@ -3106,6 +3132,7 @@ var v = new Vue({
         this.same_user = (COMMON.UserRequestID == COMMON.UserViewedId) ? true : false;  // -> hot fix, has_perm(KPI__EDITING) => actor == target cho phep nhan vien tu chinh sua kpi, nhung logic moi thi khong cho phep
         this.get_surbodinate_user_viewed();
         // });
+        this.getKPIApproval();
 
 
 
@@ -3481,7 +3508,7 @@ var v = new Vue({
             }
 
         },
-        confirm_toggle_weigth_kpi:function (kpi_id) {
+        confirm_toggle_weigth_kpi:function () {
 
             var that = this;
             var kpi_id = this.active_kpi_id;
@@ -3541,7 +3568,6 @@ var v = new Vue({
             if (that.kpi_list[kpi_id]) {
                 that.$delete(that.kpi_list, kpi_id);
             }
-
 
         },
         update_data_on_kpi_reloaded: function(kpi_data){
@@ -5113,7 +5139,6 @@ var v = new Vue({
 
         showModal_e: function (month_number, kpi_id) {
             var that = this;
-            console.log("KPI ID:" + kpi_id);
             var month_name = month_number == 1 ? v.month_1_name : month_number == 2 ? v.month_2_name : month_number == 3 ? v.month_3_name : '';
             this.month_name = month_name;
             this.month = month_number;
@@ -5129,36 +5154,12 @@ var v = new Vue({
                 },
                 success: function (response) {
                     that.$set(that.$data, 'list_evidence', response);
-                    console.log("stopped here");
-                    if (that.list_evidence.length > 0) {
-                        that.list_evidence.forEach(function (el, index) {
-                            cloudjetRequest.ajax({
-                                url: '/api/v2/profile/' + el.user + '/',
-                                type: 'get',
-                                success: function (data) {
-                                    var key1 = 'avatar';
-                                    var key2 = 'actor';
-                                    // that.$set(that.$data, 'list_evidence[' + index + '].avatar', data.get_avatar);
-                                    // that.$set(that.$data, 'list_evidence[' + index + '].avatar', data.get_avatar);
-                                    that.$set(that.list_evidence[index], 'avatar', data.get_avatar);
-                                    that.$set(that.list_evidence[index], 'actor', data.display_name);
-                                    console.log('new evidence:' + that.list_evidence[index].avatar);
-
-                                }
-                            })
-                        });
-                    }
-                    console.log('passed here');
-
                 },
                 error: function () {
                     alert("error");
                 },
             }).done(function () {
-                console.log('DONE!!!!!');
                 $('#evidence-modal').modal('show');
-                console.log(that.list_evidence)
-                console.log("shown!")
             });
 
         },
@@ -6165,11 +6166,11 @@ var v = new Vue({
         },
         view_backup_kpis: function (id) {
             var self = this;
-            $('#view-backup-kpi-modal').modal();
+            $('#view-backup-kpi-modal').modal('show');
             $('#backup-kpi-modal').modal('hide');
             // find backup by id
             self.current_backup = self.backups_list[id];
-            console.log('fihihhihihc');
+            // console.log('fihihhihihc');
 
             if (self.current_backup && self.current_backup.hasOwnProperty('data')) {
                 var kpis = self.current_backup.data;
@@ -6187,7 +6188,12 @@ var v = new Vue({
         get_backup_month_score: function (index) {
             var self = this;
             var month = self.current_backup.month;
-            return ((self.backup_kpis[index]['month_' + month + '_score'] > 0)?(self.backup_kpis[index]['month_' + month + '_score']).toFixed(2):0);
+            var backup_kpis_month_score = parseFloat(self.backup_kpis[index]['month_' + month + '_score']);
+            if ($.isNumeric(backup_kpis_month_score)){
+                return backup_kpis_month_score.toFixed(2);
+            } else {
+                return null
+            }
         },
         get_backup_month_name: function (month) {
             return self['month_' + month + '_name']
@@ -6195,18 +6201,36 @@ var v = new Vue({
         get_backup_month_target: function (index) {
             var self = this;
             var month = self.current_backup.month;
-            return (self.backup_kpis[index]['month_' + month + '_target']).toFixed(2);
+            var backup_kpis_month_target = parseFloat(self.backup_kpis[index]['month_' + month + '_target']);
+            if ($.isNumeric(backup_kpis_month_target)) {
+                return backup_kpis_month_target.toFixed(2);
+            } else {
+                return null
+            }
+
         },
         get_backup_month_real: function (index) {
             var self = this;
             var month = self.current_backup.month;
-            return ((self.backup_kpis[index]['month_' + month] > 0)?(self.backup_kpis[index]['month_' + month]).toFixed(2):0);
+            var backup_kpis_month = parseFloat(self.backup_kpis[index]['month_' + month]);
+            if($.isNumeric(backup_kpis_month)){
+                return backup_kpis_month.toFixed(2);
+            }else {
+                return null;
+            }
+
         },
         update_month_backup_display: function (month) {
             var self = this;
             if (month) {
                 self.$set(self.employee_performance, 'month_' + month + '_backup', true);
             }
+        },
+        formatBackupKpis: function (val) {
+            if (typeof val == 'number') {
+                return val.toFixed(2) + "%";
+            }
+            return ""
         },
         delete_backup: function (index) {
             var self = this;
