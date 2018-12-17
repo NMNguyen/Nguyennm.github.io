@@ -66,7 +66,7 @@
   filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff');
 }
 
-#infovis {	
+[id^='infovis'] {
 	position:relative;
 	width:710px;
 	height:700px;
