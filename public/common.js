@@ -427,9 +427,3 @@ $.ajaxSetup({
         }
     }
 });
-
-
-function format_date(date){
-	// datetime format
-   return  moment(date).format("HH:mm:ss  DD/MM/YYYY")
-}
