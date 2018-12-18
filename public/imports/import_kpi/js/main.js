@@ -818,7 +818,7 @@ methods: {
         var operator = ['<=', '>=', '='];
         var scores = ['q1', 'q2', 'q3', 'q4'];
         var months = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 't11', 't12']
-        var list_field_name_kpi = ['kpi_id','unit','measurement','weight','goal','kpi','score_calculation_type','operator']
+        var list_field_name_kpi = ['code','kpi_id','unit','measurement','weight','goal','kpi','score_calculation_type','operator']
         var object_trans_field = {
             'kpi_id':"Loại KPI",
             'unit': "Đơn vị",
@@ -1100,7 +1100,7 @@ methods: {
                     self.info_msg_box.type_msg = "error";
                     self.info_msg_box.tite_msg = "Chỉnh sửa KPI không thành công"
                     self.data_edit_kpi.data.msg.forEach(function (field) {
-                        self.info_msg_box.array_msg.push(field.field_name + ": " + field.message )
+                        self.info_msg_box.array_msg.push(field.field_name + ":" + field.message )
                     })
 
                 }else{
