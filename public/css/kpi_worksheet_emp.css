@@ -56,8 +56,7 @@
     margin-bottom: 0px;
     background: #f9f9f9;
     border-radius: 3px;
-    cursor: pointer;
-    pointer-events: unset;
+    cursor: pointer
 }
 
 .board-upload {
@@ -253,58 +252,15 @@
 }
 
 #list_user_suggest {
-    width: 300px;
-    max-height: 205px;
-    overflow: auto;
-    top: 48px;
-    z-index: 999;
-    position: absolute;
-    display: none;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.21);
-    text-align: left;
-    margin-right: 40px;
+    right: 2px;
 }
 
 #result_searched {
-    border-radius: 4px;
-    max-height: 205px;
-    overflow: auto;
-    margin-bottom: 1px;
-    position: absolute;
-    width: 300px;
-    top: 48px;
-    text-align: left;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.21);
-    z-index: 9999;
     right: 2px;
-    margin-right: 40px;
 }
 
-#data-not-found.no-data {
+.no-data {
     right: 2px;
-    border: none;
-    display: none;
-    overflow: auto;
-    margin-bottom: 1px;
-    z-index: 9999;
-    position: absolute;
-    width: 300px;
-    top: 48px;
-    text-align: center;
-    border-radius: 4px;
-    margin-right: 38px;
-}
-#result_searched .name-personal {
-    font-weight: bold;
-    font-size: 14px;
-    color: #333333;
-}
-
-#result_searched .position-personal{
-    font-size: 12px;
-    color: #666666;
-    text-overflow: ellipsis;
-    overflow: hidden;
 }
 
 .arrow-up {
@@ -503,9 +459,8 @@
 }
 
 .q-score {
+    color: #008b8b;
     font-weight: 600;
-    font-size: 40px;
-    color: #337ab7;
 }
 
 #kpiscore-avg-help {
@@ -840,23 +795,26 @@ div#unique-content {
 
 /* kpi_snapshot.html*/
 .user-avatar {
-    text-align:center;
-    background-position: unset;
-    background-size: unset;
-    padding-top: unset;
-}
-.user-avatar>img{
-    width:70px;
-    height:70px;
-    object-fit: cover;
-}
+        text-align:center;
+        background-position: unset;
+        background-size: unset;
+        padding-top: unset;
+    }
+    .user-avatar>img{
+        width:70px;
+        height:70px;
+        object-fit: cover;
+    }
 
-/* end kpi_snapshot.html*/
+    /* end kpi_snapshot.html*/
 
 
 /*kpi_editor_toolbar_top.html*/
 #list_user_suggest{
         right:2px;
+    }
+    #result_searched{
+       right:2px;
     }
     .no-data{
        right:2px;
