@@ -1993,7 +1993,7 @@ Vue.component('kpi-progressbar', {
                                     if (!(!kpi_month_value.enable_review || !disable.enable_month_2_review) || !(!kpi_month_value.enable_review || !disable.enable_month_3_review)) {
                                         message = gettext("You forget review the result") + ' ' + month_name;
                                     }
-                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_1 != null && !this.is_admin()) {
+                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_1 != null && !this.is_user_system) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
@@ -2006,7 +2006,7 @@ Vue.component('kpi-progressbar', {
                                     if (!(!kpi_month_value.enable_review || !disable.enable_month_3_review)) {
                                         message = gettext("You forget review the result") + ' ' + month_name;
                                     }
-                                } else if ((kpi_month_value.month_1 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_2 != null && !this.is_admin()) {
+                                } else if ((kpi_month_value.month_1 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_2 != null && !this.is_user_system) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
@@ -2016,7 +2016,7 @@ Vue.component('kpi-progressbar', {
                                     message = gettext("You forget review the result") + ' ' + month_name;
                                 } else if ((kpi_month_value.month_2 == null || kpi_month_value.month_1 == null) && kpi_month_value.month_3 == null) {
                                     message = gettext("You can not to review the result earlier than the specified time") + ' ' + month_name;
-                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_1 != null) && kpi_month_value.month_3 != null && !this.is_admin()) {
+                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_1 != null) && kpi_month_value.month_3 != null && !this.is_user_system) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
