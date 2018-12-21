@@ -1,20 +1,95 @@
+function format(number) {
 
-function extractEmails(text) {
-    return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
-}
+    var decimalSeparator = ".";
+    var thousandSeparator = ",";
+
+    // make sure we have a string
+    var result = String(number);
+
+    // split the number in the integer and decimals, if any
+    var parts = result.split(decimalSeparator);
+
+    // reverse the string (1719 becomes 9171)
+    result = parts[0].split("").reverse().join("");
+
+    // add thousand separator each 3 characters, except at the end of the string
+    result = result.replace(/(\d{3}(?!$))/g, "$1" + thousandSeparator);
+
+    // reverse back the integer and replace the original integer
+    parts[0] = result.split("").reverse().join("");
+
+    // recombine integer with decimals
+    return parts.join(decimalSeparator);
+
+};
+Vue.filter('decimalDisplay',  function (val) {
+    return (val === 0) ? 0 : (val == null || val === '') ? '' : format(val);
+
+
+});
+Vue.component('decimal-input-import', {
+    props: [
+        'value',
+        'inputclass',
+        'disabled',
+    ],
+    template: `
+        <input 
+            type="text" v-model="model"
+            v-bind:class="inputclass" 
+            v-on:keypress="check_number"
+            @paste.prevent
+            v-bind:disabled="disabled"
+        >
+    `,
+    computed: {
+        model:{
+            get: function(){
+                return this.$options.filters.decimalDisplay(this.value);
+
+            },
+            set: function(val){
+                val = String(val).trim()
+                var newVal=val;
+                if (val === '') {
+                    newVal = null;
+                }
+                else {
+                    var number = val.split(",").join("");
+                    number = Number(number);
+                    // Toan note: ref https://stackoverflow.com/a/5963202/2599460
+                    newVal = $.isNumeric(number) ? parseFloat(number) : null ;
+                }
+
+                this.$emit('input', newVal);
+
+            },
+        }
+    },
+    methods: {
+        check_number: function (e){
+            var _number = String.fromCharCode(e.keyCode);
+            if ('0123456789.'.indexOf(_number) !== -1) {
+                return _number;
+            }
+            e.preventDefault();
+            return false;
+        },
+    }
+
+});
+
 Vue.component('edit-import-kpi-modal', {
     delimiters: ['${', '}$'],
-    props: ['kpi', 'showmodal'],
+    props: ['kpi'],
     template: $('#edit-import-kpi-modal').html(),
     data: function () {
         return {
             data_edit_kpi: {},
-            showmodal: false,
             method: ["sum", "average", "most_recent", "tính tổng", "trung bình", "tháng gần nhất"],
         }
     },
     mounted: function () {
-        // {#            console.log(this.showmodal)#}
         // {#            this.old_data = this.kpi#}
     },
     created: function () {
@@ -30,11 +105,6 @@ Vue.component('edit-import-kpi-modal', {
             },
             deep: true
         },
-        showmodal: function (val) {
-            this.showmodal = val
-        },
-
-
     },
     beforeDestroy: function () {
         //            this.$off('dismiss')
@@ -43,6 +113,9 @@ Vue.component('edit-import-kpi-modal', {
         triggeredCloseModal: function () {
                 var self = this
                 self.$emit('dismiss')
+        },
+        trimField:function(val){
+            return String(val).trim()
         },
         check_format_operator: function (_operator) {
             var operator = ['<=', '>=', '='];
@@ -55,11 +128,14 @@ Vue.component('edit-import-kpi-modal', {
             var self = this
                 self.$emit('comfirm',self.data_edit_kpi)
         },
-        extractEmails: function (email) {
+        isEmailFormatValid: function (email) {
              if (email) {
-                 return /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi.test(email);
+                 return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi.test(email);
              }
             return false;
+        },
+        checkTypeKPI: function(type_kpi){
+            return /^([fclopFCLOP]{1}[0-9]+)((\.[0-9]+)*)$/gi.test(type_kpi)
         },
     }
 })
@@ -81,6 +157,12 @@ el: '#home-template',
 },
 data: function () {
     return {
+        info_msg_box:{
+            show_infor_msg: false,
+            type_msg:'',//success or error
+            tite_msg:'',// thêm kpi thất bại
+            array_msg:[]// [mã kpi quá 100 ký tư, mục tiêu kpi quá 300 ký tự]
+        },
         enable_allocation_target:  false,
         alert_import_kpi: true,
         id_row_error: [],
@@ -90,12 +172,11 @@ data: function () {
         error_add: '',
         check_error_upload: false,
         check_file: true,
-        dialogFormVisible: false,
         data_edit_kpi: {
             data: {},
             index: -1,
             check_error: false,
-            msg: ""
+            msg: [],
         },
         organization:{},
         file: {},
@@ -121,10 +202,6 @@ filters: {
 
 },
 methods: {
-        triggeredDismissModal: function(){
-            // console.log('triggered show modal')
-            this.dialogFormVisible = false
-        },
     hideUnusedTableHead: function(){
         console.log("triggered this hiding function")
         setTimeout(function(){
@@ -133,7 +210,7 @@ methods: {
         },100)
     },
     getOrg: function () {
-            self = this;
+            var self = this;
             cloudjetRequest.ajax({
                 method: "GET",
                 url: "/api/organization",
@@ -188,7 +265,7 @@ methods: {
         return str;
     },
     trans_method: function(str){
-         if(str=='sum'){
+        if(str=='sum'){
             return gettext('sum');
         }
         if(str=='average'){
@@ -199,19 +276,37 @@ methods: {
         }
         return str;
     },
+    trigger_close_msg_box: function(){
+        // reset infor msg box
+        var self = this
+        var msg_box = {
+            show_infor_msg: false,
+            type_msg:'',
+            tite_msg:'',
+            array_msg:[]
+        }
+        self.info_msg_box = Object.assign(self.info_msg_box, msg_box)
+    },
     handleDropFile: function (e) {
+        var that = this
         e.stopPropagation();
         e.preventDefault();
         var files = e.dataTransfer.files;
         if (!files[0].type.match('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
-            swal(gettext('Error'), gettext("Please choose the document format excel file") + "!", "error");
+            that.info_msg_box.show_infor_msg = true;
+            that.info_msg_box.type_msg = "error";
+            that.info_msg_box.tite_msg = "Nhập dữ liệu không thành công"
+            that.info_msg_box.array_msg.push(gettext("Please choose the document format excel file"))
             $("#file-upload-form")[0].reset();
             return;
         }
         this.handleFile(e);
     },
+    checkTypeKPI: function(type_kpi){
+        return /^([fclopFCLOP]{1}[0-9]+)((\.[0-9]+)*)$/gi.test(type_kpi)
+    },
     handleFile: function (e) {
-        that = this;
+        var that = this;
         that.kpis.length = 0;
         that.check_file = true;
         var files = e.target.files || e.dataTransfer.files;
@@ -221,7 +316,10 @@ methods: {
             var name = f.name;
             var re = /(\.xlsx|\.xls)$/i;
             if (!re.exec(name)) {
-                swal(gettext('Error'), gettext("Please choose the document format excel file") + "!", "error");
+                that.info_msg_box.show_infor_msg = true;
+                that.info_msg_box.type_msg = "error";
+                that.info_msg_box.tite_msg = "Nhập dữ liệu không thành công"
+                that.info_msg_box.array_msg.push(gettext("Please choose the document format excel file")+ "!")
             }
             else {
                 that.file = f;
@@ -237,7 +335,10 @@ methods: {
                     var A = sheet.C1;
 
                     if (A == undefined || sheet.AA1 == undefined || sheet.AE1 != undefined) {
-                        swal(gettext('Warning'), gettext("Data is incorrect, please re-check and make sure that template of file is in correct form. Data needs to be input from second line") + "!", "warning");
+                        that.info_msg_box.show_infor_msg = true;
+                        that.info_msg_box.type_msg = "error";
+                        that.info_msg_box.tite_msg = "Nhập dữ liệu không thành công"
+                        that.info_msg_box.array_msg.push(gettext("Data is incorrect, please re-check and make sure that template of file is in correct form. Data needs to be input from second line") + "!")
                         sheet = null;
                         that.check_error_upload = false;
                     } else {
@@ -251,269 +352,16 @@ methods: {
                             var last_goal = "";
                             that.check_error_upload = true;
                             while (A != undefined) {
-                                try {
-
-                                    try {
-                                        var kpi_id = sheet["A" + i].w;
-                                    } catch (err) {
-                                        var kpi_id = '';
-                                    }
-
-                                    var goal = '';
-                                    try {
-                                        goal = sheet["B" + i].w;
-
-                                        if (goal != undefined) {
-
-                                            goal = goal.toUpperCase();
-                                        }
-
-                                    } catch (err) {
-
-                                    }
-                                    var check_goal = "";
-
-
-                                    var kpi = '';
-                                    try {
-                                        kpi = sheet["C" + i].w;
-                                    } catch (err) {
-
-                                        last_goal_index = i;
-                                    }
-
-                                    if (kpi.trim().length != 0 && (goal == undefined || goal == '')) {
-
-                                        if (last_goal == "") {
-                                            throw "KPI Goal is missing";
-                                        }
-                                        else {
-                                            console.log(kpi);
-                                            goal = last_goal;
-                                            check_goal = "Check goal"
-                                        }
-                                    } else {
-                                        last_goal = goal;
-                                    }
-
-
-                                    try {
-                                        var unit = sheet["D" + i].w;
-                                    } catch (err) {
-                                        var unit = '';
-                                    }
-
-
-                                    try {
-                                        var measurement = sheet["E" + i].w;
-                                    } catch (err) {
-                                        var measurement = '';
-                                    }
-
-                                    try {
-                                        var datasource = sheet["F" + i].w;
-                                    } catch (err) {
-                                        var datasource = '';
-                                    }
-
-                                    try {
-                                        var method = sheet["G" + i].w;
-                                    } catch (err) {
-                                        var method = '';
-                                    }
-
-                                    try {
-                                        var operator = sheet["H" + i].w;
-                                    } catch (err) {
-                                        var operator = '';
-                                    }
-
-
-                                    try {
-                                        var year = sheet["I" + i].w;
-                                    } catch (err) {
-                                        var year = '';
-                                    }
-
-
-                                    try {
-                                        var t1 = sheet["J" + i].w;
-                                    } catch (err) {
-                                        var t1 = '';
-                                    }
-
-
-                                    try {
-                                        var t2 = sheet["K" + i].w;
-                                    } catch (err) {
-                                        var t2 = '';
-                                    }
-
-
-                                    try {
-                                        var t3 = sheet["L" + i].w;
-                                    } catch (err) {
-                                        var t3 = '';
-                                    }
-
-
-                                    try {
-                                        var q1 = sheet["M" + i].w;
-                                    } catch (err) {
-                                        var q1 = '';
-                                    }
-
-                                    try {
-                                        var t4 = sheet["N" + i].w;
-                                    } catch (err) {
-                                        var t4 = '';
-                                    }
-
-                                    try {
-                                        var t5 = sheet["O" + i].w;
-                                    } catch (err) {
-                                        var t5 = '';
-                                    }
-
-                                    try {
-                                        var t6 = sheet["P" + i].w;
-                                    } catch (err) {
-                                        var t6 = '';
-                                    }
-
-                                    try {
-                                        var q2 = sheet["Q" + i].w;
-                                    } catch (err) {
-                                        var q2 = '';
-                                    }
-
-                                    try {
-                                        var t7 = sheet["R" + i].w;
-                                    } catch (err) {
-                                        var t7 = '';
-                                    }
-
-                                    try {
-                                        var t8 = sheet["S" + i].w;
-                                    } catch (err) {
-                                        var t8 = '';
-                                    }
-
-                                    try {
-                                        var t9 = sheet["T" + i].w;
-                                    } catch (err) {
-                                        var t9 = '';
-                                    }
-
-                                    try {
-                                        var q3 = sheet["U" + i].w;
-                                    } catch (err) {
-                                        var q3 = '';
-                                    }
-
-                                    try {
-                                        var t10 = sheet["V" + i].w;
-                                    } catch (err) {
-                                        var t10 = '';
-                                    }
-
-                                    try {
-                                        var t11 = sheet["W" + i].w;
-                                    } catch (err) {
-                                        var t11 = '';
-                                    }
-
-                                    try {
-                                        var t12 = sheet["X" + i].w;
-                                    } catch (err) {
-                                        var t12 = '';
-                                    }
-
-                                    try {
-                                        var q4 = sheet["Y" + i].w;
-                                    } catch (err) {
-                                        var q4 = '';
-                                    }
-
-                                    try {
-                                        var weight = sheet["Z" + i].w;
-                                    } catch (err) {
-                                        var weight = '';
-                                    }
-
-
-                                    try {
-                                        var email = extractEmails(sheet["AA" + i].w)[0];
-                                    } catch (err) {
-                                        var email = '';
-                                    }
-                                    try {
-                                        var code = sheet["AD" + i].w;
-                                    } catch (err) {
-                                        var code = '';
-                                    }
-
-
-
-
-
-                                    // <check-duplicated>
-
-                                    // {#                                                    var duplicated_codes = that.kpis.filter(function (item) {#}
-                                    //     {#                                                        return item.code.toLowerCase().trim() == code.toLowerCase().trim()#}
-                                    //     {#                                                    });#}
-                                    // {#                                                    if (code != "" && duplicated_codes.length > 0) {#}
-                                    //     {#                                                        throw "Duplicated Code";#}
-                                    //     {#                                                    }#}
-
-                                    // </check-duplicated>
-                                    that.kpis.push({
-                                        "code": code,
-                                        "kpi_id": kpi_id,
-                                        "check_goal": check_goal,
-                                        "goal": goal,
-                                        "kpi": kpi,
-                                        "unit": unit,
-                                        "measurement": measurement,
-                                        "score_calculation_type": method,
-                                        "operator": operator,
-                                        "t1": t1,
-                                        "t2": t2,
-                                        "t3": t3,
-                                        "t4": t4,
-                                        "t5": t5,
-                                        "t6": t6,
-                                        "t7": t7,
-                                        "t8": t8,
-                                        "t9": t9,
-                                        "t10": t10,
-                                        "t11": t11,
-                                        "t12": t12,
-                                        "q1": q1,
-                                        "q2": q2,
-                                        "q3": q3,
-                                        "q4": q4,
-                                        'year': year,
-                                        "weight": weight.replace('%',''),
-                                        "email": email,
-                                        "check_error_year": false,
-                                        "check_error_quarter_1": false,
-                                        "check_error_quarter_2": false,
-                                        "check_error_quarter_3": false,
-                                        "check_error_quarter_4": false,
-                                        "index": "",
-                                        "_uuid": makeid()
-
-
-                                    });
-                                    console.log(that.kpis);
-                                } catch (err) {
-                                    that.is_error = true;
-                                    that.kpis.push({
-                                        "code": "[Error on line: " + i + "] > " + err
-
-                                    });
-
+                                var kpi = that.parseDataImport(sheet,i,last_goal)
+                                if(kpi){
+                                    last_goal = kpi.last_goal;
+                                    that.kpis.push(kpi);
+                                }else{
+                                    that.info_msg_box.show_infor_msg = true;
+                                    that.info_msg_box.type_msg = "error";
+                                    that.info_msg_box.tite_msg = "Nhập dữ liệu không thành công"
+                                    that.info_msg_box.array_msg.push("Dữ liệu dòng: "+ i + " không đúng")
+                                    break;
                                 }
                                 i += 1;
 
@@ -527,12 +375,21 @@ methods: {
                                 if (A == undefined) {
                                     A = sheet["D" + (i + 1)];
                                 }
+                                if (A == undefined) {
+                                    A = sheet["A" + (i + 1)];
+                                }
+                                if (A == undefined) {
+                                    A = sheet["AA" + (i + 1)];
+                                }
+                                if (A == undefined) {
+                                    A = sheet["Z" + (i + 1)];
+                                }
                             }
                             async.waterfall(
                                 that.kpis.forEach(function (kpi, index) {
                                     kpi.index = index
-                                    that.validate_kpi(index);
-                                    console.log(that.kpis[index]);
+                                    kpi = that.validate_kpi(kpi);
+                                    // that.$set(that.kpis, index, kpi);
                                     return kpi
                                 })
                             )
@@ -551,6 +408,255 @@ methods: {
             }
         }
         $("#file-upload-form, #upload-form")[0].reset();
+    },
+    parseDataImport: function(sheet, row,last_goal){
+        var self = this
+        var last_goal_index = 2
+        var kpi={}
+        try {
+            var kpi_id = '';
+            try {
+                 kpi_id = String(sheet["A" + row].v).trim();
+            } catch (err) {
+                 kpi_id = '';
+            }
+            var goal = '';
+            try {
+                 goal = String(sheet["B" + row].v).trim();
+
+                if (goal != undefined) {
+                    goal = goal.toUpperCase();
+                }
+
+            } catch (err) {
+                 goal = ''
+            }
+            var check_goal = "";
+            var kpi = "";
+            try {
+                kpi = String(sheet["C" + row].v).trim();
+            } catch (err) {
+                kpi = ""
+                last_goal_index = row;
+            }
+
+            if (kpi.trim().length != 0 && (goal == undefined || goal == '')) {
+
+                if (last_goal == "") {
+                    throw "KPI Goal is missing";
+                }
+                else {
+                    goal = last_goal;
+                    check_goal = "Check goal"
+                }
+            } else {
+                last_goal = goal;
+            }
+
+            var unit = '';
+            try {
+                 unit = String(sheet["D" + row].v).trim();
+            } catch (err) {
+                 unit = '';
+            }
+
+            var measurement = '';
+            try {
+                 measurement = String(sheet["E" + row].v).trim();
+            } catch (err) {
+                 measurement = '';
+            }
+            var datasource = '';
+            try {
+                 datasource = String(sheet["F" + row].v).trim();
+            } catch (err) {
+                 datasource = '';
+            }
+            var method = '';
+            try {
+                method = String(sheet["G" + row].v).trim();
+            } catch (err) {
+                method = '';
+            }
+            var operator = '';
+            try {
+                var operator = String(sheet["H" + row].v).trim();
+            } catch (err) {
+                var operator = '';
+            }
+
+            var year = null;
+            try {
+                 year = String(sheet["I" + row].v).trim();
+            } catch (err) {
+                 year = null;
+            }
+
+            var t1 = null;
+            try {
+                 t1 = String(sheet["J" + row].v).trim();
+            } catch (err) {
+                 t1 = null;
+            }
+
+            var t2 = null;
+            try {
+                 t2 = String(sheet["K" + row].v).trim();
+            } catch (err) {
+                 t2 = null;
+            }
+
+            var t3 = null;
+            try {
+                 t3 = String(sheet["L" + row].v).trim();
+            } catch (err) {
+                 t3 = null;
+            }
+
+            var q1 = null;
+            try {
+                 q1 = String(sheet["M" + row].v).trim();
+            } catch (err) {
+                 q1 = null;
+            }
+            var t4 = null;
+            try {
+                 t4 = String(sheet["N" + row].v).trim();
+            } catch (err) {
+                 t4 = null;
+            }
+            var t5 = null;
+            try {
+                 t5 = String(sheet["O" + row].v).trim();
+            } catch (err) {
+                 t5 = null;
+            }
+            var t6 = null;
+            try {
+                 t6 = String(sheet["P" + row].v).trim();
+            } catch (err) {
+                 t6 = null;
+            }
+            var q2 = null;
+            try {
+                 q2 = String(sheet["Q" + row].v).trim();
+            } catch (err) {
+                 q2 = null;
+            }
+            var t7 = null;
+            try {
+                 t7 = String(sheet["R" + row].v).trim();
+            } catch (err) {
+                 t7 = null;
+            }
+            var t8 = null;
+            try {
+                 t8 = String(sheet["S" + row].v).trim();
+            } catch (err) {
+                 t8 = null;
+            }
+            var t9 = null;
+            try {
+                 t9 = String(sheet["T" + row].v).trim();
+            } catch (err) {
+                 t9 = null;
+            }
+            var q3 = null;
+            try {
+                 q3 = String(sheet["U" + row].v).trim();
+            } catch (err) {
+                 q3 = null;
+            }
+            var t10 = null;
+            try {
+                 t10 = String(sheet["V" + row].v).trim();
+            } catch (err) {
+                 t10 = null;
+            }
+            var t11 = null;
+            try {
+                t11 = String(sheet["W" + row].v).trim();
+            } catch (err) {
+                t11 = null;
+            }
+            var t12 = null;
+            try {
+                 t12 = String(sheet["X" + row].v).trim();
+            } catch (err) {
+                 t12 = null;
+            }
+            var q4 = null;
+            try {
+                 q4 = String(sheet["Y" + row].v).trim();
+            } catch (err) {
+                 q4 = null;
+            }
+             var weight = null;
+            try {
+                 weight = String(sheet["Z" + row].v).trim();
+            } catch (err) {
+                 weight = null;
+            }
+
+            var email = '';
+            try {
+                 email = self.isEmailFormatValid(String(sheet["AA" + row].v).trim())?String(sheet["AA" + row].v).trim():'';
+            } catch (err) {
+                 email = '';
+            }
+            var code = '';
+            try {
+                code = String(sheet["AD" + row].v);
+            } catch (err) {
+                code = '';
+            }
+             kpi = {
+                "code": code,
+                "kpi_id": kpi_id,
+                "check_goal": check_goal,
+                "goal": goal,
+                "last_goal":last_goal,
+                "kpi": kpi,
+                "unit": unit,
+                "measurement": measurement,
+                "score_calculation_type": method,
+                "operator": operator,
+                "t1": $.isNumeric(t1) ?parseFloat(t1): t1,
+                "t2": $.isNumeric(t2) ?parseFloat(t2): t2,
+                "t3": $.isNumeric(t3) ?parseFloat(t3): t3,
+                "t4": $.isNumeric(t4) ?parseFloat(t4): t4,
+                "t5": $.isNumeric(t5) ?parseFloat(t5): t5,
+                "t6": $.isNumeric(t6) ?parseFloat(t6): t6,
+                "t7": $.isNumeric(t7) ?parseFloat(t7): t7,
+                "t8": $.isNumeric(t8) ?parseFloat(t8): t8,
+                "t9": $.isNumeric(t9) ?parseFloat(t9): t9,
+                "t10": $.isNumeric(t10) ?parseFloat(t10): t10,
+                "t11": $.isNumeric(t11) ?parseFloat(t11): t11,
+                "t12": $.isNumeric(t12) ?parseFloat(t12): t12,
+                "q1": $.isNumeric(q1) ?parseFloat(q1): q1,
+                "q2": $.isNumeric(q2) ?parseFloat(q2): q2,
+                "q3": $.isNumeric(q3) ?parseFloat(q3): q3,
+                "q4": $.isNumeric(q4) ?parseFloat(q4): q4,
+                'year': $.isNumeric(year) ?parseFloat(year): year,
+                "weight": $.isNumeric(weight) ?parseFloat(weight)*100: weight,
+                "email": email,
+                "check_error_year": false,
+                "check_error_quarter_1": false,
+                "check_error_quarter_2": false,
+                "check_error_quarter_3": false,
+                "check_error_quarter_4": false,
+                "index": "",
+                "msg":[],
+                "_uuid": makeid(),
+                "code_kpi_existed":false,
+                "email_is_incorrect":false
+            };
+            console.log(self.kpis);
+        } catch (err) {
+            self.is_error = true;
+            return false
+        }
+        return kpi
     },
     addRowError: function(uuid){
         var self = this;
@@ -573,15 +679,15 @@ methods: {
         self.$set(self,'id_row_error',self.id_row_error)
     },
 
-    extractEmails: function (email) {
+    isEmailFormatValid: function (email) {
         if (email) {
-            return /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi.test(email);
+            return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi.test(email);
         }
         return false;
     },
     init: function () {
 
-        that = this;
+        var that = this;
         that.getOrg()
 
         //  document.getElementById('drop').addEventListener('drop', that.handleDrop, false);
@@ -590,6 +696,7 @@ methods: {
     },
     check_add_all: function () {
         var count = 0;
+        var that = this
         for (var i = 0; i < that.kpis.length; i++) {
             if (kpis[i].msg) return false;
             if (kpis[i].status == 'success') count++;
@@ -607,15 +714,21 @@ methods: {
         // Process conditions
 
         // year target bang voi tong target cac quy
-        kpi.year = !$.isNumeric(kpi.year)?null:parseFloat(kpi.year)
+        var year_target_input = !$.isNumeric(kpi.year) ? null : parseFloat(kpi.year).toFixed(15)
+        //year_target_input = parseFloat(year_target_input) == 0?0: parseFloat(year_target_input) || null
+        sum_q = !$.isNumeric(sum_q) ? null : parseFloat(sum_q).toFixed(15)
+        //sum_q = parseFloat(sum_q) || null
         var yearTargetValid =  kpi.year == sum_q
         if(!yearTargetValid){
             kpi.check_error_year = true
         }
         //bao loi khi thang khong theo phuong phap phan quy
         for(var i = 1;i<5; i++){
-            kpi['q' + i] = !$.isNumeric(kpi['q' + i])?null:parseFloat(kpi['q' + i])
-            if(!(kpi['q' + i] == totalQuarterArray[i -1])){
+            var quarter_target_input = !$.isNumeric(kpi['q' + i]) ? null : parseFloat(kpi['q' + i]).toFixed(15)
+            //quarter_target_input = parseFloat(quarter_target_input) || null
+            totalQuarterArray[i - 1] = !$.isNumeric(totalQuarterArray[i - 1]) ? null : parseFloat(totalQuarterArray[i - 1]).toFixed(15)
+            //totalQuarterArray[i - 1] = parseFloat(totalQuarterArray[i - 1]) || null
+            if (!(quarter_target_input == totalQuarterArray[i - 1])) {
                 kpi['check_error_quarter_' + i] = true
             }
         }
@@ -627,18 +740,6 @@ methods: {
         }
         return kpi
     },
-    // validateIsSumQuarter: function (kpi,sum_p,totalQuarterArray,sum_year) {//sum_q1,sum_q2,sum_q3,sum_q4 or average_q1,average_q2,average_q3,average_q4
-    //     var self = this;
-    //     return kpi = self.checkValidate(kpi,sum_p,totalQuarterArray,sum_year)
-    // },
-    // validateIsMostRecent: function (kpi,most_recent_q,totalQuarterArray,sum_year) {
-    //     var self = this;
-    //     return kpi = self.checkValidate(kpi,most_recent_q,totalQuarterArray,sum_year)
-    // },
-    // validateIsAverage: function (kpi,average_q,totalQuarterArray,sum_year) {
-    //     var self = this;
-    //     return kpi = self.checkValidate(kpi,average_q,totalQuarterArray,sum_year)
-    // },
     calculationScore: function(score){
         var self = this
         var year = score.year
@@ -681,7 +782,7 @@ methods: {
             self.method_save = self.method[p];
         }
         else{
-            self.method_save = self.method[p];
+            self.method_save = "";
             check_score_calculation_type = false
         }
         kpi.score_calculation_type = self.method_save;
@@ -718,171 +819,197 @@ methods: {
         }
         return kpi
     },
-    validate_kpi: function (index) {
+    validate_kpi: function (kpi) {
         var self = this
-        var that = this;
         var operator = ['<=', '>=', '='];
         var scores = ['q1', 'q2', 'q3', 'q4'];
-        if (index == undefined) {
-            return;
+        var months = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 't11', 't12']
+        var list_field_name_kpi = ['code','kpi_id','unit','measurement','weight','goal','kpi','score_calculation_type','operator']
+        var object_trans_field = {
+            'code':"Mã KPI",
+            'kpi_id':"Loại KPI",
+            'unit': "Đơn vị",
+            'measurement': "Phương pháp đo lường",
+            'weight': "Trọng số",
+            'goal':"Mục tiêu kpi",
+            'kpi': "Tên KPI",
+            'score_calculation_type': "Phương pháp phân bổ chỉ tiêu",
+            'operator':"Toán tử"
         }
-        var kpi = self.kpis[index];
+        if (kpi.index == undefined) {
+            return kpi;
+        }
         if (self.enable_allocation_target){
-            kpi = that.validateTargetScoreFollowAllocationTarget(kpi)
+            kpi = self.validateTargetScoreFollowAllocationTarget(kpi)
         }
-        kpi.weight = kpi.weight.toString()
-        if(!kpi.score_calculation_type){
-            kpi.score_calculation_type = ""
-        }
-        if(!kpi.code){
-            kpi.code = ""
-        }
-        if(!kpi.kpi_id){
-            kpi.kpi_id = ""
-        }
-        if(!kpi.unit){
-            kpi.unit = ""
-        }
-        if(!kpi.measurement){
-            kpi.measurement = ""
-        }
-
-        kpi.msg = '';
-        that.check_file = true;
+        kpi.msg = [];
+        self.check_file = true;
+        var quarter_error = [];// mảng lưu quý bị lỗi
+        var months_error = [];// mảng lưu tháng bị lỗi
         cloudjetRequest.ajax({
             type: "POST",
             url: '/api/kpis/import/validate',
             data: JSON.stringify(kpi),
             success: function (responseJSON, textStatus) {
-                // console.log('yes, we can!');
-                // router.push('/');
                 kpi.status = null;
-                var messages = '';
                 if (responseJSON['status'] == 'ok') {
                     kpi.validated = true;
-                    if (that.method.indexOf(kpi.score_calculation_type.trim().toLowerCase()) == -1){
-                        kpi.validated = false;
-                        kpi.status = responseJSON['status'];
-                        that.check_file = false;
-                        kpi.msg = kpi.msg + "\n" + gettext("Score calculation type format is not correct");
-                    }
-
-                    if (operator.indexOf(kpi.operator) == -1 && kpi.operator) {
-                        kpi.validated = false;
-                        kpi.status = responseJSON['status'];
-                        that.check_file = false;
-                        kpi.msg = kpi.msg + "\n" + gettext('Operator format is not correct');
-                    }
-                    if (kpi.code.trim()==''){
-                        kpi.validated = false;
-                        kpi.msg = kpi.msg + "\n" +gettext("Code must not be empty");
-                    }
-
-                    scores.forEach(function (score) {
-                        if (isNaN(kpi[score])) {
-                            messages += score.toUpperCase() + ', '
-                        }
-                    });
-                    if (kpi.msg.trim()[0] == '\n') {
-                        kpi.msg = kpi.msg.slice(2, kpi.msg.length);
-                        kpi.msg = kpi.msg.charAt(0).toUpperCase() + kpi.msg.slice(1);
-                    }
+                    kpi.status = responseJSON['status'];
+                    kpi.email_is_incorrect = false;
+                    kpi.code_kpi_existed = false;
                 } else {
                     kpi.status = responseJSON['status'];
                     kpi.validated = false;
-                    kpi.msg = responseJSON['message'];
-                    that.check_file = false;
-
-                    if (kpi.unit.trim()==''){
-                        kpi.validated = false;
-                        kpi.msg = kpi.msg + "\n" + gettext("Unit is not formatted correctly");
+                    if (responseJSON['messages'].length>0){
+                        self.check_file = false;
+                        responseJSON['messages'].forEach(function (message) {
+                            if(message.field_name == gettext("In charge Email")){
+                                kpi.email_is_incorrect = true
+                            }
+                            if(message.field_name == gettext("KPI Code")){
+                                kpi.code_kpi_existed = true
+                            }
+                            kpi.msg.push(
+                                {
+                                    'field_name': message.field_name,
+                                    'message': message.message
+                                })
+                        })
                     }
-                    if (kpi.code.trim()==''){
-                        kpi.validated = false;
-                        kpi.msg = kpi.msg + "\n" +gettext("Code must not be empty");
+                }
+                list_field_name_kpi.forEach(function (field) {
+                    kpi.validated = false;
+                    if (kpi[field] == "" || kpi[field] == null){
+                        kpi.msg.push({
+                            'field_name': object_trans_field[field],
+                            'message': ' không được để trống'
+                        });
                     }
-                    if (kpi.kpi_id.trim()==''){
-                        kpi.validated = false;
-                        kpi.msg = kpi.msg + "\n" +gettext("Type must not be empty");
+                })
+                // check loại kpi phải thuộc ['f', 'c', 'p', 'l', 'o']
+                if (kpi.kpi_id){
+                    var __kpi_id = kpi.kpi_id.trim()
+                    var is_kpi_id = self.checkTypeKPI(__kpi_id)
+                    if(!is_kpi_id){
+                        kpi.msg.push({
+                            'field_name': 'Loại KPI',
+                            'message': ' không đúng'
+                        });
                     }
-
-                    if (kpi.measurement.trim()==''){
-                        kpi.validated = false;
-                        kpi.msg = kpi.msg + "\n" + gettext("Measurement must not empty");
-                    }
-
-                    if (operator.indexOf(kpi.operator) == -1 && kpi.operator) {
-                        kpi.msg = kpi.msg + "\n" + gettext("Operator format is not correct");
-                    }
-                    if (that.method.indexOf(kpi.score_calculation_type.trim().toLowerCase()) == -1){
-                        kpi.validated = false;
-                        kpi.status = responseJSON['status'];
-                        that.check_file = false;
-                        kpi.msg = kpi.msg + "\n" + gettext("Score calculation type format is not correct");
-                    }
-                    scores.forEach(function (score) {
-                        if (isNaN(kpi[score])) {
-                            messages += score.toUpperCase() + ', '
-                        }
+                }
+                if (operator.indexOf(kpi.operator) == -1 && kpi.operator) {
+                    kpi.validated = false;
+                    kpi.msg.push({
+                        'field_name': 'Toán tử',
+                        'message': ' không đúng định dạng'
                     });
                 }
-                if (messages) {
+                if (self.method.indexOf(kpi.score_calculation_type.toLowerCase()) == -1 && kpi.score_calculation_type){
                     kpi.validated = false;
-                    messages = messages.slice(0, -2) + " " + gettext("is not numbers");
-                    kpi.msg = kpi.msg + "\n" + gettext("Quarter score") + " " + messages;
+                    kpi.status = responseJSON['status'];
+                    self.check_file = false;
+                    kpi.msg.push({
+                        'field_name': 'Phương pháp phân bổ chỉ tiêu',
+                        'message': ' không đúng định dạng'
+                    });
                 }
-                kpi.weight = kpi.weight.replace(',', '.');
+                if (isNaN(kpi.year) ) {
+                    kpi.validated = false;
+                    kpi.msg.push({
+                        'field_name': 'Chỉ tiêu năm',
+                        'message': ' không đúng định dạng'
+                    });
+                }
+                scores.forEach(function (score) {
+                    if (isNaN(kpi[score])) {
+                        quarter_error.push(scores.indexOf(score)+1)
+                    }
+                })
+                months.forEach(function (month) {
+                    if (isNaN(kpi[month])) {
+                        months_error.push(months.indexOf(month)+1)
+                    }
+                })
+                if (quarter_error.length > 0 ) {
+                    kpi.validated = false;
+                    var quarter_error_str = quarter_error.join(', ');
+                    kpi.msg.push({
+                        'field_name': "Chỉ tiêu quý" + " " + quarter_error_str,
+                        'message': ' không đúng định dạng'
+                    });
+                }
+                if (months_error.length > 0 ) {
+                    kpi.validated = false;
+                    var months_error_str = months_error.join(', ');
+                    kpi.msg.push({
+                        'field_name': "Chỉ tiêu tháng" + " " + months_error_str,
+                        'message': ' không đúng định dạng'
+                    });
+                }
+
+                if (self.enable_allocation_target){
+                    kpi = self.validateTargetScoreFollowAllocationTarget(kpi)
+                }
                 if (isNaN(parseFloat(kpi.weight)) && kpi.weight) {
                     kpi.validated = false;
-                    kpi.msg = kpi.msg + "\n" +gettext("Weights are not formatted correctly");
+                    kpi.msg.push({
+                        'field_name': 'Trọng số',
+                        'message': ' không đúng định dạng'
+                    });
                 }
                 if (parseFloat(kpi.weight) <= 0) {
                     kpi.validated = false;
-                    kpi.msg = kpi.msg + "\n" +gettext("Weight must be greater than 0");
+                    kpi.msg.push({
+                        'field_name': 'Trọng số',
+                        'message': ' phải lớn hơn 0'
+                    });
                 }
                 if (kpi.check_error_year == true){
                     kpi.validated = false;
-                    kpi.msg = kpi.msg + "\n" +gettext("Year must be follow score calculation type");
+                    kpi.msg.push({
+                        'field_name': 'Chỉ tiêu năm',
+                        'message': ' phải theo phương pháp phân rã chỉ tiêu'
+                    });
                 }
                 if (kpi.check_error_quarter_1 == true){
                     kpi.validated = false;
-                    kpi.msg = kpi.msg + "\n" + gettext("Quarter 1 must be follow score calculation type");
+                    kpi.msg.push({
+                        'field_name': 'Chỉ tiêu quý 1',
+                        'message': ' phải theo phương pháp phân rã chỉ tiêu'
+                    });
                 }
                 if (kpi.check_error_quarter_2 == true){
                     kpi.validated = false;
-                    kpi.msg = kpi.msg + "\n" + gettext("Quarter 2 must be follow score calculation type");
+                     kpi.msg.push({
+                        'field_name': 'Chỉ tiêu quý 2',
+                        'message': ' phải theo phương pháp phân rã chỉ tiêu'
+                    });
                 }
                 if (kpi.check_error_quarter_3 == true){
                     kpi.validated = false;
-                    kpi.msg = kpi.msg + "\n" +gettext("Quarter 3 must be follow score calculation type");
+                     kpi.msg.push({
+                        'field_name': 'Chỉ tiêu quý 3',
+                        'message': ' phải theo phương pháp phân rã chỉ tiêu'
+                    });
                 }
                 if (kpi.check_error_quarter_4 == true){
                     kpi.validated = false;
-                    kpi.msg = kpi.msg + "\n" + gettext("Quarter 4 must be follow score calculation type");
+                    kpi.msg.push({
+                        'field_name': 'Chỉ tiêu quý 4',
+                        'message': ' phải theo phương pháp phân rã chỉ tiêu'
+                    });
                 }
-                if (kpi.kpi === '') {
-                    kpi.validated = false;
-                    kpi.msg = kpi.msg + "\n" + gettext("Name must not be empty");
-                }
-                if (kpi.goal == "") {
-                    kpi.validated = false;
-                    kpi.msg = kpi.msg + "\n" + gettext("KPI targets must not be empty");
-                }
-                if (kpi.msg.trim() == '\n') {
-                    kpi.msg = kpi.msg.slice(2, kpi.msg.length);
-                    kpi.msg = kpi.msg.charAt(0).toUpperCase() + kpi.msg.slice(1);
-                }
-
-
-                console.log("===============xxxxxxxxx============")
-                console.log(kpi.msg)
-                if(kpi.msg !== ''){
+                // if (kpi.msg.trim() == '\n') {
+                //     kpi.msg = kpi.msg.slice(2, kpi.msg.length);
+                //     kpi.msg = kpi.msg.charAt(0).toUpperCase() + kpi.msg.slice(1);
+                // }
+                if(kpi.msg.length > 0){
                     self.addRowError(kpi._uuid)
                 }else{
                     self.removeRowError(kpi._uuid)
                 }
-                that.$set(that.kpis, index, kpi);
-                that.$set(that.data_edit_kpi, 'msg', kpi.msg);
+                // self.$set(self.kpis, index, kpi);
+                // self.$set(self.data_edit_kpi, 'msg', kpi.msg);
                 try{
                     // auto scroll to error messages
                     setTimeout(function(){
@@ -891,29 +1018,32 @@ methods: {
                 }catch(err){
 
                 }
+                self.$set(self.data_edit_kpi, 'data', kpi)
+                return kpi
 
             },
             error: function (jqXHR, textStatus) {
-                kpi.status = message_request;
-                kpi.msg = null;
+                kpi.status = jqXHR.message_request;
+                kpi.msg = [];
                 try {
-                    kpi.msg = "Validate failed: " + jqXHR.responseJSON['message'];
-                    that.check_file = false;
+                    kpi.msg.push( {'field_name':"Validate failed: ",'message': jqXHR.responseJSON['message']})
+                    self.check_file = false;
                 } catch (err) {
                 }
-                if(kpi.msg !== ''){
+                if(kpi.msg.length >0){
                     self.addRowError(kpi._uuid)
                 }else{
                     self.removeRowError(kpi._uuid)
                 }
-                that.$set(that.kpis, index, kpi);
+                return kpi
+                // that.$set(that.kpis, index, kpi);
             },
             complete: function (data) {
-                that.check_total++;
-                if (that.check_total == that.kpis.length) {
+                self.check_total++;
+                if (self.check_total == self.kpis.length) {
                     setTimeout(function () {
                         $('body').loading('stop');
-                        that.check_total = 0;
+                        self.check_total = 0;
                     }, 1000)
                 }
             },
@@ -921,7 +1051,7 @@ methods: {
             contentType: "application/json"
 
         });
-        that.$set(that.kpis, index, kpi);
+        // self.$set(self.kpis, index, kpi);
     },
     to_string: function (value) {
         return value != null ? value.toString() : null;
@@ -934,7 +1064,7 @@ methods: {
         return operator.indexOf(_operator) == -1;
     },
     edit_kpi: function (index) {
-        that = this;
+        var that = this;
         that.data_edit_kpi.check_error = false;
         that.data_edit_kpi.msg = that.kpis[index].msg;
         that.data_edit_kpi.data = JSON.parse(JSON.stringify(that.kpis[index]));
@@ -944,22 +1074,17 @@ methods: {
         }
         else if (that.method.indexOf(that.data_edit_kpi.data.score_calculation_type.trim().toLowerCase())>-1){
             that.method_save = that.data_edit_kpi.data.score_calculation_type;
-            p = that.method.indexOf(that.data_edit_kpi.data.score_calculation_type.trim().toLowerCase());
-            if(p>2){
+            var p = that.method.indexOf(that.data_edit_kpi.data.score_calculation_type.trim().toLowerCase());
+            if(p > 2 && p<6){
                 that.data_edit_kpi.data.score_calculation_type = that.method[p-3];
             }
-            if(p<3){
+            else if(0 <= p && p<=2){
                 that.data_edit_kpi.data.score_calculation_type = that.method[p];
+            }else {
+                that.data_edit_kpi.data.score_calculation_type = ""
             }
         }
-        if (parseFloat(that.data_edit_kpi.data.weight) != NaN) {
-            that.data_edit_kpi.data.weight = parseFloat(that.data_edit_kpi.data.weight);
-        }
         that.data_edit_kpi.index = index;
-        console.log("======>>>>>>>>>>>><<<<<<<<<thssg")
-        console.log(that.data_edit_kpi)
-        that.dialogFormVisible = true
-        console.log(that.dialogFormVisible)
         setTimeout(function () {
             $('#edit-import-kpi').modal('show');
             $('.modal-dialog .modal-body').attr('style', 'max-height:' + parseInt(screen.height * 0.6) + 'px !important; overflow-y: auto');
@@ -974,30 +1099,35 @@ methods: {
     },
     confirm_edit_kpi: function (kpi) {
         var self = this;
+        var kpi_validate = {}
         self.resetErrorMsg(kpi.data)
-        // {#                              that.data_edit_kpi.check_error = true;#}
-        // kpi.data.weight = kpi.data.weight; ?? không cần thiết
-        self.kpis[kpi.index] = kpi.data;
         kpi.data.msg = '';
-        self.validate_kpi(kpi.index)
-        self.data_edit_kpi.data = self.kpis[kpi.index]
+        self.validate_kpi(kpi.data)
         setTimeout(function () {
             if (!$('.text-muted').length) {
                 $("body.bg-sm").removeAttr("style");
-                setTimeout(function () {
-                    $('#edit-import-kpi').modal('hide');
-                    swal({
-                        title: gettext("Success"),
-                        text: gettext("Edit import KPI success!"),
-                        type: "success",
-                        timer: 2000,
-                        confirmButtonColor: "#43ABDB"
-                    });
-                }, 200)
+                self.info_msg_box.show_infor_msg = true;
+                if(self.data_edit_kpi.data.msg.length > 0){
+                    self.info_msg_box.type_msg = "error";
+                    self.info_msg_box.tite_msg = "Chỉnh sửa KPI không thành công"
+                    self.data_edit_kpi.data.msg.forEach(function (field) {
+                        self.info_msg_box.array_msg.push(field.field_name + ":" + field.message )
+                    })
+
+                }else{
+                    $('#edit-import-kpi').modal('hide')
+                    self.info_msg_box.type_msg = "success";
+                    self.info_msg_box.tite_msg = "Chỉnh sửa KPI thành công"
+                    self.info_msg_box.array_msg.push("Chỉnh sửa nhập dữ liệu KPI thành công !")
+                    self.$set(self.kpis, self.data_edit_kpi.data.index, self.data_edit_kpi.data);
+                    setTimeout(function () {
+                        self.info_msg_box.show_infor_msg = false;
+                    },2000)
+                }
+
                 return;
             }
         }, 1000)
-
         // Không cần thiết vì đã có filter xử lý việc này => tránh lỗi chuyển data kpi.score_calculation_type
         // qua tiếng việt rồi lại qua tiếng anh chỉ để show lên xem
         //
@@ -1012,7 +1142,7 @@ methods: {
     },
     convertNewStructData: function(kpi){
         var data_import_kpi= {
-            year_target: kpi.year,
+            year_target:$.isNumeric(kpi.year)?parseFloat(kpi.year): null,
             q1: kpi.q1,
             q2: kpi.q2,
             q3: kpi.q3,
@@ -1057,45 +1187,33 @@ methods: {
         return data_import_kpi
     },
     add_kpi: function (index) {
-        var that = this;
+        var self = this;
         $('#error_modal').modal('hide');
         if (index == undefined) {
             return;
         }
-        var kpi = that.kpis[index];
+        var kpi = self.kpis[index];
 
         kpi.status = "adding";
         if ((kpi.score_calculation_type.trim().toLowerCase() == ''
             || kpi.score_calculation_type.trim().toLowerCase() == 'most recent')
-            && that.check_kpi_child(kpi.kpi_id))
+            && self.check_kpi_child(kpi.kpi_id))
             kpi.score_calculation_type = 'most_recent';
-        that.$set(that.kpis, index, kpi);
+        self.$set(self.kpis, index, kpi);
 
-        var p = that.method.indexOf(kpi.score_calculation_type.trim().toLowerCase());
-        if (p > 2){
-            that.method_save = that.method[p-3];
+        var p = self.method.indexOf(kpi.score_calculation_type.trim().toLowerCase());
+        if (p > 2 && p <6){
+            self.method_save = self.method[p-3];
         }
-        else{
-            that.method_save = that.method[p];
+        else if( 0 <= p && p <= 2){
+            self.method_save = self.method[p];
+        }else {
+            self.method_save = "";
         }
-        kpi.score_calculation_type = that.method_save;
+        kpi.score_calculation_type = self.method_save;
 
-        if (that.to_string(kpi.q1) == '') {
-            kpi.q1 = null;
-        }
-        if (that.to_string(kpi.q2) == '') {
-            kpi.q2 = null;
-        }
-        if (that.to_string(kpi.q3) == '') {
-            kpi.q3 = null;
-        }
-        if (that.to_string(kpi.q4) == '') {
-            kpi.q4 = null;
-        }
-        if (that.to_string(kpi.year) == '') {
-            kpi.year = null;
-        }
-        var kpi_data_import = that.convertNewStructData(kpi)
+        var kpi_data_import = self.convertNewStructData(kpi)
+        $('.add_kpi_' + index).button('loading')
         cloudjetRequest.ajax({
             type: "POST",
             url: "/api/kpis/import/add",
@@ -1104,32 +1222,41 @@ methods: {
                 //console.log('yes, we can!');
                 // router.push('/');
                 kpi.status = "success";
-                that.$set(that.kpis, index, kpi);
-                kpi.score_calculation_type = that.method[p];
+                self.$set(self.kpis, index, kpi);
+                kpi.score_calculation_type = self.method[p];
+                $('.add_kpi_' + index).button('reset')
             },
             error: function (jqXHR) {
                 //alert('failed');
                 requestcenterHideNotification();
-                var html = ''
-                if (jqXHR.responseJSON['exception']) {
-                    html = '<ol class="text-left">\n';
-                    Object.keys(jqXHR.responseJSON['exception']).forEach(function (key) {
-                        html += '<li>"' + key + '": ' + jqXHR.responseJSON['exception'][key] + '</li>\n';
-                    });
-                    html += '</ol>\n';
+                var title_msg_error = "Thêm KPI thất bại"
+                if (jqXHR.responseJSON){
+                    if (jqXHR.responseJSON['exception']) {
+                        var msg_error
+                        Object.keys(jqXHR.responseJSON['exception']).forEach(function (key) {
+                            msg_error =  key + ' : ' + jqXHR.responseJSON['exception'][key];
+                            self.info_msg_box.array_msg.push(msg_error)
+                        });
+                    }
+                    // if(jqXHR.responseJSON['message']){
+                    //     title_msg_error = jqXHR.responseJSON['message']
+                    // }
+                }else{
+                    self.info_msg_box.array_msg.push(jqXHR['message'])
                 }
-                swal({
-                    title: '<h4 class>' + jqXHR.responseJSON['message'] + '</h4>',
-                    html: html,
-                    type: 'error',
-                    animation: false
-                });
+                self.info_msg_box.show_infor_msg = true;
+                self.info_msg_box.type_msg = "error";
+                self.info_msg_box.tite_msg = title_msg_error
                 try {
-                    kpi.msg = jqXHR.responseJSON['message'];
+                    kpi.msg.push({
+                        'field_name': '',
+                        'message': jqXHR['message']
+                    });
                 } catch (err) {
                 }
                 kpi.status = "failed";
-                that.$set(that.kpis, index, kpi);
+                self.$set(self.kpis, index, kpi);
+                $('.add_kpi_' + index).button('reset')
             },
 
             contentType: "application/json"

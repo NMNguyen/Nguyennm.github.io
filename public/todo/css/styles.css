@@ -61,7 +61,7 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 	overflow: visible;
 }
 #content{
-    margin-top: 70px !important;
+    /*margin-top: 70px !important;*/
 }
 #container {
 	background: #f9f9f9;
@@ -473,9 +473,7 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 .create-new-task .list_subordinate{
     width: 99%!important;
 }
-.create-new-task .list_permision{
-    width: calc(100% - 15px)!important;
-}
+
 .create-new-task .list_kpi{
     width: 100%!important;
 }
@@ -506,12 +504,6 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 .create-new-task .validate-input .description{
      font-weight: normal
 }
-.create-new-task .perform-width{
-     width: 55%;
-}
-.create-new-task .permission-width{
-     width: 45%;
-}
 #file-upload-form .label-upload{
     padding: 0px;
     margin: 0px;
@@ -538,7 +530,7 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 	width: 73%;
 }
 .due-time.el-date-editor.el-range-editor{
-	width: 70%;
+	width: 76%;
 	padding: 0px;
 	background-color: transparent;
     border: none;
@@ -552,6 +544,7 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 	font-weight: normal;
     font-size: 13px;
     cursor: pointer;
+    width: 50%;
 }
 .el-date-editor .el-range__icon{
 	color: #008b8b!important;
@@ -696,13 +689,34 @@ table.nocolor, table.nocolor tr, table.nocolor td {
     margin-top: 8px;
 }
 
-
 @media (min-width: 992px) and (max-width: 1199px) {
     .due-time.el-date-editor.el-range-editor{
         width: 90%;
         padding: 0px;
         background-color: transparent;
         border: none;
+    }
+    .create-new-task .permission-width{
+        padding-left: 0px!important;
+        margin-top: 10px;
+    }
+    .create-new-task .material-icons.permission {
+        left: 10px;
+    }
+    .create-new-task .list_permision{
+        width: 100% !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .create-new-task .perform-width{
+        width: 55%!important;
+    }
+    .create-new-task .permission-width{
+        width: 45%!important;
+    }
+    .create-new-task .list_permision{
+        width: calc(100% - 15px)!important;
     }
 }
 

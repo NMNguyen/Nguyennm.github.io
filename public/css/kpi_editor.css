@@ -1493,7 +1493,9 @@ ul.success {
 }
 
 .width35 {
-    width: 50px !important;
+    /*width: 50px !important;*/
+    /*use percent to fix bug in firefox*/
+    width: 5% !important;
 }
 
 .group-header {
@@ -4367,7 +4369,7 @@ button.close{
     width: 100%;
 }
 #modal-order-quarter-kpi .modal-body .table-size .format-col{
-    font-weight: bold
+    font-weight: bold;
 }
 #search_user{
     height:40px;

@@ -1861,8 +1861,6 @@ Vue.component('kpi-owner', {
                 return false;
             }
 
-            this.update_assigned_user_data(selected_item);
-            // assign/kpi/
             var data={
                 user: to_user_id
             };
@@ -1995,7 +1993,7 @@ Vue.component('kpi-progressbar', {
                                     if (!(!kpi_month_value.enable_review || !disable.enable_month_2_review) || !(!kpi_month_value.enable_review || !disable.enable_month_3_review)) {
                                         message = gettext("You forget review the result") + ' ' + month_name;
                                     }
-                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_1 != null) {
+                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_1 != null && !this.is_admin()) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
@@ -2008,7 +2006,7 @@ Vue.component('kpi-progressbar', {
                                     if (!(!kpi_month_value.enable_review || !disable.enable_month_3_review)) {
                                         message = gettext("You forget review the result") + ' ' + month_name;
                                     }
-                                } else if ((kpi_month_value.month_1 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_2 != null) {
+                                } else if ((kpi_month_value.month_1 != null || kpi_month_value.month_3 != null) && kpi_month_value.month_2 != null && !this.is_admin()) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
@@ -2018,7 +2016,7 @@ Vue.component('kpi-progressbar', {
                                     message = gettext("You forget review the result") + ' ' + month_name;
                                 } else if ((kpi_month_value.month_2 == null || kpi_month_value.month_1 == null) && kpi_month_value.month_3 == null) {
                                     message = gettext("You can not to review the result earlier than the specified time") + ' ' + month_name;
-                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_1 != null) && kpi_month_value.month_3 != null) {
+                                } else if ((kpi_month_value.month_2 != null || kpi_month_value.month_1 != null) && kpi_month_value.month_3 != null && !this.is_admin()) {
                                     message = gettext("Over time to review the KPI result") + ' ' + month_name;
                                 }
                             break;
@@ -3288,7 +3286,7 @@ var v = new Vue({
 
             var jqXhr=this.add_kpi(false, kpi_data);
             // additional success callback function
-            jqXhr.success(function(){
+            jqXhr.done(function(){
                 that.$set(that.kpi_list[parent_kpi_id], 'has_child', true);
                 that.$set(that.kpi_list[parent_kpi_id], 'children_data', {'parent_score_auto': true});
                 // $('#btn-kpi-toggle'+kpi).children('i.fa').removeClass("fa-angle-double-right").addClass("fa-angle-double-down");
@@ -5856,11 +5854,11 @@ var v = new Vue({
         },
         view_backup_kpis: function (id) {
             var self = this;
-            $('#view-backup-kpi-modal').modal();
+            $('#view-backup-kpi-modal').modal('show');
             $('#backup-kpi-modal').modal('hide');
             // find backup by id
             self.current_backup = self.backups_list[id];
-            console.log('fihihhihihc');
+            // console.log('fihihhihihc');
 
             if (self.current_backup && self.current_backup.hasOwnProperty('data')) {
                 var kpis = self.current_backup.data;
@@ -5878,7 +5876,12 @@ var v = new Vue({
         get_backup_month_score: function (index) {
             var self = this;
             var month = self.current_backup.month;
-            return ((self.backup_kpis[index]['month_' + month + '_score'] > 0)?(self.backup_kpis[index]['month_' + month + '_score']).toFixed(2):0);
+            var backup_kpis_month_score = parseFloat(self.backup_kpis[index]['month_' + month + '_score']);
+            if ($.isNumeric(backup_kpis_month_score)){
+                return backup_kpis_month_score.toFixed(2);
+            } else {
+                return null
+            }
         },
         get_backup_month_name: function (month) {
             return self['month_' + month + '_name']
@@ -5886,18 +5889,36 @@ var v = new Vue({
         get_backup_month_target: function (index) {
             var self = this;
             var month = self.current_backup.month;
-            return (self.backup_kpis[index]['month_' + month + '_target']).toFixed(2);
+            var backup_kpis_month_target = parseFloat(self.backup_kpis[index]['month_' + month + '_target']);
+            if ($.isNumeric(backup_kpis_month_target)) {
+                return backup_kpis_month_target.toFixed(2);
+            } else {
+                return null
+            }
+
         },
         get_backup_month_real: function (index) {
             var self = this;
             var month = self.current_backup.month;
-            return ((self.backup_kpis[index]['month_' + month] > 0)?(self.backup_kpis[index]['month_' + month]).toFixed(2):0);
+            var backup_kpis_month = parseFloat(self.backup_kpis[index]['month_' + month]);
+            if($.isNumeric(backup_kpis_month)){
+                return backup_kpis_month.toFixed(2);
+            }else {
+                return null
+            }
+
         },
         update_month_backup_display: function (month) {
             var self = this;
             if (month) {
                 self.$set(self.employee_performance, 'month_' + month + '_backup', true);
             }
+        },
+        formatBackupKpis: function (val) {
+            if (typeof val == 'number') {
+                return val.toFixed(2) + "%";
+            }
+            return ""
         },
         delete_backup: function (index) {
             var self = this;
