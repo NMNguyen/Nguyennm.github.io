@@ -1468,6 +1468,22 @@ ul.success {
 }
 .observing_display {
 }
+.kpi-table .operator-kpi, .kpi-table .operator-kpi:hover,
+.kpi-table .operator-kpi:active, .kpi-table .operator-kpi:focus {
+    display: inline-block;
+    border:none;
+    background: none;
+    box-shadow: none;
+    padding: 3px 6px;
+    height: 24px;
+}
+.kpi-table .group-btn-small {
+    text-align: center;
+}
+.kpi-table .group-btn-small button {
+    padding: 2px 6px;
+    font-size: 12px;
+}
 .row-1{
     float:left;
     width:25%;
@@ -1509,7 +1525,7 @@ ul.success {
     color: #008b8b;
     background-color: #e4e4e4;
     border-bottom: 1px solid #fff;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 }
 
 .group-header #hide {
@@ -1546,7 +1562,7 @@ ul.success {
     display: block;
 }
 
-.kpi-expand-item-row div.col-xs-4:first-child {
+.kpi-expand-item-row div.col-xs-4.col-label {
     font-weight: bold;
     display: table;
     padding-left: 0px;
@@ -1746,6 +1762,9 @@ ul.success {
 }
 
 .kpi-table .year-target.current-target .borderless {
+    border: solid 2px #f5a623;
+}
+.kpi-table input.current-target {
     border: solid 2px #f5a623;
 }
 
@@ -5372,9 +5391,3 @@ button.close{
     vertical-align: unset!important;
 }
 
-.kpi-inp-incharge .autocomplete__results{
-    position: relative!important;
-}
-.autocomplete__inputs .input-change-owner {
-    height: 36px;
-}

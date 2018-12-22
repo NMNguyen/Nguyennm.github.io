@@ -1188,7 +1188,7 @@ div.btn-wrapper .btn {
 
 .disabled {
     pointer-events: none;
-    cursor: not-allowed;
+    cursor: not-allowed!important;;
     opacity: 0.6;
 }
 
@@ -1738,7 +1738,7 @@ a:hover {
 
 .btn-cus-add {
     background-color: #008b8b;
-    color: #fff;
+    color: #fff!important;
     border: 1px solid #008b8b;
 }
 
@@ -3250,6 +3250,8 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
 .btn-system {
     height: 34px;
     line-height: 10px !important;
+    background-color: #00b0ad;
+    border-color: #00b0ad;
 }
 .padding-all-6 {
     padding: 6px;
@@ -3282,6 +3284,7 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
     padding: 5px 10px 4px;
     white-space: pre-wrap;
     text-align: left;
+    max-width:500px;
 }
 
 .tooltip.vue-tooltip-theme .tooltip-arrow {
