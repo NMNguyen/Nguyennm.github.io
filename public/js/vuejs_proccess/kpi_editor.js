@@ -828,7 +828,7 @@ Vue.component('kpi-config', {
                 jqxhr.done(function(){
                     swal(gettext( "Success"), gettext( "Data is successfully copied"), "success");
                 });
-                jqxhr.error(function () {
+                jqxhr.fail(function () {
                         swal(gettext( "Error"), gettext( "Please try again!"), "error");
                 });
 
@@ -1146,7 +1146,6 @@ Vue.component('delay-kpi-modal', {
         },
 
     }
-
 });
 
 
@@ -1750,8 +1749,9 @@ Vue.component('kpi-row', {
 
 
         update_quarter_x_target: function(update_data){
-            let data = this.kpi;
-             let url = `/api/v2/kpi/${kpi_id}/update-quarter-target/` ;
+            var that = this;
+            let data = that.kpi;
+             let url = `/api/v2/kpi/${data.id}/update-quarter-target/` ;
             data.quarter_one_target = update_data[0].value;
             data.quarter_two_target = update_data[1].value;
             data.quarter_three_target = update_data[2].value;
@@ -1932,6 +1932,7 @@ Vue.component('kpi-row', {
             let list_action_need_to_reload_childs=[
                 'delay_kpi',
                 'active_kpi',
+                'copy_data_to_children'
             ];
             if(list_action_need_to_reload_childs.indexOf(update_type) != -1){
                 reload_childs=true;
@@ -2856,7 +2857,7 @@ var v = new Vue({
         // nguyen 4
         move_kpi_to_new_group_kpi: function(data_kpi){
             var that = this;
-            that.$set(that.kpi_list, data_kpi.id, data_kpi);
+            that._reload_kpi(data_kpi.id);
         },
         get_kpis_by_group: function(kpi_group){
             let that = this;
