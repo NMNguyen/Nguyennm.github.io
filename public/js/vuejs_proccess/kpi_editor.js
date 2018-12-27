@@ -449,9 +449,9 @@ Vue.component('evidence-button', {
     delimiters: ['{$', '$}'],
     props: [
         'month',
-        'kpi_id',
         'list_evidences',
         'title',
+        'kpi',
     ],
     data:function(){
         return {
@@ -465,7 +465,7 @@ Vue.component('evidence-button', {
         v-tooltip="title"
         
         v-bind:class="'btn btn-default KPI_BTN_EVD ' + (evidence_count ? ' evidence-exist btn-evidences-2': ' btn-evidences-1')"
-        v-on:click="showModal_e(month, kpi_id)"
+        v-on:click="showModal_e(month, kpi)"
         >
         <i class="fa fa-file-text-o pull-left evidences-icon"></i> {$ evidence_count $}
         </button>
@@ -506,22 +506,22 @@ Vue.component('evidence-button', {
     methods:{
         count_evidence: function () {
             var that = this;
-            if (that.evidences[this.kpi_id] == undefined || that.evidences[this.kpi_id][this.month] == undefined)
+            if (that.evidences[this.kpi.id] == undefined || that.evidences[this.kpi.id][this.month] == undefined)
                 return null;
             else
-                return that.evidences[this.kpi_id][this.month]
+                return that.evidences[this.kpi.id][this.month]
 
         },
         get_evidence: function () {
             var that = this;
             // alert('get evidence')
             cloudjetRequest.ajax({
-                url: '/api/v2/kpi/' + that.kpi_id + '/evidence/upload/',
+                url: '/api/v2/kpi/' + that.kpi.id + '/evidence/upload/',
                 type: 'get',
                 data: {
                     type: "json",
                     month: that.month,
-                    kpi_id: that.kpi_id,
+                    kpi_id: that.kpi.id,
                     count: true,
                 },
                 success: function (response) {
@@ -533,12 +533,12 @@ Vue.component('evidence-button', {
                     //
                     // that.evidences = Object.assign({}, that.evidences, evidence);
 
-                    setObj(that.evidences, that.kpi_id+ '.'+ that.month, count);
+                    setObj(that.evidences, that.kpi.id+ '.'+ that.month, count);
                     that.evidences = Object.assign({}, that.evidences);
                     // that.$set(that.evidences[that.kpi_id], that.month, count);
 
                     // emit event for parent to update evidences list
-                    that.$root.$emit('update_evidence_event_callback', that.kpi_id, that.month, count);
+                    that.$root.$emit('update_evidence_event_callback', that.kpi.id, that.month, count);
 
                 },
                 error: function () {
@@ -548,9 +548,10 @@ Vue.component('evidence-button', {
 
 
         },
-        showModal_e:function(month, kpi_id){
+        showModal_e:function(month){
             // alert('click evidence button');
-            this.$root.$emit('showModal_e', month, kpi_id);
+            this.$root.current_evidence_kpi = JSON.parse(JSON.stringify(this.kpi));
+            this.$root.$emit('showModal_e', month);
         }
     }
 
@@ -2263,7 +2264,7 @@ var v = new Vue({
         evidence_id: '',
         content: '',
         kpi_list: {},
-
+        current_evidence_kpi:{},
         list_kpi_group: {
             customer: {
                 ungroup_kpis: [
@@ -2679,8 +2680,8 @@ var v = new Vue({
         this.$on('update_evidence_event_callback', function(kpi_id, month, count) {
             that.update_evidence_event_callback(kpi_id, month, count);
         });
-        this.$on('showModal_e', function(month_number, kpi_id) {
-            that.showModal_e(month_number, kpi_id);
+        this.$on('showModal_e', function(month_number) {
+            that.showModal_e(month_number);
         });
 
 
@@ -4210,19 +4211,20 @@ var v = new Vue({
         },
 
 
-        showModal_e: function (month_number, kpi_id) {
+        showModal_e: function (month_number) {
             var that = this;
+            var current_evidence_kpi = that.current_evidence_kpi;
             var month_name = month_number == 1 ? v.month_1_name : month_number == 2 ? v.month_2_name : month_number == 3 ? v.month_3_name : '';
             this.month_name = month_name;
             this.month = month_number;
-            this.disable_upload = this.check_disable_upload_evidence(this.kpi_list[kpi_id]);
-            that.$set(that.$data, 'evidence_id', kpi_id);
+            this.disable_upload = this.check_disable_upload_evidence(current_evidence_kpi);
+            that.$set(that.$data, 'evidence_id', current_evidence_kpi.id);
             cloudjetRequest.ajax({
-                url: '/api/v2/kpi/' + kpi_id + '/evidence/upload/',
+                url: '/api/v2/kpi/' + current_evidence_kpi.id + '/evidence/upload/',
                 type: 'get',
                 data: {
                     type: "json",
-                    kpi_id: kpi_id,
+                    kpi_id: current_evidence_kpi.id,
                     month: month_number,
                 },
                 success: function (response) {
@@ -4293,7 +4295,6 @@ var v = new Vue({
             var patt1 = /\.[0-9a-z]+$/i;
             this.preview_attach_url = file_url;
             var file_ext = file_url.match(patt1);
-            console.log(file_ext);
 
             if (['.png', '.jpg', '.bmp', '.gif', '.jpeg', '.pdf', '.odf'].indexOf(file_ext[0].toLowerCase()) < 0) {
                 window.open(file_url, 'Download');
@@ -4433,6 +4434,7 @@ var v = new Vue({
         show_Modal_delevi: function(index){
             var that = this;
             that.current_evidence = that.list_evidence[index];
+            that.current_evidence.kpi = that.current_evidence_kpi;
             $('#evidence-modal').modal('hide');
             $('#confirm-delete-evidence').modal('show');
         },
@@ -4445,11 +4447,12 @@ var v = new Vue({
         },
 
 
-        deleteEvidence: function(id, kpi_id, month){
+        deleteEvidence: function(id, month){
             var that = this;
-            var current_evidence_count=that.evidences[kpi_id][month];
+            var current_evidence_kpi = that.current_evidence_kpi;
+            var current_evidence_count=that.evidences[current_evidence_kpi.id][month];
             cloudjetRequest.ajax({
-                url: '/api/v2/kpi/' + kpi_id + '/evidence/upload/',
+                url: '/api/v2/kpi/' + current_evidence_kpi.id + '/evidence/upload/',
                 type: 'delete',
                 data: {
                     type: "json",
@@ -4466,9 +4469,9 @@ var v = new Vue({
                 },
             }).done(function () {
                 $("#confirm-delete-evidence").modal('hide');
-                that.showModal_e(month,kpi_id);
+                that.showModal_e(month, current_evidence_kpi);
                 // that.get_evidence(month,kpi_id);
-                setObj(that.evidences, kpi_id + '.' + month, current_evidence_count-1 );
+                setObj(that.evidences, current_evidence_kpi.id + '.' + month, current_evidence_count-1 );
                 that.evidences=Object.assign({}, that.evidences);
             });
         },
