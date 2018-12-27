@@ -988,6 +988,19 @@ div#unique-content {
         text-transform: uppercase;
         border:none!important;
     }
+    .edit_kpis_weight_modal .category-weight{
+
+    }
+    .edit_kpis_weight_modal .category-weight>.weight-percentage{
+        border-bottom: 1px dashed grey;
+    }
+    .edit_kpis_weight_modal .category-weight>.weight-total{
+        /*border-top: 1px dashed white;*/
+    }
+    .edit_kpis_weight_modal .category-head th{
+        vertical-align: middle;
+    }
+
     .row-no-background th{
         background:white;
         border:none!important;
