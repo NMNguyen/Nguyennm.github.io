@@ -1123,3 +1123,32 @@ div#unique-content {
 [data-group-header-slug]:hover [class^="el-icon-"]{
     color: red;
 }
+
+
+
+.kpi-table .kpi-row.row-reload-effect .kpi-id,
+.kpi-table .kpi-row.row-reload-effect .kpi-detail{
+
+      /*background-color: red!important;*/
+      -webkit-animation-name: rowreloadeffect; /* Safari 4.0 - 8.0 */
+      -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+      animation-name: rowreloadeffect;
+      animation-duration: 1s;
+}
+
+
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes rowreloadeffect {
+  from   {background-color: #e8f8f8;}
+  to  {background-color: #fff4c8;}
+}
+
+/* Standard syntax */
+@keyframes rowreloadeffect {
+  /*from   {background-color: #fff7d7;}*/
+  from   {background-color: #e8f8f8;}
+  to  {background-color: #fff4c8;}
+
+}
+/* end row reload/update effects */

@@ -191,6 +191,7 @@ Vue.mixin({
         _reload_kpi:function(kpi_id, top_level=true, reset_childs=0){
             let that = this; // depend on context, usually a kpi-row component
             let parent_kpi_id = kpi_id;
+            let reload_effect = getUrlVars()['reload-effect'];
 
 
 
@@ -222,7 +223,20 @@ Vue.mixin({
                         let reloaded_kpi = kpi_data.kpi;
                         // reloaded_kpi.reset_childs = reset_childs;
                         that.kpi = reloaded_kpi;
+
                     }
+
+
+                    //UI
+                    if (reload_effect){
+                        that.$nextTick(function(){
+                            $(that.$refs.kpi_row).addClass('row-reload-effect');
+                            setTimeout(function(){
+                                $(that.$refs.kpi_row).removeClass('row-reload-effect');
+                            }, 1000);
+                        });
+                    }
+
 
 
                     // let format_data = kpi_data.kpi;
@@ -721,10 +735,17 @@ Vue.component('kpi-config', {
             return this.kpi.weight > 0 && !this.kpi.can_add_child_kpi && !this.is_parent_kpi
         },
         can_link_kpi:function(){
-          return (this.is_parent_kpi && this.kpi.weight > 0) && (!this.kpi.parent && !this.kpi.refer_to && !this.kpi.cascaded_from )
+          // return (this.is_parent_kpi && this.kpi.weight > 0) && (!this.kpi.parent && !this.kpi.refer_to && !this.kpi.cascaded_from )
+          return (this.is_parent_kpi && this.kpi.weight > 0) && (!this.kpi.parent && !this.kpi.refer_to)
         },
         can_unlink_kpi:function(){
-            return (!this.kpi.parent && this.kpi.refer_to && this.kpi.cascaded_from)
+            /*
+            * QUOCDUAN NOTE:
+            *   DO NOT USE `cascaded_from` field BECAUSE DEPRICATED!!!!!!!
+            * 
+            * */
+            // return (!this.kpi.parent && this.kpi.refer_to && this.kpi.cascaded_from) //
+            return (this.kpi.refer_to && this.kpi.user !=  this.kpi.refer_to_user)
         },
 
     },
@@ -1809,7 +1830,7 @@ Vue.component('kpi-row', {
                     data = {
                         // user_id: user_id,
                         aligned_kpi_id: kpi_id
-                    }
+                    };
                     break;
                 case 're_calculate_kpi_score':
                     url = '/api/kpi/services/';
@@ -1878,13 +1899,22 @@ Vue.component('kpi-row', {
             //     return;
             // }
 
-
+            /*TODO:
+            * fix backend to use only contentType = "application/json; charset=utf-8";
+            * */
+            let contentType = "application/json; charset=utf-8";
+            let post_data = JSON.stringify(data);
+            if (update_type == 'unlink_align_up_kpi'){
+                contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
+                // contentType = 'multipart/form-data';
+                post_data = data;
+            }
 
             let jqxhr = cloudjetRequest.ajax({
                 url: url,
                 type: 'POST',
-                data: JSON.stringify(data),
-                contentType: "application/json",
+                data: post_data,
+                contentType: contentType,
                 success: function(updated_kpi_data){},
                 error: function(jqxhr){
                     alert('error on update kpi');
@@ -1921,6 +1951,7 @@ Vue.component('kpi-row', {
             //1. reload kpi data (score, ...)
             // we reload kpi data from server instead of using responsed data (to eliminate bug of wrong data structure)
             that.reload_kpi(top_level, reload_childs);
+
             // 2. notify parent kpi (or kpi group) to reload kpi's score (or employee's score)
             that.$parent.$emit('child_kpi_score_updated');
         },
