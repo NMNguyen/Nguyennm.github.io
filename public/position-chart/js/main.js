@@ -1,3 +1,83 @@
+function format(number) {
+
+    var decimalSeparator = ".";
+    var thousandSeparator = ",";
+
+    // make sure we have a string
+    var result = String(number);
+
+    // split the number in the integer and decimals, if any
+    var parts = result.split(decimalSeparator);
+
+    // reverse the string (1719 becomes 9171)
+    result = parts[0].split("").reverse().join("");
+
+    // add thousand separator each 3 characters, except at the end of the string
+    result = result.replace(/(\d{3}(?!$))/g, "$1" + thousandSeparator);
+
+    // reverse back the integer and replace the original integer
+    parts[0] = result.split("").reverse().join("");
+
+    // recombine integer with decimals
+    return parts.join(decimalSeparator);
+
+};
+Vue.component('decimal-input-import', {
+    props: [
+        'value',
+        'inputclass',
+        'disabled',
+    ],
+    template: `
+        <el-input 
+            type="text" v-model="model"
+            v-bind:class="inputclass" 
+            v-on:keypress.native="check_number"
+            @paste.native.prevent
+            v-bind:disabled="disabled"
+        ></el-input>
+    `,
+    computed: {
+        model:{
+            get: function(){
+                return this.$options.filters.decimalDisplay(this.value);
+
+            },
+            set: function(val){
+                val = String(val).trim()
+                var newVal=val;
+                if (val === '') {
+                    newVal = null;
+                }
+                else {
+                    var number = val.split(",").join("");
+                    number = Number(number);
+                    // Toan note: ref https://stackoverflow.com/a/5963202/2599460
+                    newVal = $.isNumeric(number) ? parseFloat(number) : null ;
+                }
+
+                this.$emit('input', newVal);
+
+            },
+        }
+    },
+    methods: {
+        check_number: function (e){
+            // With Firefox e.keyCode alway return 0
+            var charCode = e.which || e.keyCode;
+            var _number = String.fromCharCode(charCode);
+
+            // For firefox, include 'Arrow left, arrow right, backspace, delete'.
+            var controlKeyAllowPress = [37, 39, 8, 46];
+            if ('0123456789.'.indexOf(_number) !== -1 || controlKeyAllowPress.indexOf(charCode) !== -1) {
+                return _number;
+            }
+            e.preventDefault();
+            return false;
+        }
+    }
+
+});
 var selected_position = Vue.extend({
     type: 'selected_position',
     delimiters: ['${', '}$'],
@@ -76,26 +156,9 @@ Vue.component('cjs-component-selected-position', selected_position);
             var self = this
                 self.$emit('comfirm',self.data_edit_kpi)
         },
-        check_number: function(e){
-            var _number = String.fromCharCode(e.keyCode);
-            if ('0123456789.'.indexOf(_number) !== -1) {
-                return _number;
-            }
-            e.preventDefault();
-            return false;
-        },
-        check_paste: function (evt) {
-                evt.preventDefault();
-                evt.stopPropagation();
-        },
-        valid_change: function (obj, prop) {
-            var val = parseFloat(obj[prop]);
-            if (isNaN(val)) {
-                Vue.set(obj, prop, null);
-            } else {
-                Vue.set(obj, prop, val);
-            }
-        },
+        checkTypeKPI: function(type_kpi){
+            return /^([fclopFCLOP]{1}[0-9]+)((\.[0-9]+)*)$/gi.test(type_kpi)
+        }
     }
 });
 
@@ -106,11 +169,11 @@ var importKpiPosition = new Vue({
     delimiters: ["${", "}$"],
     data:{
         position_default: position_default_import,
-        import_kpi_position_message_obj:{
-            show_message:false,
-            array_msg:[],
-            type_msg:"",
-            title_msg:""
+        info_msg_box:{
+            show_infor_msg: false,
+            type_msg:'',//success or error
+            title_msg:'',// thêm kpi thất bại
+            array_msg:[]// [mã kpi quá 100 ký tư, mục tiêu kpi quá 300 ký tự]
         },
         position_kpi_id:"",
         enable_allocation_target: false,
@@ -126,7 +189,7 @@ var importKpiPosition = new Vue({
             data: {},
             index: -1,
             check_error: false,
-            msg: "",
+            msg: [],
             errors:{}
         },
         organization:{},
@@ -207,17 +270,18 @@ var importKpiPosition = new Vue({
         },
         getPositionKpiId: function (position_id) {
             var that = this
-              cloudjetRequest.ajax({
+            cloudjetRequest.ajax({
                 method: "GET",
                 url: "/api/v2/position-kpi/get-kpilib/?position=" + position_id,
                 success: function (data) {
-                   console.log("==========>hhahahahaha<========")
-                    console.log(data)
                     that.position_kpi_id = data.id;
                 },
                 error: function () {
                 }
             });
+        },
+        checkTypeKPI: function(type_kpi){
+            return /^([fclopFCLOP]{1}[0-9]+)((\.[0-9]+)*)$/gi.test(type_kpi)
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
             if (columnIndex === 0) {
@@ -276,7 +340,10 @@ var importKpiPosition = new Vue({
             e.preventDefault();
             var files = e.dataTransfer.files;
             if (!files[0].type.match('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
-                swal(gettext('Error'), gettext("Please choose the document format excel file") + "!", "error");
+                that.info_msg_box.show_infor_msg = true;
+                that.info_msg_box.type_msg = "error";
+                that.info_msg_box.title_msg = "Nhập dữ liệu không thành công"
+                that.info_msg_box.array_msg.push(gettext("Please choose the document format excel file"))
                 $("#file-upload-form")[0].reset();
                 return;
             }
@@ -293,7 +360,10 @@ var importKpiPosition = new Vue({
                 var name = f.name;
                 var re = /(\.xlsx|\.xls)$/i;
                 if (!re.exec(name)) {
-                    swal(gettext('Error'), gettext("Please choose the document format excel file") + "!", "error");
+                    that.info_msg_box.show_infor_msg = true;
+                    that.info_msg_box.type_msg = "error";
+                    that.info_msg_box.title_msg = "Nhập dữ liệu không thành công"
+                    that.info_msg_box.array_msg.push(gettext("Please choose the document format excel file")+ "!");
                 }
                 else {
                     that.file = f;
@@ -309,7 +379,10 @@ var importKpiPosition = new Vue({
                         var A = sheet.C1;
 
                         if (A == undefined ) {
-                            swal(gettext('Warning'), gettext("Data is incorrect, please re-check and make sure that template of file is in correct form. Data needs to be input from second line") + "!", "warning");
+                            that.info_msg_box.show_infor_msg = true;
+                            that.info_msg_box.type_msg = "error";
+                            that.info_msg_box.title_msg = "Nhập dữ liệu không thành công"
+                            that.info_msg_box.array_msg.push(gettext("Data is incorrect, please re-check and make sure that template of file is in correct form. Data needs to be input from second line") + "!");
                             sheet = null;
                             that.check_error_upload = false;
                         } else {
@@ -323,246 +396,16 @@ var importKpiPosition = new Vue({
                                 var last_goal = "";
                                 that.check_error_upload = true;
                                 while (A != undefined) {
-                                    try {
-
-                                        try {
-                                            var type_kpi = sheet["A" + i].w;
-                                        } catch (err) {
-                                            var type_kpi = '';
-                                        }
-
-                                        var goal = '';
-                                        try {
-                                            goal = sheet["B" + i].w;
-
-                                            if (goal != undefined) {
-
-                                                goal = goal.toUpperCase();
-                                            }
-
-                                        } catch (err) {
-
-                                        }
-                                        var check_goal = "";
-
-
-                                        var kpi = '';
-                                        try {
-                                            kpi = sheet["C" + i].w;
-                                        } catch (err) {
-
-                                            last_goal_index = i;
-                                        }
-
-                                        if (kpi.trim().length != 0 && (goal == undefined || goal == '')) {
-
-                                            if (last_goal == "") {
-                                                throw "KPI Goal is missing";
-                                            }
-                                            else {
-                                                console.log(kpi);
-                                                goal = last_goal;
-                                                check_goal = "Check goal"
-                                            }
-                                        } else {
-                                            last_goal = goal;
-                                        }
-
-
-                                        try {
-                                            var unit = sheet["D" + i].w;
-                                        } catch (err) {
-                                            var unit = '';
-                                        }
-
-
-                                        try {
-                                            var measurement = sheet["E" + i].w;
-                                        } catch (err) {
-                                            var measurement = '';
-                                        }
-
-                                        try {
-                                            var datasource = sheet["F" + i].w;
-                                        } catch (err) {
-                                            var datasource = '';
-                                        }
-
-                                        try {
-                                            var method = sheet["G" + i].w;
-                                        } catch (err) {
-                                            var method = '';
-                                        }
-
-                                        try {
-                                            var operator = sheet["H" + i].w;
-                                        } catch (err) {
-                                            var operator = '';
-                                        }
-
-
-                                        try {
-                                            var year = sheet["I" + i].w;
-                                        } catch (err) {
-                                            var year = '';
-                                        }
-
-
-                                        try {
-                                            var t1 = sheet["J" + i].w;
-                                        } catch (err) {
-                                            var t1 = '';
-                                        }
-
-
-                                        try {
-                                            var t2 = sheet["K" + i].w;
-                                        } catch (err) {
-                                            var t2 = '';
-                                        }
-
-
-                                        try {
-                                            var t3 = sheet["L" + i].w;
-                                        } catch (err) {
-                                            var t3 = '';
-                                        }
-
-
-                                        try {
-                                            var q1 = sheet["M" + i].w;
-                                        } catch (err) {
-                                            var q1 = '';
-                                        }
-
-                                        try {
-                                            var t4 = sheet["N" + i].w;
-                                        } catch (err) {
-                                            var t4 = '';
-                                        }
-
-                                        try {
-                                            var t5 = sheet["O" + i].w;
-                                        } catch (err) {
-                                            var t5 = '';
-                                        }
-
-                                        try {
-                                            var t6 = sheet["P" + i].w;
-                                        } catch (err) {
-                                            var t6 = '';
-                                        }
-
-                                        try {
-                                            var q2 = sheet["Q" + i].w;
-                                        } catch (err) {
-                                            var q2 = '';
-                                        }
-
-                                        try {
-                                            var t7 = sheet["R" + i].w;
-                                        } catch (err) {
-                                            var t7 = '';
-                                        }
-
-                                        try {
-                                            var t8 = sheet["S" + i].w;
-                                        } catch (err) {
-                                            var t8 = '';
-                                        }
-
-                                        try {
-                                            var t9 = sheet["T" + i].w;
-                                        } catch (err) {
-                                            var t9 = '';
-                                        }
-
-                                        try {
-                                            var q3 = sheet["U" + i].w;
-                                        } catch (err) {
-                                            var q3 = '';
-                                        }
-
-                                        try {
-                                            var t10 = sheet["V" + i].w;
-                                        } catch (err) {
-                                            var t10 = '';
-                                        }
-
-                                        try {
-                                            var t11 = sheet["W" + i].w;
-                                        } catch (err) {
-                                            var t11 = '';
-                                        }
-
-                                        try {
-                                            var t12 = sheet["X" + i].w;
-                                        } catch (err) {
-                                            var t12 = '';
-                                        }
-
-                                        try {
-                                            var q4 = sheet["Y" + i].w;
-                                        } catch (err) {
-                                            var q4 = '';
-                                        }
-
-                                        try {
-                                            var weight = sheet["Z" + i].w;
-                                        } catch (err) {
-                                            var weight = '';
-                                        }
-
-                                        that.kpis.push({
-                                            "code": "",
-                                            "type_kpi": type_kpi,
-                                            "check_goal": check_goal,
-                                            "goal": goal,
-                                            "kpi": kpi,
-                                            "unit": unit,
-                                            "measurement": measurement,
-                                            "score_calculation_type": method,
-                                            "operator": operator,
-                                            "t1": t1,
-                                            "t2": t2,
-                                            "t3": t3,
-                                            "t4": t4,
-                                            "t5": t5,
-                                            "t6": t6,
-                                            "t7": t7,
-                                            "t8": t8,
-                                            "t9": t9,
-                                            "t10": t10,
-                                            "t11": t11,
-                                            "t12": t12,
-                                            "q1": q1,
-                                            "q2": q2,
-                                            "q3": q3,
-                                            "q4": q4,
-                                            'year': year,
-                                            "weight": weight.replace('%', ''),
-                                            "not_correct_type_kpi":false,
-                                            "check_error_year": false,
-                                            "check_error_quarter_1": false,
-                                            "check_error_quarter_2": false,
-                                            "check_error_quarter_3": false,
-                                            "check_error_quarter_4": false,
-                                            "index": "",
-                                            "msg":"",
-                                            "bsc_category": "",
-                                            "data_source":datasource,
-                                            "_uuid": makeid()
-
-
-                                        });
-                                        console.log(that.kpis);
-                                    } catch (err) {
-                                        that.is_error = true;
-                                        that.kpis.push({
-                                            "code": "[Error on line: " + i + "] > " + err
-
-                                        });
-
+                                    var kpi = that.parseDataImport(sheet,i,last_goal)
+                                    if(kpi){
+                                        last_goal = kpi.last_goal;
+                                        that.kpis.push(kpi);
+                                    }else{
+                                        that.info_msg_box.show_infor_msg = true;
+                                        that.info_msg_box.type_msg = "error";
+                                        that.info_msg_box.title_msg = "Nhập dữ liệu không thành công"
+                                        that.info_msg_box.array_msg.push("Dữ liệu dòng: "+ i + " không đúng")
+                                        break;
                                     }
                                     i += 1;
 
@@ -571,16 +414,15 @@ var importKpiPosition = new Vue({
                                         A = sheet["D" + i];
                                     }
                                     if (A == undefined) {
-                                        A = sheet["C" + (i + 1)];
+                                        A = sheet["A" + (i + 1)];
                                     }
                                     if (A == undefined) {
-                                        A = sheet["D" + (i + 1)];
+                                        A = sheet["Z" + (i + 1)];
                                     }
                                 }
                                 that.kpis.forEach(function (kpi, index) {
                                     kpi.index = index
-                                    that.validate_kpi(kpi);
-                                    console.log(that.kpis[index]);
+                                    kpi = that.validate_kpi(kpi)
                                     return kpi
                                 })
                                 that.hideUnusedTableHead()
@@ -599,6 +441,239 @@ var importKpiPosition = new Vue({
             }
             $("#file-upload-form, #upload-form")[0].reset();
         },
+        parseDataImport: function(sheet, row,last_goal){
+        var self = this
+        var last_goal_index = 2
+        var kpi={}
+        try {
+            var kpi_code = '';
+            try {
+                 kpi_code = String(sheet["A" + row].v).trim();
+            } catch (err) {
+                 kpi_code = '';
+            }
+            var goal = '';
+            try {
+                 goal = String(sheet["B" + row].v).trim();
+
+                if (goal != undefined) {
+                    goal = goal.toUpperCase();
+                }
+
+            } catch (err) {
+                 goal = ''
+            }
+            var check_goal = "";
+            var kpi = "";
+            try {
+                kpi = String(sheet["C" + row].v).trim();
+            } catch (err) {
+                kpi = ""
+                last_goal_index = row;
+            }
+
+            if (kpi.trim().length != 0 && (goal == undefined || goal == '')) {
+
+                if (last_goal == "") {
+                    throw "KPI Goal is missing";
+                }
+                else {
+                    goal = last_goal;
+                    check_goal = "Check goal"
+                }
+            } else {
+                last_goal = goal;
+            }
+
+            var unit = '';
+            try {
+                 unit = String(sheet["D" + row].v).trim();
+            } catch (err) {
+                 unit = '';
+            }
+
+            var measurement = '';
+            try {
+                 measurement = String(sheet["E" + row].v).trim();
+            } catch (err) {
+                 measurement = '';
+            }
+            var datasource = '';
+            try {
+                 datasource = String(sheet["F" + row].v).trim();
+            } catch (err) {
+                 datasource = '';
+            }
+            var method = '';
+            try {
+                method = String(sheet["G" + row].v).trim();
+            } catch (err) {
+                method = '';
+            }
+            var operator = '';
+            try {
+                var operator = String(sheet["H" + row].v).trim();
+            } catch (err) {
+                var operator = '';
+            }
+
+            var year = null;
+            try {
+                 year = String(sheet["I" + row].v).trim();
+            } catch (err) {
+                 year = null;
+            }
+
+            var t1 = null;
+            try {
+                 t1 = String(sheet["J" + row].v).trim();
+            } catch (err) {
+                 t1 = null;
+            }
+
+            var t2 = null;
+            try {
+                 t2 = String(sheet["K" + row].v).trim();
+            } catch (err) {
+                 t2 = null;
+            }
+
+            var t3 = null;
+            try {
+                 t3 = String(sheet["L" + row].v).trim();
+            } catch (err) {
+                 t3 = null;
+            }
+
+            var q1 = null;
+            try {
+                 q1 = String(sheet["M" + row].v).trim();
+            } catch (err) {
+                 q1 = null;
+            }
+            var t4 = null;
+            try {
+                 t4 = String(sheet["N" + row].v).trim();
+            } catch (err) {
+                 t4 = null;
+            }
+            var t5 = null;
+            try {
+                 t5 = String(sheet["O" + row].v).trim();
+            } catch (err) {
+                 t5 = null;
+            }
+            var t6 = null;
+            try {
+                 t6 = String(sheet["P" + row].v).trim();
+            } catch (err) {
+                 t6 = null;
+            }
+            var q2 = null;
+            try {
+                 q2 = String(sheet["Q" + row].v).trim();
+            } catch (err) {
+                 q2 = null;
+            }
+            var t7 = null;
+            try {
+                 t7 = String(sheet["R" + row].v).trim();
+            } catch (err) {
+                 t7 = null;
+            }
+            var t8 = null;
+            try {
+                 t8 = String(sheet["S" + row].v).trim();
+            } catch (err) {
+                 t8 = null;
+            }
+            var t9 = null;
+            try {
+                 t9 = String(sheet["T" + row].v).trim();
+            } catch (err) {
+                 t9 = null;
+            }
+            var q3 = null;
+            try {
+                 q3 = String(sheet["U" + row].v).trim();
+            } catch (err) {
+                 q3 = null;
+            }
+            var t10 = null;
+            try {
+                 t10 = String(sheet["V" + row].v).trim();
+            } catch (err) {
+                 t10 = null;
+            }
+            var t11 = null;
+            try {
+                t11 = String(sheet["W" + row].v).trim();
+            } catch (err) {
+                t11 = null;
+            }
+            var t12 = null;
+            try {
+                 t12 = String(sheet["X" + row].v).trim();
+            } catch (err) {
+                 t12 = null;
+            }
+            var q4 = null;
+            try {
+                 q4 = String(sheet["Y" + row].v).trim();
+            } catch (err) {
+                 q4 = null;
+            }
+             var weight = null;
+            try {
+                 weight = String(sheet["Z" + row].v).trim();
+            } catch (err) {
+                 weight = null;
+            }
+             kpi = {
+                "kpi_code": kpi_code,
+                "check_goal": check_goal,
+                "goal": goal,
+                "kpi": kpi,
+                "unit": unit,
+                "measurement": measurement,
+                "score_calculation_type": method,
+                "operator": operator,
+                "t1": $.isNumeric(t1) ?parseFloat(t1): t1,
+                "t2": $.isNumeric(t2) ?parseFloat(t2): t2,
+                "t3": $.isNumeric(t3) ?parseFloat(t3): t3,
+                "t4": $.isNumeric(t4) ?parseFloat(t4): t4,
+                "t5": $.isNumeric(t5) ?parseFloat(t5): t5,
+                "t6": $.isNumeric(t6) ?parseFloat(t6): t6,
+                "t7": $.isNumeric(t7) ?parseFloat(t7): t7,
+                "t8": $.isNumeric(t8) ?parseFloat(t8): t8,
+                "t9": $.isNumeric(t9) ?parseFloat(t9): t9,
+                "t10": $.isNumeric(t10) ?parseFloat(t10): t10,
+                "t11": $.isNumeric(t11) ?parseFloat(t11): t11,
+                "t12": $.isNumeric(t12) ?parseFloat(t12): t12,
+                "q1": $.isNumeric(q1) ?parseFloat(q1): q1,
+                "q2": $.isNumeric(q2) ?parseFloat(q2): q2,
+                "q3": $.isNumeric(q3) ?parseFloat(q3): q3,
+                "q4": $.isNumeric(q4) ?parseFloat(q4): q4,
+                'year': $.isNumeric(year) ?parseFloat(year): year,
+                "weight": $.isNumeric(weight) ?parseFloat(weight)*100: weight,
+                "check_error_year": false,
+                "check_error_quarter_1": false,
+                "check_error_quarter_2": false,
+                "check_error_quarter_3": false,
+                "check_error_quarter_4": false,
+                "index": "",
+                "msg":[],
+                "_uuid": makeid(),
+                "code_kpi_existed":false,
+                "email_is_incorrect":false
+            };
+            console.log(self.kpis);
+        } catch (err) {
+            self.is_error = true;
+            return false
+        }
+        return kpi
+    },
         addRowError: function (uuid) {
             var self = this;
             if (self.id_row_error.indexOf(uuid) === -1) {
@@ -627,10 +702,6 @@ var importKpiPosition = new Vue({
         getCategory: function(category){
             category = category.toString();
             var first_word_category = category[0].toUpperCase();
-            var suffixes_category = category.slice(1, category.length);
-            if(isNaN(suffixes_category)){
-                return "no category"
-            }
             for( key in this.group_bsc_category){
                 if (first_word_category == key){
                     return this.group_bsc_category[key]
@@ -638,14 +709,16 @@ var importKpiPosition = new Vue({
             }
             return "no category"
         },
-        triggeredDismissModal: function(){
-            var reset_import_kpi_position_message_obj={
-                show_message:false,
-                array_msg:[],
-                type_msg:"",
-                title_msg:""
+        trigger_close_msg_box: function(){
+            // reset infor msg box
+            var self = this
+            var msg_box = {
+                show_infor_msg: false,
+                type_msg:'',
+                title_msg:'',
+                array_msg:[]
             }
-          this.import_kpi_position_message_obj = Object.assign(this.import_kpi_position_message_obj, reset_import_kpi_position_message_obj);
+            self.info_msg_box = Object.assign(self.info_msg_box, msg_box)
         },
         check_add_all: function () {
             var count = 0;
@@ -666,20 +739,16 @@ var importKpiPosition = new Vue({
             // Process conditions
 
             // year target bang voi tong target cac quy
-            var year_target_input = !$.isNumeric(kpi.year) ? null : parseFloat(kpi.year).toFixed(4)
-            year_target_input = parseFloat(year_target_input) || null
-            sum_q = !$.isNumeric(sum_q) ? null : parseFloat(sum_q).toFixed(4)
-            sum_q = parseFloat(sum_q) || null
+            var year_target_input = !$.isNumeric(kpi.year) ? null : parseFloat(kpi.year).toFixed(15)
+            sum_q = !$.isNumeric(sum_q) ? null : parseFloat(sum_q).toFixed(15)
             var yearTargetValid = year_target_input == sum_q
             if (!yearTargetValid) {
                 kpi.check_error_year = true
             }
             //bao loi khi thang khong theo phuong phap phan quy
             for (var i = 1; i < 5; i++) {
-                var quarter_target_input = !$.isNumeric(kpi['q' + i]) ? null : parseFloat(kpi['q' + i]).toFixed(4)
-                quarter_target_input = parseFloat(quarter_target_input) || null
-                totalQuarterArray[i - 1] = !$.isNumeric(totalQuarterArray[i - 1]) ? null : parseFloat(totalQuarterArray[i - 1]).toFixed(4)
-                totalQuarterArray[i - 1] = parseFloat(totalQuarterArray[i - 1]) || null
+                var quarter_target_input = !$.isNumeric(kpi['q' + i]) ? null : parseFloat(kpi['q' + i]).toFixed(15)
+                totalQuarterArray[i - 1] = !$.isNumeric(totalQuarterArray[i - 1]) ? null : parseFloat(totalQuarterArray[i - 1]).toFixed(15)
                 if (!(quarter_target_input == totalQuarterArray[i - 1])) {
                     kpi['check_error_quarter_' + i] = true
                 }
@@ -773,171 +842,153 @@ var importKpiPosition = new Vue({
             var operator = ['<=', '>=', '='];
             var scores = ['q1', 'q2', 'q3', 'q4'];
             var months = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 't11', 't12'];
-
+            var list_field_name_kpi = ['kpi_code','unit','measurement','weight','goal','kpi','score_calculation_type','operator']
+            var object_trans_field = {
+                'kpi_code':"Loại KPI",
+                'unit': "Đơn vị",
+                'measurement': "Phương pháp đo lường",
+                'weight': "Trọng số",
+                'goal':"Mục tiêu kpi",
+                'kpi': "Tên KPI",
+                'score_calculation_type': "Phương pháp phân bổ chỉ tiêu",
+                'operator':"Toán tử"
+            }
             if($.isEmptyObject(kpi)){
                 return
             }
-
-            kpi.bsc_category = kpi.type_kpi == null? kpi.type_kpi :kpi.type_kpi.toString();
-            kpi.weight = kpi.weight.toString()
-            if (!kpi.score_calculation_type) {
-                kpi.score_calculation_type = ""
-            }
-            if (!kpi.unit) {
-                kpi.unit = ""
-            }
-            if (!kpi.measurement) {
-                kpi.measurement = ""
-            }
-            if (!kpi.type_kpi) {
-                kpi.type_kpi = ""
-            }
-            if (!kpi.goal) {
-                kpi.goal = ""
-            }
-            if (!kpi.kpi) {
-                kpi.kpi = ""
-            }
-            if (!kpi.operator) {
-                kpi.operator = ""
-            }
-            kpi.msg = '';
+            kpi.msg = [];
             self.check_file = true;
             kpi.status = null;
             var quarter_error = [];// mảng lưu quý bị lỗi
             var months_error = [];// mảng lưu tháng bị lỗi
             kpi.validated = true;
-            if (kpi.bsc_category.trim() == '') {
+            list_field_name_kpi.forEach(function (field) {
                 kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("KPI code must not be empty");
-            }else{
-                var is_bsc_categoty = self.getCategory(kpi.bsc_category.trim());
-                if (is_bsc_categoty == "no category"){
-                    kpi.not_correct_type_kpi = true;
-                    kpi.msg = kpi.msg + "\n" + gettext("KPI code format is not correct");
+                if (kpi[field] == "" || kpi[field] == null){
+                    kpi.msg.push({
+                        'field_name': object_trans_field[field],
+                        'message': ' không được để trống'
+                    });
+                }
+            })
+            if (kpi.kpi_code.trim() ) {
+                var is_bsc_categoty = self.checkTypeKPI(kpi.kpi_code) ;
+                if (!is_bsc_categoty){
+                     kpi.msg.push({
+                        'field_name': "Mã KPI",
+                        'message': ' không đúng định dạng'
+                    });
                 }else{
-                    kpi.not_correct_type_kpi = false;
-                    kpi.bsc_category = is_bsc_categoty;
+                    var bsc_categoty = self.getCategory(kpi.kpi_code)
+                    kpi.bsc_category = bsc_categoty;
                 }
             }
-            if (self.method.indexOf(kpi.score_calculation_type.trim().toLowerCase()) == -1) {
+            if (operator.indexOf(kpi.operator) == -1 && kpi.operator) {
+                    kpi.validated = false;
+                    kpi.msg.push({
+                        'field_name': 'Toán tử',
+                        'message': ' không đúng định dạng'
+                    });
+                }
+            if (self.method.indexOf(kpi.score_calculation_type.toLowerCase()) == -1 && kpi.score_calculation_type){
                 kpi.validated = false;
                 self.check_file = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Score calculation type format is not correct");
+                kpi.msg.push({
+                    'field_name': 'Phương pháp phân bổ chỉ tiêu',
+                    'message': ' không đúng định dạng'
+                });
             }
-            if (operator.indexOf(kpi.operator) == -1 && kpi.operator.trim()) {
+            if (isNaN(kpi.year) ) {
                 kpi.validated = false;
-                self.check_file = false;
-                kpi.msg = kpi.msg + "\n" + gettext('Operator format is not correct');
+                kpi.msg.push({
+                    'field_name': 'Chỉ tiêu năm',
+                    'message': ' không đúng định dạng'
+                });
             }
-            if ( kpi.operator.trim() == '') {
-                kpi.validated = false;
-                self.check_file = false;
-                kpi.msg = kpi.msg + "\n" + gettext('Operator must not empty');
-            }
-            kpi.year = kpi.year == null?kpi.year:kpi.year.toString().replace(/,/g, '')
             scores.forEach(function (score) {
-                kpi[score] = kpi[score]== null?kpi[score]:kpi[score].toString().replace(/,/g, '')
                 if (isNaN(kpi[score])) {
                     quarter_error.push(scores.indexOf(score)+1)
                 }
             })
             months.forEach(function (month) {
-                kpi[month] = kpi[month]== null?kpi[month]:kpi[month].toString().replace(/,/g, '')
                 if (isNaN(kpi[month])) {
                     months_error.push(months.indexOf(month)+1)
                 }
             })
-            if (kpi.msg.trim()[0] == '\n') {
-                kpi.msg = kpi.msg.slice(2, kpi.msg.length);
-                kpi.msg = kpi.msg.charAt(0).toUpperCase() + kpi.msg.slice(1);
-            }
-            if (kpi.unit.trim() == '') {
-                kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Unit is not formatted correctly");
-            }
-
-            if (kpi.measurement.trim() == '') {
-                kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Measurement must not empty");
-            }
-            if (kpi.weight.trim() == '') {
-                kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Weight must not empty");
-            }
-
-            if (operator.indexOf(kpi.operator) == -1 && kpi.operator) {
-                kpi.msg = kpi.msg + "\n" + gettext("Operator format is not correct");
-            }
-            if (isNaN(kpi.year) ) {
-                kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + "Điểm năm" + " không đúng định dạng";
-            }
             if (quarter_error.length > 0 ) {
                 kpi.validated = false;
-                var quarter_error_str = quarter_error.join(', ') + " " + "không đúng định dạng";
-                kpi.msg = kpi.msg + "\n" + "Điểm quý" + " " + quarter_error_str;
+                var quarter_error_str = quarter_error.join(', ');
+                kpi.msg.push({
+                    'field_name': "Chỉ tiêu quý" + " " + quarter_error_str,
+                    'message': ' không đúng định dạng'
+                });
             }
             if (months_error.length > 0 ) {
                 kpi.validated = false;
-                var months_error_str = months_error.join(', ') + " " + "không đúng định dạng";
-                kpi.msg = kpi.msg + "\n" + "Điểm tháng" + " " + months_error;
+                var months_error_str = months_error.join(', ');
+                kpi.msg.push({
+                    'field_name': "Chỉ tiêu tháng" + " " + months_error_str,
+                    'message': ' không đúng định dạng'
+                });
             }
-            if (self.enable_allocation_target) {
+            if (self.enable_allocation_target){
                 kpi = self.validateTargetScoreFollowAllocationTarget(kpi)
             }
-            kpi.weight = kpi.weight == null ? kpi.weight:kpi.weight.toString().replace(/,/g, '');
             if (isNaN(parseFloat(kpi.weight)) && kpi.weight) {
                 kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Weights are not formatted correctly");
+                kpi.msg.push({
+                    'field_name': 'Trọng số',
+                    'message': ' không đúng định dạng'
+                });
             }
             if (parseFloat(kpi.weight) <= 0) {
                 kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Weight must be greater than 0");
+                kpi.msg.push({
+                    'field_name': 'Trọng số',
+                    'message': ' phải lớn hơn 0'
+                });
             }
-            if (kpi.check_error_year == true) {
+            if (kpi.check_error_year == true){
                 kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Year must be follow score calculation type");
+                kpi.msg.push({
+                    'field_name': 'Chỉ tiêu năm',
+                    'message': ' phải theo phương pháp phân rã chỉ tiêu'
+                });
             }
-            if (kpi.check_error_quarter_1 == true) {
+            if (kpi.check_error_quarter_1 == true){
                 kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Quarter 1 must be follow score calculation type");
+                kpi.msg.push({
+                    'field_name': 'Chỉ tiêu quý 1',
+                    'message': ' phải theo phương pháp phân rã chỉ tiêu'
+                });
             }
-            if (kpi.check_error_quarter_2 == true) {
+            if (kpi.check_error_quarter_2 == true){
                 kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Quarter 2 must be follow score calculation type");
+                kpi.msg.push({
+                    'field_name': 'Chỉ tiêu quý 2',
+                    'message': ' phải theo phương pháp phân rã chỉ tiêu'
+                });
             }
-            if (kpi.check_error_quarter_3 == true) {
+            if (kpi.check_error_quarter_3 == true){
                 kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Quarter 3 must be follow score calculation type");
+                kpi.msg.push({
+                    'field_name': 'Chỉ tiêu quý 3',
+                    'message': ' phải theo phương pháp phân rã chỉ tiêu'
+                });
             }
-            if (kpi.check_error_quarter_4 == true) {
+            if (kpi.check_error_quarter_4 == true){
                 kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Quarter 4 must be follow score calculation type");
+                kpi.msg.push({
+                    'field_name': 'Chỉ tiêu quý 4',
+                    'message': ' phải theo phương pháp phân rã chỉ tiêu'
+                });
             }
-            if (kpi.kpi == '') {
-                kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("Name must not be empty");
-            }
-            if (kpi.goal == "") {
-                kpi.validated = false;
-                kpi.msg = kpi.msg + "\n" + gettext("KPI targets must not be empty");
-            }
-            if (kpi.msg.trim() == '\n') {
-                kpi.msg = kpi.msg.slice(2, kpi.msg.length);
-                kpi.msg = kpi.msg.charAt(0).toUpperCase() + kpi.msg.slice(1);
-            }
-            kpi.msg = kpi.msg.trim();
-
-            console.log(kpi.msg);
-
-            if (kpi.msg != '' && show_error) {
+            if (kpi.msg.length > 0) {
                 self.addRowError(kpi._uuid)
             } else {
                 self.removeRowError(kpi._uuid)
             }
             // show_error && self.$set(self.kpis, index, kpi);
-            self.$set(self.data_edit_kpi, 'msg', kpi.msg);
             try {
                 // auto scroll to error messages
                 setTimeout(function () {
@@ -946,6 +997,8 @@ var importKpiPosition = new Vue({
             } catch (err) {
 
             }
+            self.$set(self.data_edit_kpi, 'data', kpi)
+            return kpi
             //self.$set(self.kpis, index, kpi);
         },
         to_string: function (value) {
@@ -976,9 +1029,6 @@ var importKpiPosition = new Vue({
                     that.data_edit_kpi.data.score_calculation_type = ""
                 }
             }
-            if (parseFloat(that.data_edit_kpi.data.weight) != NaN) {
-                that.data_edit_kpi.data.weight = parseFloat(that.data_edit_kpi.data.weight);
-            }
             that.data_edit_kpi.index = index;
             setTimeout(function () {
                 $('#edit-import-kpi-position-chart').modal('show');
@@ -1001,29 +1051,35 @@ var importKpiPosition = new Vue({
             setTimeout(function () {
                 if (!$('.text-muted').length) {
                     $("body.bg-sm").removeAttr("style");
-                    self.import_kpi_position_message_obj.array_msg.push(gettext("Edit import KPI success!"))
-                    self.import_kpi_position_message_obj.title_msg = "Chỉnh sửa KPI thành công!"
-                    self.import_kpi_position_message_obj.type_msg = "success"
-                    self.import_kpi_position_message_obj.show_message = true
-                    $('#edit-import-kpi-position-chart').modal('hide');
+                    if(self.data_edit_kpi.data.msg.length > 0){
+                    self.info_msg_box.type_msg = "error";
+                    self.info_msg_box.title_msg = "Chỉnh sửa KPI không thành công"
+                    self.data_edit_kpi.data.msg.forEach(function (field) {
+                        self.info_msg_box.array_msg.push(field.field_name + ": " + field.message )
+                    })
+
+                }else{
+                    $('#edit-import-kpi-position-chart').modal('hide')
+                    self.info_msg_box.type_msg = "success";
+                    self.info_msg_box.title_msg = "Chỉnh sửa KPI thành công"
+                    self.info_msg_box.array_msg.push("Chỉnh sửa nhập dữ liệu KPI thành công !")
+                    self.$set(self.kpis, self.data_edit_kpi.data.index, self.data_edit_kpi.data);
                     setTimeout(function () {
-                        self.import_kpi_position_message_obj.show_message = false
-                    },2000);
-                    self.$set(self.kpis, kpi.index, kpi.data);
+                        self.info_msg_box.show_infor_msg = false;
+                    },2000)
+                }
                     return;
                 }
             }, 100);
 
-            if (self.method.indexOf(kpi.data.score_calculation_type.trim().toLowerCase()) != -1) kpi.data.score_calculation_type = self.trans_method(kpi.data.score_calculation_type);
-
         },
         convertNewStructData: function (kpi) {
             var data_import_kpi = {
-                year_target: parseFloat(kpi.year) || null,
-                quarter_1_target: parseFloat(kpi.q1) || null,
-                quarter_2_target: parseFloat(kpi.q2) || null,
-                quarter_3_target: parseFloat(kpi.q3) || null,
-                quarter_4_target: parseFloat(kpi.q4) || null,
+                year_target: $.isNumeric(kpi.year)?parseFloat(kpi.year): null,
+                quarter_1_target: kpi.q1,
+                quarter_2_target:kpi.q2,
+                quarter_3_target: kpi.q3,
+                quarter_4_target: kpi.q4,
                 bsc_category: kpi.bsc_category,
                 group_name: kpi.goal,
                 kpilib_unique_id:'',
@@ -1032,31 +1088,31 @@ var importKpiPosition = new Vue({
                 current_goal: kpi.measurement,
                 score_calculation_type: kpi.score_calculation_type,
                 operator: kpi.operator,
-                weight: parseFloat(kpi.weight) || null,
-                kpi_code: kpi.type_kpi,
+                weight: kpi.weight,
+                kpi_code: kpi.kpi_code,
                 data_source: kpi.data_source,
                 refer_relationship: [],
                 year_data: {
                     months_target: {
                         quarter_1: {
-                            month_1_target: parseFloat(kpi.t1) || null,
-                            month_2_target: parseFloat(kpi.t2) || null,
-                            month_3_target: parseFloat(kpi.t3) || null
+                            month_1_target: kpi.t1,
+                            month_2_target:kpi.t2,
+                            month_3_target: kpi.t3
                         },
                         quarter_2: {
-                            month_1_target: parseFloat(kpi.t4) || null,
-                            month_2_target: parseFloat(kpi.t5) || null,
-                            month_3_target: parseFloat(kpi.t6) || null
+                            month_1_target: kpi.t4,
+                            month_2_target: kpi.t5,
+                            month_3_target: kpi.t6
                         },
                         quarter_3: {
-                            month_1_target: parseFloat(kpi.t7) || null,
-                            month_2_target: parseFloat(kpi.t8) || null,
-                            month_3_target: parseFloat(kpi.t9) || null
+                            month_1_target: kpi.t7,
+                            month_2_target: kpi.t8,
+                            month_3_target: kpi.t9
                         },
                         quarter_4: {
-                            month_1_target: parseFloat(kpi.t10) || null,
-                            month_2_target: parseFloat(kpi.t11) || null,
-                            month_3_target: parseFloat(kpi.t12) || null
+                            month_1_target: kpi.t10,
+                            month_2_target: kpi.t11,
+                            month_3_target: kpi.t12
                         }
                     }
                 }
@@ -1095,10 +1151,10 @@ var importKpiPosition = new Vue({
 
             var kpi_data_import = that.convertNewStructData(kpi)
             if(that.position_kpi_id == "") {
-                that.import_kpi_position_message_obj.array_msg.push(gettext("Not selected position chart yet"))
-                that.import_kpi_position_message_obj.title_msg = "Thêm KPI thất bại!"
-                that.import_kpi_position_message_obj.type_msg = "error"
-                that.import_kpi_position_message_obj.show_message = true
+                that.info_msg_box.array_msg.push(gettext("Not selected position chart yet"))
+                that.info_msg_box.title_msg= "Thêm KPI thất bại!"
+                that.info_msg_box.type_msg = "error"
+                that.info_msg_box.show_infor_msg = true
             }else {
                     cloudjetRequest.ajax({
                         type: "POST",
@@ -1124,14 +1180,17 @@ var importKpiPosition = new Vue({
                                         field = key;
                                     }
                                     var error_message = field + ': ' + jqXHR.responseJSON[key]
-                                    that.import_kpi_position_message_obj.array_msg.push(error_message)
+                                    that.info_msg_box.array_msg.push(error_message)
                                 });
                             }
-                            that.import_kpi_position_message_obj.title_msg = "Thêm KPI thất bại!"
-                            that.import_kpi_position_message_obj.type_msg = "error"
-                            that.import_kpi_position_message_obj.show_message = true
+                            that.info_msg_box.title_msg = "Thêm KPI thất bại!"
+                            that.info_msg_box.type_msg = "error"
+                            that.info_msg_box.show_infor_msg = true
                             try {
-                                kpi.msg = that.array_msg.join('\n')
+                                kpi.msg.push({
+                                    'field_name': '',
+                                    'message': jqXHR['message']
+                                });
                             } catch (err) {
                             }
                             kpi.status = "failed";
@@ -1161,3 +1220,8 @@ var importKpiPosition = new Vue({
         }
     }
 })
+
+Vue.filter('decimalDisplay',  function (val) {
+    return (val === 0) ? 0 : (val == null || val === '') ? '' : format(val);
+
+});

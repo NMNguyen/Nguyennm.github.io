@@ -669,7 +669,7 @@ input[type='radio']:checked:after {
     background: #fff;
 }
 .modal-footer .btn-add{
-    width: 70px;
+    min-width: 70px;
     height: 34px;
     background-color: #008b8b;
     color:white;

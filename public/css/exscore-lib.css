@@ -9,9 +9,6 @@
     background:#f9f9f9;
     height:100vh;
 }
-#content{
-    margin-top:60px!important;
-}
 #exscore-lib .el-autocomplete{
     float:right;
     margin-top:10px;
