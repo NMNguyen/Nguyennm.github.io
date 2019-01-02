@@ -1452,7 +1452,7 @@ ul.success {
 .kpi_left_menu {
     position: absolute;
     bottom: -30px;
-    z-index: 100;
+    z-index: 10;
     background: #f9f9f9;
     padding-right: 5px;
     font-size: 12px;
@@ -2483,6 +2483,15 @@ span.bonus-score {
     border-color: #f27577;
 }
 
+.other .bsc-category-title{
+    background-color: #929da3;
+}
+
+.other .bsc-category-title .category-weight {
+    color: #929da3;
+    border-color: #929da3;
+}
+
 .kpi-group {
     border: 1px solid #e4e4e4;
     min-height: 100px;
@@ -2700,6 +2709,9 @@ span.bonus-score {
 .bsc-category.learn-growth .kpi-group-title {
     background-color: #f27577;
 }
+.bsc-category.other .kpi-group-title {
+    background-color: #929da3;
+}
 
 .bsc-category .kpi-group-title .group-weight {
     white-space: nowrap;
@@ -2727,6 +2739,9 @@ span.bonus-score {
 
 .learn-growth .kpi-group-title {
     border: 1px solid #f27577;
+}
+.other .kpi-group-title {
+    border: 1px solid #d7dfe5;
 }
 
 .strategy-map-company {
