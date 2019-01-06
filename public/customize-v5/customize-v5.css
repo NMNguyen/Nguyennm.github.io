@@ -360,19 +360,13 @@ img.icon{
 .p-b-5 {
     padding-bottom: 5px;
 }
-#tooltip-of-table-member .team-member-email {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.team-member-email {
     font-size: 14px;
     text-align: left;
     color: #666666;
 }
 
-#tooltip-of-table-member .team-member-function {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.team-member-function {
     font-size: 14px;
     text-align: left;
     color: #666666;
@@ -554,7 +548,4 @@ img.icon{
 }
 .position-relative{
     position: relative;
-}
-#tooltip-of-table-member .hover-tooltip {
-    display: inline-grid;
 }

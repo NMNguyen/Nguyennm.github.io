@@ -41,7 +41,7 @@ function calculationQuarterTotal(data_quarter_month) {
 }
 
 /* istanbul ignore next */
-if (typeof exports != "undefined"){
+if (typeof exports !== undefined){
     exports.calculateYearTotal = calculateYearTotal
     exports.calculationQuarterTotal = calculationQuarterTotal
 }

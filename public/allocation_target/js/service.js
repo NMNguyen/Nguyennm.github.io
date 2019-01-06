@@ -50,7 +50,7 @@ function pemission_edit_kpi(logic_object) {
 }
 
 /* istanbul ignore next */
-if (typeof exports != "undefined"){
+if (typeof exports !== undefined){
     exports.calculateYearTotal = calculateYearTotal
     exports.calculationQuarterTotal = calculationQuarterTotal
     exports.pemission_edit_kpi = pemission_edit_kpi
