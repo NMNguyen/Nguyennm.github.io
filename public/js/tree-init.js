@@ -2,50 +2,98 @@ var st = null;
 var node_id = null;
 var language = 'VN';
 var node_old_active = true;
+
+function simulate(element, eventName)
+{
+    var options = extend(defaultOptions, arguments[2] || {});
+    var oEvent, eventType = null;
+
+    for (var name in eventMatchers)
+    {
+        if (eventMatchers[name].test(eventName)) { eventType = name; break; }
+    }
+
+    if (!eventType)
+        throw new SyntaxError('Only HTMLEvents and MouseEvents interfaces are supported');
+
+    if (document.createEvent)
+    {
+        oEvent = document.createEvent(eventType);
+        if (eventType == 'HTMLEvents')
+        {
+            oEvent.initEvent(eventName, options.bubbles, options.cancelable);
+        }
+        else
+        {
+            oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
+            options.button, options.pointerX, options.pointerY, options.pointerX, options.pointerY,
+            options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, options.button, element);
+        }
+        element.dispatchEvent(oEvent);
+    }
+    else
+    {
+        options.clientX = options.pointerX;
+        options.clientY = options.pointerY;
+        var evt = document.createEventObject();
+        oEvent = extend(evt, options);
+        element.fireEvent('on' + eventName, oEvent);
+    }
+    return element;
+}
+
+function extend(destination, source) {
+    for (var property in source)
+      destination[property] = source[property];
+    return destination;
+}
+
+var eventMatchers = {
+    'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
+    'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
+}
+var defaultOptions = {
+    pointerX: 0,
+    pointerY: 0,
+    button: 0,
+    ctrlKey: false,
+    altKey: false,
+    shiftKey: false,
+    metaKey: false,
+    bubbles: true,
+    cancelable: true
+}
+
 function valid_input() {
-	var message = [];
-	var elms = [];
-	if($("#id-employee-name-edit").val().trim().length == 0) {
-		message.push(gettext("Full name field cannot be empty or name's format is not correct"));
-		elms.push("#id-employee-name-edit");
+    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+    var isError = false;
+	$('#add-employee-modal.error-msg').hide();
+	if ($('#id-employee-name-edit').val().trim() == '') {
+		$('#msg-name-up').show();
+		    isError = true;
     }
-	
-    if ($('#id-email-employee-edit').val() == ''){
-    	message.push(gettext('Email field is required.'));
-    	elms.push('#id-email-employee-edit');
-    }
-    
-    if ($('#id-position-edit').val() == ''){
-    	message.push(gettext('Position field is required.'));
-    	elms.push('#id-position-edit');
+
+    if (!pattern.test($('#id-email-employee-edit').val())){
+        $('#msg-invalid-email-up').show();
+        $('#msg-duplicate-email').hide();
+            isError = true;
     }
     
-    if (message.length > 0) {
-    	alert(message.join("\n"));
-    	$(elms[0]).focus();
-    	return false;
-    }
-    
-    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
-    if (!pattern.test($('#id-email-employee-edit').val())) {
-        alert(gettext('Enter a valid E-mail address.'));
-        $('#id-email-employee-edit').focus();
-        return false;
-    }
-    
-    if(!isFinite($("#id-employee-phone-edit").val()) && $("#id-employee-phone-edit").val().length>0){
-        $("#id-employee-phone-edit").focus();
-        alert(gettext("Phone's format is not correct"));
-        return false;
+    if ($('#id-position-edit').val().trim() == ''){
+    	$('#msg-invalid-position-edit').show();
+    	    isError = true;
     }
 
     if(peopleApp.emp_status == 0 && $("#id-employee-reason").val().length == 0
         && node_old_active == '1'){
+        $('#msg-reason-up').show();
+    	    isError = true;
+    }
 
-        $("#id-employee-reason").focus();
-        alert(gettext("Please input reason delay"));
+    if(isError){
         return false;
     }
+
     return true;
 }
 
@@ -131,6 +179,9 @@ function clear_form() {
     $("#id-employee-phone-edit").val("");
     $("#id-employee-skype-edit").val("");
     $("#listuc").val("");
+    //Reset status delay employee. 0 = delay, 1 = no delay;
+    peopleApp.emp_status = 1;
+
 }
 
 function load_data_update(node){
@@ -146,6 +197,11 @@ function load_data_update(node){
     $("#id-employee-edit").val(node.data.employee_code);
     $("#id-employee-phone-edit").val(node.data.phone);
     $("#id-employee-skype-edit").val(node.data.skype);
+    $('#msg-name-up').hide();
+    $('#msg-duplicate-email').hide();
+    $('#msg-invalid-email-up').hide();
+    $('#msg-invalid-position-edit').hide();
+    $('#add-employee-modal.error-msg').hide();
     if (node.data.active) {
     	$("#emp_active_1").click();
     } else {
@@ -153,8 +209,10 @@ function load_data_update(node){
     }
     if (node.data.unit_code == '') {
         $("#listuc").val('');
+        peopleApp.unit_code = node.data.unit_code;
     } else {
         $("#listuc").val(node.data.unit_code);
+        peopleApp.unit_code = node.data.unit_code;
     }
 }
 
@@ -171,7 +229,7 @@ function update_data_node(node) {
     // node.data.job_category_id = $("#id-role-category").val();
     node.data.phone = $("#id-employee-phone-edit").val();
     node.data.skype = $("#id-employee-skype-edit").val();
-    node.data.unit_code = peopleApp.unitcode;
+    node.data.unit_code = peopleApp.unit_code;
 }
 
 function update_info(node) {
@@ -191,7 +249,7 @@ function update_info(node) {
             // job_title_id: $("#id-role-type").val(),
             phone: $("#id-employee-phone-edit").val().trim(),
             skype: $("#id-employee-skype-edit").val(),
-            unit_code: peopleApp.unitcode,
+            unit_code: peopleApp.unit_code,
             active: $("input[name='emp_status']:checked").val(),
             reason: $("input[name='emp_status']:checked").val() == '1' ? '':$("#id-employee-reason").val()
         }),
@@ -223,6 +281,9 @@ function update_info(node) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             $("#id-edit-save").enable(true);
+            if ($('#id-email-employee-edit').val()){
+                $('#msg-duplicate-email').show();
+            }
         }
     });
 }
@@ -267,6 +328,7 @@ function get_managers_for_new_person(node) {
 function remove_person(node, delete_kpis) {
 
     var alertcf = gettext("Employee ") + node.data.name + gettext(" will be deleted immediately, are you sure?");
+    var parent_node = node.getParents().pop();
     swal({
         title: gettext("Warning"),
         text: alertcf,
@@ -292,21 +354,21 @@ function remove_person(node, delete_kpis) {
             },
             success: function (data) {
                 if (typeof data == 'object' && data.status == "ok") {
-                	p = node.getParents().pop();
-                    if (p) {
-                        load_data_node(p);
-                        st.onClick(st.root);
-                    }
-
-                    if(node.data.type){
-                        peopleApp.get_list_backup_user();
-                    }
                     st.removeSubtree(node.id, true, 'animate', {
                         hideLabels: false,
                         onComplete: function () {
-
                         }
                     });
+
+                    if (parent_node) {
+                        // load_data_node(parent_node);
+                        // st.onClick(parent_node.id); // Don't remove this if you don't know what you do
+                        // init_node(parent_node);
+
+                        clickOneNode(parent_node);
+                    }
+
+                    peopleApp.get_list_backup_user();
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -338,8 +400,9 @@ function get_subordinate(node) {
 
 function bind_new_person() {
     $('#add-save-new-person').unbind('click');
+    $('#msg-duplicate-email').hide();
     $(".pass-control").show();
-    $("#id_send_new_pass").prop('checked', true);
+    $("#id_send_new_pass").prop('checked', false);
     $('#add-save-new-person').enable(true);
     $('#add-save-new-person').click(function () {
         if (!valid_input()) {
@@ -361,7 +424,7 @@ function bind_new_person() {
                 send_pass: $("#id_send_new_pass").is(":checked"),
                 phone: $("#id-employee-phone-edit").val(),
                 skype: $("#id-employee-skype-edit").val(),
-                unit_code: peopleApp.unitcode,
+                unit_code: peopleApp.unit_code,
             },
             url: "/performance/people/new/",
             beforeSend: function () {
@@ -382,8 +445,8 @@ function bind_new_person() {
                 st.addSubtree(data, 'animate', {
                     onComplete: function () {
                         //alert('add subtree complete! ' + peopleApp.current_node.id);// this deo chay
-
-                         st.onClick('u'+peopleApp.current_node.id);
+                        clickOneNode(st.graph.getNode('u'+peopleApp.current_node.id), false);
+                         // st.onClick('u'+peopleApp.current_node.id);
                     }
                 });
                 swal({
@@ -395,7 +458,12 @@ function bind_new_person() {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 $("#add-save-new-person").enable(true);
-                alert(gettext("Data error"));
+                if ($('#id-email-employee-edit').val()){
+                    $('#msg-duplicate-email').show();
+                }
+                $('#msg-name-up').hide();
+                $('#msg-invalid-email-up').hide();
+                $('#msg-invalid-position-edit').hide();
             }
         });
     });
@@ -406,7 +474,6 @@ function bind_avatar_upload(node) {
     $('#id-btn-upload').click(function () {
         $("#id-avatar-upload").click();
     });
-
     $("#id-avatar-upload").data('ajaxUploader-setup', false);
     $("#id-avatar-upload").ajaxfileupload({
         action: "/performance/people/",
@@ -424,7 +491,6 @@ function bind_avatar_upload(node) {
                 $('.progress-striped').hide();
                 $('.progress-striped .bar').css('width', '60%');
             } else {
-                console.log(response);
             }
             //alert(JSON.stringify(response));
         },
@@ -624,7 +690,7 @@ function init_node(node) {
         $("#btn-delete-user-with-kpis").unbind('click');
         $("#btn-delete-user-with-kpis").click(
             function () {
-                    $("#confirm-delete").modal('toggle');
+                $("#confirm-delete").modal('toggle');
                 remove_person(node, true);
                 }
         );
@@ -675,6 +741,15 @@ function init_node(node) {
 }
 
 var data_node = {};
+
+function clickOneNode(node, simulate_native_event = true){
+    if (simulate_native_event){
+        simulate(document.getElementById(node.id), "click");
+    }else{
+        st.onClick(node.id);
+        init_node(node)
+    }
+}
 
 function getTree(nodeId, level, onComplete) {
     var subtree = {
@@ -784,19 +859,23 @@ function init() {
         Events: {
             enable: true,
             onClick: function (node, eventInfo, e) {
-                if (node) {
-                    init_node(node);
-                }
+                // Use event onClick in onCreateLable instead this. Not working.
+                //
+                // if (node) {
+                //     init_node(node);
+                // }
             }
         },
         onBeforeCompute: function (node) {
             console.log("loading " + node.name);
         },
-        onAfterCompute: function () {
+        onAfterCompute: function (node) {
 
             console.log("done");
+            if (!$(node_id).is(':visible')){
+                st.canvas.translate(-st.canvas.translateOffsetX, -st.canvas.translateOffsetY);
+            }
             reach_node();
-
         },
         request: function (nodeId, level, onComplete) {
             getTree(nodeId, level, onComplete);
@@ -808,8 +887,7 @@ function init() {
             label.id = node.id;
             label.innerHTML = node.name;
             label.onclick = function () {
-                st.onClick(node.id);
-                init_node(node);
+                clickOneNode(node, false);
             };
             //set label styles
             var style = label.style;
@@ -872,8 +950,8 @@ function init() {
     //optional: make a translation of the tree
     st.geom.translate(new $jit.Complex(-100, 0), "current");
     //emulate a click on the root node.
-    st.onClick(st.root);
-
+    // st.onClick(st.root);
+    clickOneNode(st.graph.getNode(st.root), false);
     // duan
     // st.refresh();
 
@@ -935,17 +1013,18 @@ function search_person(id) {
     node_search_list = [];
 
     var name = id;
-    $('.symbol_loading').show();
+    // $('.symbol_loading').show();
 
     if (name) {
         var found = false;
         st.graph.eachNode(function (node) {
             if (node.data.user_id == name) {
                 found = true;
-                st.onClick(node.id);
+                // st.onClick(node.id);
+                clickOneNode(node, false);
                 // neu ten ton trai tren cay co san, thi se click vao node do
-                init_node(node);
-                $('.symbol_loading').hide();
+                // init_node(node);
+                // $('.symbol_loading').hide();
                 $('.mango_search_input').focus();
                 return;
             }
@@ -976,7 +1055,7 @@ function search_person(id) {
             });
 
         }
-
+        st.canvas.translate(-st.canvas.translateOffsetX, -st.canvas.translateOffsetY);
 
     } else {
         alert(gettext("Emloyee's name field cannot be empty or is incorrect"));
@@ -998,8 +1077,9 @@ function reach_node() {
                 node_search_list = node_search_list.slice(0, node_search_list.length - 1);
                 found_node_id = node.id;
                 console.log(node.id);
-                st.onClick(node.id);
-                init_node(node);
+                // st.onClick(node.id);
+                // init_node(node);
+                clickOneNode(node, false);
                 return;
             }
         });
@@ -1012,17 +1092,18 @@ function reach_node() {
             // },200);
             auto_timeout_id = setInterval(function () {
                 if (!st.busy) {
-                    st.onClick(found_node_id);
-                    $('.symbol_loading').hide();
+                    // st.onClick(found_node_id);
+                    // $('.symbol_loading').hide();
+
+                    clickOneNode(st.graph.getNode(found_node_id), false);
                     $('.mango_search_input').focus();
+
                     clearInterval(auto_timeout_id);
                 }
-
             }, 50);
             // st.onClick(found_node_id);
             // st.refresh();
         }
-
     }
 
 }

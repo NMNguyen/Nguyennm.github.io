@@ -77,7 +77,7 @@
      "[keyword var] [variable x] [operator =] [number 10]",
      "[variable x] [operator +=] [variable y] [operator +]",
      "  [atom Infinity]",
-     "[keyword debugger];");
+     "[keyword ];");
 
   MT("indent_if",
      "[keyword if] ([number 1])",
@@ -99,12 +99,12 @@
      "     [variable i] [operator <] [number 100];",
      "     [variable i][operator ++])",
      "  [variable doSomething]([variable i]);",
-     "[keyword debugger];");
+     "[keyword ];");
 
   MT("indent_c_style",
      "[keyword function] [variable foo]()",
      "{",
-     "  [keyword debugger];",
+     "  [keyword ];",
      "}");
 
   MT("indent_else",

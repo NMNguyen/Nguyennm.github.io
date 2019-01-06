@@ -503,9 +503,8 @@
 }
 
 .q-score {
+    color: #008b8b;
     font-weight: 600;
-    font-size: 40px;
-    color: #337ab7;
 }
 
 #kpiscore-avg-help {
@@ -840,18 +839,18 @@ div#unique-content {
 
 /* kpi_snapshot.html*/
 .user-avatar {
-    text-align:center;
-    background-position: unset;
-    background-size: unset;
-    padding-top: unset;
-}
-.user-avatar>img{
-    width:70px;
-    height:70px;
-    object-fit: cover;
-}
+        text-align:center;
+        background-position: unset;
+        background-size: unset;
+        padding-top: unset;
+    }
+    .user-avatar>img{
+        width:70px;
+        height:70px;
+        object-fit: cover;
+    }
 
-/* end kpi_snapshot.html*/
+    /* end kpi_snapshot.html*/
 
 
 /*kpi_editor_toolbar_top.html*/

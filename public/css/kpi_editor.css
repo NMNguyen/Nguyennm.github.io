@@ -10,6 +10,8 @@
     font-weight: bold;
 }
 
+
+
 .kpi-rating {
     /*margin-left: 20px;*/
     min-width: 130px;
@@ -115,6 +117,7 @@ span.badge {
 
 .tooltiptext {
     display: none;
+    white-space: pre-wrap;
 }
 
 .required_class {
@@ -900,7 +903,6 @@ ul#content-nav > li.active[data-href="#tab-other"] ~ li.nav-color-style {
     text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
     -ms-text-overflow: ellipsis;
-    overflow-wrap: break-word;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -1450,7 +1452,7 @@ ul.success {
 .kpi_left_menu {
     position: absolute;
     bottom: -30px;
-    z-index: 100;
+    z-index: 10;
     background: #f9f9f9;
     padding-right: 5px;
     font-size: 12px;
@@ -1465,6 +1467,22 @@ ul.success {
     word-break: break-all;
 }
 .observing_display {
+}
+.kpi-table .operator-kpi, .kpi-table .operator-kpi:hover,
+.kpi-table .operator-kpi:active, .kpi-table .operator-kpi:focus {
+    display: inline-block;
+    border:none;
+    background: none;
+    box-shadow: none;
+    padding: 3px 6px;
+    height: 24px;
+}
+.kpi-table .group-btn-small {
+    text-align: center;
+}
+.kpi-table .group-btn-small button {
+    padding: 2px 6px;
+    font-size: 12px;
 }
 .row-1{
     float:left;
@@ -1491,7 +1509,9 @@ ul.success {
 }
 
 .width35 {
-    width: 50px !important;
+    /*width: 50px !important;*/
+    /*use percent to fix bug in firefox*/
+    width: 5% !important;
 }
 
 .group-header {
@@ -1505,7 +1525,7 @@ ul.success {
     color: #008b8b;
     background-color: #e4e4e4;
     border-bottom: 1px solid #fff;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 }
 
 .group-header #hide {
@@ -1542,7 +1562,7 @@ ul.success {
     display: block;
 }
 
-.kpi-expand-item-row div.col-xs-4:first-child {
+.kpi-expand-item-row div.col-xs-4.col-label {
     font-weight: bold;
     display: table;
     padding-left: 0px;
@@ -1742,6 +1762,9 @@ ul.success {
 }
 
 .kpi-table .year-target.current-target .borderless {
+    border: solid 2px #f5a623;
+}
+.kpi-table input.current-target {
     border: solid 2px #f5a623;
 }
 
@@ -2006,6 +2029,19 @@ span.comment-sign.toggle-auto:hover {
 .text-left, .table-per-result.table-bordered tbody tr td.text-left{
     text-align: left!important;
 }
+.table-per-result.table-bordered tbody tr .extrascore{
+    color: darkcyan;
+}
+.table-per-result.table-bordered tbody tr .extrascore img{
+    width:15px;
+    vertical-align: top;
+}
+.table-per-result.table-bordered tbody tr td  span.minus_score{
+    color:#7ed321;
+}
+.table-per-result.table-bordered tbody tr td  span.plus_score{
+    color:#d9534f;
+}
 
 .com-name{
     font-size: 16px;
@@ -2187,7 +2223,6 @@ span.bonus-score {
 
 .toolbar .toolbar-right {
     position: relative;
-    text-align: right;
     float: right;
     margin-left: 10px;
 }
@@ -2448,6 +2483,15 @@ span.bonus-score {
     border-color: #f27577;
 }
 
+.other .bsc-category-title{
+    background-color: #929da3;
+}
+
+.other .bsc-category-title .category-weight {
+    color: #929da3;
+    border-color: #929da3;
+}
+
 .kpi-group {
     border: 1px solid #e4e4e4;
     min-height: 100px;
@@ -2665,6 +2709,9 @@ span.bonus-score {
 .bsc-category.learn-growth .kpi-group-title {
     background-color: #f27577;
 }
+.bsc-category.other .kpi-group-title {
+    background-color: #929da3;
+}
 
 .bsc-category .kpi-group-title .group-weight {
     white-space: nowrap;
@@ -2692,6 +2739,9 @@ span.bonus-score {
 
 .learn-growth .kpi-group-title {
     border: 1px solid #f27577;
+}
+.other .kpi-group-title {
+    border: 1px solid #d7dfe5;
 }
 
 .strategy-map-company {
@@ -4346,11 +4396,14 @@ button.close{
 .transparent-color{
     background: transparent;
 }
+#modal-order-quarter-kpi .modal-body table{
+   text-align: left;
+}
 #modal-order-quarter-kpi .modal-body .table-size{
     width: 100%;
 }
 #modal-order-quarter-kpi .modal-body .table-size .format-col{
-    font-weight: bold
+    font-weight: bold;
 }
 #search_user{
     height:40px;
@@ -4358,6 +4411,9 @@ button.close{
     box-shadow:none;
     border-radius:3px;
     margin-right:-15px;
+}
+#edit-all-weight-modal tbody{
+    border:none;
 }
 #edit-all-weight-modal .modal-header .title{
     font-size:20px;
@@ -4382,6 +4438,9 @@ button.close{
 }
 #edit-all-weight-modal .modal-content .modal-footer .btn-save{
     padding:5px 10px;
+}
+#edit-all-weight-modal .modal-content .modal-footer .btn-save:focus{
+    color:white;
 }
 #list-kpi{
     border-collapse: collapse;
@@ -5295,14 +5354,14 @@ button.close{
 .add-kpi{
     margin-top: 5px;
 }
-#exscore-select-control{
+#exscore-select-control {
     background: darkcyan;
     color: white;
     min-width: 85px;
     height: 30px;
     margin-left: 20px;
     border: 1px solid aliceblue;
-
+}
 .warning-del-card .el-message-box{
     width: 465px;
 }
@@ -5346,3 +5405,4 @@ button.close{
     color: #008b8b!important;
     vertical-align: unset!important;
 }
+

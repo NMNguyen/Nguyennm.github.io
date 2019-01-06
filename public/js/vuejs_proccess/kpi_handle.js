@@ -37,13 +37,6 @@ $('#file-upload-action-plan-input').change(function() {
 
 });
 
-
-
-$("#evidence-modal").on("hidden.bs.modal", function(){
-    $('#file-upload').val('');
-    that.filename='';
-    $('#e-content').val('');
-});
 $("#e-content").on("input", function(){
     var maxlength = parseInt($("#e-content").attr("maxlength"));
     if ($("#e-content").val().length>=maxlength)  {

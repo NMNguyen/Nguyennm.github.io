@@ -86,6 +86,8 @@
     -ms-animation-delay: .72s;
 }
 
+
+
 /* This is the default Tooltipster theme (feel free to modify or duplicate and create multiple themes!): */
 .tooltipster-default {
     border-radius: 5px;
@@ -1126,7 +1128,7 @@ div.btn-wrapper .btn {
 #container {
     background-color: #FFF;
     border-top: 1px solid transparent;
-/ / overflow: overlay;
+    /*overflow: overlay;*/
 }
 
 #header.navbar-inverse .navbar-nav > li > a {
@@ -1188,7 +1190,7 @@ div.btn-wrapper .btn {
 
 .disabled {
     pointer-events: none;
-    cursor: not-allowed;
+    cursor: not-allowed!important;;
     opacity: 0.6;
 }
 
@@ -1738,7 +1740,7 @@ a:hover {
 
 .btn-cus-add {
     background-color: #008b8b;
-    color: #fff;
+    color: #fff!important;
     border: 1px solid #008b8b;
 }
 
@@ -2061,13 +2063,25 @@ a:hover {
     display: block;
 }
 
+
+/* To get footer work properly with position absolute, and others as well.*/
+
+#container {
+    min-height: 100vh;
+    position: relative;
+    padding-bottom: 100px;
+}
+
 .new-footer {
     font-family: 'Helvetica';
-    margin: 50px 0px 0px 0px;
     padding: 15px 15px 15px 60px;
     border-top: 1px solid #dedede;
     white-space: nowrap;
     font-weight: bold;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
 
 .new-footer #info-2 span:not(:nth-last-child(1)) {
@@ -2095,10 +2109,15 @@ a:hover {
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
+
     .new-footer {
         margin: 50px 0px 0px 0px;
         padding: 15px 15px 15px 15px;
         border-top: 1px solid #dedede;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
     }
 }
 
@@ -2885,7 +2904,7 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
 #target .export-excel-target{
     text-align: center;
     display: inline-block;
-   position: absolute;
+    position: absolute;
     top:70px;
     right: 0px;
     padding-right: 20px;
@@ -3065,6 +3084,7 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
 }
 #target .el-table .kpi-name{
     /*display: inline-block;*/
+    word-break: break-word;
 }
 #target .content-kpi-name{
     text-align: left;
@@ -3249,6 +3269,11 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
 .btn-system {
     height: 34px;
     line-height: 10px !important;
+    background-color: #00b0ad;
+    border-color: #00b0ad;
+}
+.padding-all-6 {
+    padding: 6px;
 }
 
 .color_default {
@@ -3264,3 +3289,114 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
     flex-wrap:wrap ;
     flex-grow: inherit;
 }
+
+/*v-tooltip css */
+.tooltip.vue-tooltip-theme {
+    display: block !important;
+    z-index: 10000;
+}
+
+.tooltip.vue-tooltip-theme .tooltip-inner {
+    background: #CAED9E;
+    color: #3F6219;
+    border-radius: 5px;
+    padding: 5px 10px 4px;
+    white-space: pre-wrap;
+    text-align: left;
+    max-width:500px;
+}
+
+.tooltip.vue-tooltip-theme .tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+    border-color: rgb(202, 237, 158);
+    z-index: 1;
+}
+
+.tooltip.vue-tooltip-theme[x-placement^="top"] {
+    margin-bottom: 5px;
+}
+
+.tooltip.vue-tooltip-theme[x-placement^="top"] .tooltip-arrow {
+    border-width: 5px 5px 0 5px;
+    border-left-color: transparent !important;
+    border-right-color: transparent !important;
+    border-bottom-color: transparent !important;
+    bottom: -5px;
+    left: calc(50% - 5px);
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.tooltip.vue-tooltip-theme[x-placement^="bottom"] {
+    margin-top: 5px;
+}
+
+.tooltip.vue-tooltip-theme[x-placement^="bottom"] .tooltip-arrow {
+    border-width: 0 5px 5px 5px;
+    border-left-color: transparent !important;
+    border-right-color: transparent !important;
+    border-top-color: transparent !important;
+    top: -5px;
+    left: calc(50% - 5px);
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.tooltip.vue-tooltip-theme[x-placement^="right"] {
+    margin-left: 5px;
+}
+
+.tooltip.vue-tooltip-theme[x-placement^="right"] .tooltip-arrow {
+    border-width: 5px 5px 5px 0;
+    border-left-color: transparent !important;
+    border-top-color: transparent !important;
+    border-bottom-color: transparent !important;
+    left: -5px;
+    top: calc(50% - 5px);
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.tooltip.vue-tooltip-theme[x-placement^="left"] {
+    margin-right: 5px;
+}
+
+.tooltip.vue-tooltip-theme[x-placement^="left"] .tooltip-arrow {
+    border-width: 5px 0 5px 5px;
+    border-top-color: transparent !important;
+    border-right-color: transparent !important;
+    border-bottom-color: transparent !important;
+    right: -5px;
+    top: calc(50% - 5px);
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.tooltip.popover .popover-inner {
+    background: #f9f9f9;
+    color: black;
+    padding: 24px;
+    border-radius: 5px;
+    box-shadow: 0 5px 30px rgba(black, .1);
+}
+
+.tooltip.popover .popover-arrow {
+    border-color: #f9f9f9;
+}
+
+.tooltip.vue-tooltip-theme[aria-hidden='true'] {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .15s, visibility .15s;
+}
+
+.tooltip.vue-tooltip-theme[aria-hidden='false'] {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity .15s;
+}
+/* end v-tooltip css */

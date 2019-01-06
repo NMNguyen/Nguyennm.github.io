@@ -31,6 +31,7 @@
 }
 .detail-task .task-title .title{
     word-wrap: break-word;
+    white-space: pre-line;
 }
 .detail-task .task-subtitle,.detail-task .subtitle, .subtitle{
     width: auto;
@@ -130,10 +131,6 @@
 }
 
 /* detail-display-block */
-.detail-display-block .dropdown-menu{
-    min-width: 165px;
-    padding: 20px;
-}
 
 .detail-display-block .btn-box-radio{
     width: 120px;

@@ -38,7 +38,7 @@
  }
 
  #content {
-	margin-top: 60px !important;
+	/*margin-top: 60px !important;*/
 }
 .img_ava {
     opacity: 1;
@@ -380,6 +380,7 @@ info-functions a:last-child {
 .personal-info p {
 	margin-bottom: 5px;
 }
+
 .people_box {
 	border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -1397,4 +1398,15 @@ label.error{
     object-fit: cover;
     height:50px;
     width:50px;
+}
+#tabs-people >li.active>a, #tabs-people>li.active>a:hover, #tabs-people>li.active>a:focus{
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #008b8b;
+    border: 1px solid transparent;
+}
+#tabs-people >li > a{
+    font-size: 16px;
+    font-weight: bolder;
+    color: #666666;
 }
