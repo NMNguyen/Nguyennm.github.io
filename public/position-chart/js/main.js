@@ -1,3 +1,13 @@
+/*
+  quocduan note: this method is the fucking trick,
+*  so, we should check later for the better way to archive what we want
+* */
+
+window.parseFloatWeight = function(weight_percent){
+    return $.isNumeric(weight_percent) ? Decimal.mul(parseFloat(weight_percent), 100).toNumber() : NaN;
+};
+
+
 function format(number) {
 
     var decimalSeparator = ".";
@@ -268,6 +278,31 @@ var importKpiPosition = new Vue({
                 }
             });
         },
+        renderHeaderButton(h, {column}) {
+            var self = this
+            var result = h('el-button', {
+                props: {
+                    size: 'mini',
+                    type: 'primary',
+                    icon: 'el-icon-plus'
+                },
+                style: 'font-weight: normal;padding: 2px 4px',
+                on: {
+                    click(e) {
+                        if (confirm("Bạn muốn thêm tất cả KPI?")) {
+                            self.kpis.forEach(function (kpi, index) {
+                                if (kpi.msg && kpi.msg.length == 0 && $(`#add_kpi${index}`).length > 0) {
+                                    setTimeout(function (index) {
+                                        self.add_kpi(index)
+                                    }, 200 + index * 150, index);
+                                }
+                            })
+                        }
+                    }
+                }
+            })
+            return h('el-tooltip', {props: {content: "Thêm tất cả", placement: "top"}}, [result])
+        },
         getPositionKpiId: function (position_id) {
             var that = this
             cloudjetRequest.ajax({
@@ -498,11 +533,11 @@ var importKpiPosition = new Vue({
             } catch (err) {
                  measurement = '';
             }
-            var datasource = '';
+            var data_source = '';
             try {
-                 datasource = String(sheet["F" + row].v).trim();
+                 data_source = String(sheet["F" + row].v).trim();
             } catch (err) {
-                 datasource = '';
+                 data_source = '';
             }
             var method = '';
             try {
@@ -636,6 +671,7 @@ var importKpiPosition = new Vue({
                 "kpi": kpi,
                 "unit": unit,
                 "measurement": measurement,
+                "data_source": data_source,
                 "score_calculation_type": method,
                 "operator": operator,
                 "t1": $.isNumeric(t1) ?parseFloat(t1): t1,
@@ -655,7 +691,7 @@ var importKpiPosition = new Vue({
                 "q3": $.isNumeric(q3) ?parseFloat(q3): q3,
                 "q4": $.isNumeric(q4) ?parseFloat(q4): q4,
                 'year': $.isNumeric(year) ?parseFloat(year): year,
-                "weight": $.isNumeric(weight) ?parseFloat(weight)*100: weight,
+                "weight": parseFloatWeight(weight),
                 "check_error_year": false,
                 "check_error_quarter_1": false,
                 "check_error_quarter_2": false,
@@ -1202,13 +1238,6 @@ var importKpiPosition = new Vue({
                     });
                 }
 
-        },
-        add_all_kpi: function () {
-            this.kpis.forEach(function (kpi, index) {
-                if (kpi.status != 'success') {
-                    $('#add_kpi' + index).click();
-                }
-            })
         },
     },
     created: function () {
