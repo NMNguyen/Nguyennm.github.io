@@ -1376,3 +1376,129 @@
   font-size: 14px;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[data-v-4b902e73] .user__avatar{
+    -o-object-fit: cover;
+       object-fit: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+[data-v-4b902e73] .user__display_name{
+    color: #ababab;
+    font-size: 12px;
+}
+[data-v-4b902e73] .comment{
+    word-wrap: break-word;
+    max-width: 100%;
+    background-color: #e1ebf4;
+    padding: 10px 15px 10px 15px;
+    border-radius: 4px;
+    margin-left: 15%;
+    color: #337ab7;
+    display: inline-block;
+    float: right;
+    position: relative;
+}
+[data-v-4b902e73] .comment:after{
+    content: ' ';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: auto;
+    right: -10px;
+    top: 0px;
+    bottom: auto;
+    border: 15px solid;
+    border-color: #e1ebf4 transparent transparent transparent;
+}
+[data-v-4b902e73] .comment__content{
+    white-space: pre;
+}
+[data-v-4b902e73] .comment__created_at{
+    color: #ababab;
+    font-size: 10px;
+}
+[data-v-4b902e73] .el-col-20{
+    padding-right:5px!important;
+}
+[data-v-4b902e73] .el-col-4{
+    padding-left:0px!important;
+}
+[data-v-4b902e73] .el-button--text{
+    padding: 0;
+}
+[data-v-4b902e73] .el-dialog__body{
+    padding:10px 20px;
+    padding-bottom:0px;
+}
+[data-v-4b902e73] .el-button--primary{
+    /*height:54px;*/
+}
+[data-v-4b902e73] .el-row{
+    margin-top:10px;
+}
+[data-v-4b902e73] .el-tabs__content{
+    height:345px;
+    overflow-y:scroll!important;
+}
+[data-v-4b902e73] .el-textarea__inner{
+    min-height: 36px !important;
+}
+
