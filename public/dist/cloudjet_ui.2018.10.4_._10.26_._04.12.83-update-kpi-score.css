@@ -334,6 +334,12 @@
 }
 
 
+[data-v-fc2cb0bc] .button-open-modal{
+    cursor: pointer;
+}
+[data-v-fc2cb0bc] .el-dialog{
+    text-align: left;
+}
 [data-v-fc2cb0bc] .el-dialog__body{
     padding:15px 20px;
 }
@@ -353,6 +359,7 @@
 }
 [data-v-fc2cb0bc] .el-table .cell{
     color:#333;
+    text-align: left;
     word-break: break-word;
 }
 [data-v-fc2cb0bc] .custom-column-button-remove{

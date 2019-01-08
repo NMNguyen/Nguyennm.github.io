@@ -2984,6 +2984,10 @@ var v = new Vue({
         });
 
         this.$on('reload-backup-kpi-list', function (){
+            that.$set(that.employee_performance, 'month_1_backup', false);
+            that.$set(that.employee_performance, 'month_2_backup', false);
+            that.$set(that.employee_performance, 'month_3_backup', false);
+
             that.get_backups_list();
         })
 
