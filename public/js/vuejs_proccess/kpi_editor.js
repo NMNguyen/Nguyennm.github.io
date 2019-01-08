@@ -2982,7 +2982,6 @@ var v = new Vue({
         this.$on('move-kpi-to-new-group-kpi', function (data_kpi) {
             that.move_kpi_to_new_group_kpi(data_kpi);
         });
-
         this.$on('reload-backup-kpi-list', function (){
             that.$set(that.employee_performance, 'month_1_backup', false);
             that.$set(that.employee_performance, 'month_2_backup', false);

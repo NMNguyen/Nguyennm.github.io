@@ -357,11 +357,13 @@
     font-weight:bold!important;
     color:#333;
 }
+[data-v-fc2cb0bc] .el-table tbody .cell{
+    font-weight: normal;
+}
 [data-v-fc2cb0bc] .el-table .cell{
     color:#333;
     text-align: left;
     word-break: break-word;
-    font-weight: normal;
 }
 [data-v-fc2cb0bc] .custom-column-button-remove{
     text-align: center;
