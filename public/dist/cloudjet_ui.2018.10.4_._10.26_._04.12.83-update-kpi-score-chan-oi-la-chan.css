@@ -334,6 +334,11 @@
 }
 
 
+[data-v-fc2cb0bc] .el-button--danger:focus{
+    color: #fff;
+    background-color: #f56c6c;
+    border-color: #f56c6c;
+}
 [data-v-fc2cb0bc] .button-open-modal{
     cursor: pointer;
 }
