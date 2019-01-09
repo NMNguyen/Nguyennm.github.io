@@ -2982,13 +2982,6 @@ var v = new Vue({
         this.$on('move-kpi-to-new-group-kpi', function (data_kpi) {
             that.move_kpi_to_new_group_kpi(data_kpi);
         });
-        this.$on('reload-backup-kpi-list', function (){
-            that.$set(that.employee_performance, 'month_1_backup', false);
-            that.$set(that.employee_performance, 'month_2_backup', false);
-            that.$set(that.employee_performance, 'month_3_backup', false);
-
-            that.get_backups_list();
-        })
 
     },
     methods: {
@@ -5020,21 +5013,21 @@ var v = new Vue({
             this.get_backups_list(true);
         },
         get_backups_list: function (showModal) {
-            var that = this;
+            self = this;
             if (showModal) $('#lb-load-backups-list').show();
             cloudjetRequest.ajax({
                 type: 'get',
-                url: '/api/v2/user/backup_kpis/' + that.user_id + '/' + that.current_quarter.id,
+                url: '/api/v2/user/backup_kpis/' + self.user_id + '/' + self.current_quarter.id,
                 success: function (data) {
                     $('#lb-load-backups-list').hide();
                     if ($.isArray(data)) {
-                        that.backups_list = data;
+                        self.backups_list = data;
                         data.forEach(function (_data) {
                             // self.$set(self.$data, 'employee_performance.month_' + _data.month + '_backup', true);
-                            that.$set(that.employee_performance, 'month_' + _data.month + '_backup', true);
+                            self.$set(self.employee_performance, 'month_' + _data.month + '_backup', true);
 
-                            if (that.backup_month.indexOf(_data.month) == -1) {
-                                that.backup_month.push(_data.month);
+                            if (self.backup_month.indexOf(_data.month) == -1) {
+                                self.backup_month.push(_data.month);
                             }
                         })
                     }
