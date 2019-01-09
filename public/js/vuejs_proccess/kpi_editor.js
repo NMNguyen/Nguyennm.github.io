@@ -1727,7 +1727,6 @@ Vue.component('kpi-group', {
         });
 
         this.$on('child_kpi_score_updated',function(){
-
             that.$root.get_current_employee_performance();
         });
 
@@ -2982,12 +2981,15 @@ var v = new Vue({
         this.$on('move-kpi-to-new-group-kpi', function (data_kpi) {
             that.move_kpi_to_new_group_kpi(data_kpi);
         });
-        this.$on('reload-backup-kpi-list', function (){
+        this.$on('reload-backup-kpi-list', function (is_remove=false){
             that.$set(that.employee_performance, 'month_1_backup', false);
             that.$set(that.employee_performance, 'month_2_backup', false);
             that.$set(that.employee_performance, 'month_3_backup', false);
-
-            that.get_backups_list();
+            if (is_remove){
+                that.get_current_employee_performance();
+            }else{
+                that.get_backups_list();
+            }
         })
 
     },
@@ -4830,7 +4832,7 @@ var v = new Vue({
                 success: function (res) {
                     // that.$set(that.$data,  'employee_performance', res);
                     that.employee_performance=res;
-                    that.get_backups_list(true);
+                    that.get_backups_list();
                     // console.log('jahskjfkjsdaasdh');
                 },
                 error: function (res) {
@@ -5017,16 +5019,14 @@ var v = new Vue({
         show_backup_kpi: function () {
             $('#kpiscore-backup-help').modal('hide');
             $('#backup-kpi-modal').modal();
-            this.get_backups_list(true);
+            this.get_backups_list();
         },
-        get_backups_list: function (showModal) {
+        get_backups_list: function () {
             var that = this;
-            if (showModal) $('#lb-load-backups-list').show();
             cloudjetRequest.ajax({
                 type: 'get',
                 url: '/api/v2/user/backup_kpis/' + that.user_id + '/' + that.quarter_by_id.id,
                 success: function (data) {
-                    $('#lb-load-backups-list').hide();
                     if ($.isArray(data)) {
                         that.backups_list = data;
                         data.forEach(function (_data) {
@@ -5213,7 +5213,7 @@ var v = new Vue({
                             self.backup_month.splice(self.backup_month.indexOf(backup_kpi.month), 1);
                             self.$set(self.employee_performance, 'month_' + backup_kpi.month + '_backup', false);
                             self.get_current_employee_performance();
-                            self.get_backups_list(false);
+                            self.get_backups_list();
                         }
                     }
                 })
