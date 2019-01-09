@@ -5024,7 +5024,7 @@ var v = new Vue({
             if (showModal) $('#lb-load-backups-list').show();
             cloudjetRequest.ajax({
                 type: 'get',
-                url: '/api/v2/user/backup_kpis/' + that.user_id + '/' + that.current_quarter.id,
+                url: '/api/v2/user/backup_kpis/' + that.user_id + '/' + that.quarter_by_id.id,
                 success: function (data) {
                     $('#lb-load-backups-list').hide();
                     if ($.isArray(data)) {
