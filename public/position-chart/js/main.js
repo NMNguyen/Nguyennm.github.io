@@ -388,6 +388,7 @@ var importKpiPosition = new Vue({
             var that = this;
             that.kpis.length = 0;
             that.check_file = true;
+            that.is_error = false;
             var files = e.target.files || e.dataTransfer.files;
             var i, f;
             for (i = 0, f = files[i]; i != files.length; ++i) {
@@ -508,14 +509,8 @@ var importKpiPosition = new Vue({
             }
 
             if (kpi.trim().length != 0 && (goal == undefined || goal == '')) {
-
-                if (last_goal == "") {
-                    throw "KPI Goal is missing";
-                }
-                else {
-                    goal = last_goal;
-                    check_goal = "Check goal"
-                }
+                goal = last_goal;
+                check_goal = "Check goal"
             } else {
                 last_goal = goal;
             }
@@ -691,7 +686,7 @@ var importKpiPosition = new Vue({
                 "q3": $.isNumeric(q3) ?parseFloat(q3): q3,
                 "q4": $.isNumeric(q4) ?parseFloat(q4): q4,
                 'year': $.isNumeric(year) ?parseFloat(year): year,
-                "weight": parseFloatWeight(weight),
+                "weight": $.isNumeric(weight)?parseFloatWeight(weight):weight,
                 "check_error_year": false,
                 "check_error_quarter_1": false,
                 "check_error_quarter_2": false,
@@ -970,14 +965,14 @@ var importKpiPosition = new Vue({
             if (self.enable_allocation_target){
                 kpi = self.validateTargetScoreFollowAllocationTarget(kpi)
             }
-            if (isNaN(parseFloat(kpi.weight)) && kpi.weight) {
+            if (isNaN(kpi.weight) && kpi.weight) {
                 kpi.validated = false;
                 kpi.msg.push({
                     'field_name': 'Trọng số',
                     'message': ' không đúng định dạng'
                 });
             }
-            if (parseFloat(kpi.weight) <= 0) {
+            if (!isNaN(kpi.weight) && kpi.weight != '' && parseFloatWeight(kpi.weight) <= 0) {
                 kpi.validated = false;
                 kpi.msg.push({
                     'field_name': 'Trọng số',
