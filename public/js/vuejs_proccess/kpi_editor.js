@@ -1931,27 +1931,14 @@ Vue.component('kpi-progressbar', {
             // Truong hop user hoac quan ly da xac nhan thi khong cho phep chinh sua
             this.check_disable_result();
             if (this.is_user_system) return false;
-
-            // Actor: Subodinates View KPI Editor of Parent => False
-            // Actor_ID === Manager_ID
-            var is_manager = COMMON.UserId .toString() === COMMON.ManagerIdOfVieweedUser.toString();
-            var is_current_user = COMMON.UserId.toString() === COMMON.UserViewedId.toString();
-
-            // La user hien tai, duoc phep xoa sua evidence
-            // Ko phai user hien tai, ko duoc phep xoa sua tru TH cap tren
-
+            var is_manager = COMMON.UserId != COMMON.UserViewedId;
             var current_month_locked = !(this.can_edit_current_month(current_month, this.organization.monthly_review_lock));
-
-            if (!is_current_user && !is_manager){
-                return true;
-            }else{
-                if (is_manager) { // if current Login user is parent of user viewed
-                    return (!this.organization.allow_manager_review || current_month_locked) || this.confirm_complete; // manager can edit if enable_to_edit not pass
-                } else {
-                    return (!this.organization.allow_employee_review || current_month_locked) || this.confirm_complete; // employee can edit(review) kpi only if not pass self_review_date
-                }
+            if (is_manager){ // if current Login user is parent of user viewed
+                return ( !this.organization.allow_manager_review || current_month_locked ) || this.confirm_complete; // manager can edit if enable_to_edit not pass
             }
-
+            else {
+                return ( !this.organization.allow_employee_review || current_month_locked ) || this.confirm_complete; // employee can edit(review) kpi only if not pass self_review_date
+            }
         },
 
         check_quarter_plan: function (kpi) {
