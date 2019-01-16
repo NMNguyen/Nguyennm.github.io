@@ -2703,7 +2703,18 @@ var v = new Vue({
         organization:[],
         fetched_data_exscore_user:[],
         user_smap: {},
-        selected_group_kpi: {}
+        selected_kpi_group: {
+            "name": "",
+            "category": "financial",
+            "map": '',
+            "group": false,
+            "kpis": []
+        },
+        kpi_data_to_create:{
+            name: ''
+        },
+        // allow_change_or_create_kpi_group: true,
+
     },
     validators: {
         numeric: { // `numeric` custom validator local registration
@@ -2974,17 +2985,53 @@ var v = new Vue({
             that.remove_group_kpi(data_group);
         });
         // nguyen 3
-        this.$on('set-current-group-kpi-to-add-kpi', function (data_group) {
-            that.selected_group_kpi = data_group;
-            that.$refs.addGroupAndKpi.show_modal_add_kpi();
+        this.$on('add-kpi-to-kpi-group-request', function (data_group) {
+            that.selected_kpi_group = data_group;
+            that.kpi_data_to_create= {
+                name: ''
+            };
+            // that.allow_change_or_create_kpi_group = false;
+            that.show_modal_add_kpi();
+
         });
         // nguyen 4
         this.$on('move-kpi-to-new-group-kpi', function (data_kpi) {
             that.move_kpi_to_new_group_kpi(data_kpi);
         });
 
+
+        // this.$on('set-current-group-kpi-to-add-kpi', function (data_group) {
+        //     that.selected_kpi_group = data_group;
+        //     that.$refs.addGroupAndKpi.show_modal_add_kpi();
+        // });
+        this.$on('add_new_kpi_from_kpi_lib', function(kpi_data_from_kpi_lib){
+            that.selected_kpi_group = {
+                "name": kpi_data_from_kpi_lib.objective,
+                "category": kpi_data_from_kpi_lib.category,
+
+            };
+            that.kpi_data_to_create = JSON.parse(JSON.stringify(kpi_data_from_kpi_lib));
+        });
+
+        this.$on('modal-add-group-and-kpi-closed', function(reset_modal=false){
+            if (reset_modal === true){
+                that.selected_kpi_group = {
+                    "name": '',
+                    "category": 'financial',
+
+                };
+                that.kpi_data_to_create = {
+                    name:''
+                };
+            }
+        });
+
     },
     methods: {
+        show_modal_add_kpi: function(){
+            this.$refs.addGroupAndKpi.show_modal_add_kpi();
+        },
+
         change_parent_kpis_weight: function(parent_kpis_with_weight_changed=[]){
             let that = this;
             let data = {};
