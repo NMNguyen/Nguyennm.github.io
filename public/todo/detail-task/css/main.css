@@ -91,8 +91,7 @@
 
 /* end detail_task */
 .text-container{
-    white-space: pre-wrap;
-    word-break: break-word;
+    white-space: pre-wrap;.
 }
 .text-title{
     line-height: 15px;
@@ -130,9 +129,7 @@
 .color-danger{
     color: #d9534f;
 }
-.color-success{
-    color: #008b8b;
-}
+
 /* detail-display-block */
 
 .detail-display-block .btn-box-radio{
@@ -250,11 +247,6 @@
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
-}
-
-.messenger .title-input-alert{
-    font-size: 12px;
-    color: #ababab;
 }
 /* end .messger */
 /* message-app */
