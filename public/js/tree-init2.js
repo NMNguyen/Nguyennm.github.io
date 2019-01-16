@@ -2,15 +2,15 @@ var st;
 var node_id = null;
 
 function init_node(node) {
-	if (node_id) {
+    if (node_id) {
         $('#' + node_id).removeClass("focused");
-        $("#btn-edit-position-tree-"+node_id).hide();
-        $("#btn-add-position-tree-"+node_id).hide();
+        $("#btn-edit-position-tree-" + node_id).hide();
+        $("#btn-add-position-tree-" + node_id).hide();
     }
-	node_id = node.id;
+    node_id = node.id;
     $("#" + node.id).addClass("focused");
-    $("#btn-edit-position-tree-"+node.id).show();
-    $("#btn-add-position-tree-"+node.id).show();
+    $("#btn-edit-position-tree-" + node.id).show();
+    $("#btn-add-position-tree-" + node.id).show();
     PositionApp.init_node(node);
 }
 
@@ -20,55 +20,54 @@ function get_managers_for_new_person(node) {
     for (i in nodes) {
         obj = nodes[i];
         if (obj._depth <= node._depth) {
-        	result.push({
-        		id: obj.data.id,
-        		name: obj.data.name
-        	});
+            result.push({
+                id: obj.data.id,
+                name: obj.data.name
+            });
         }
     }
     return result;
 }
 
 function create_inner_html(node) {
-	var name = node.name.replace(/^(.{15}[^\s]*).*/, "$1");
-	if (node.name.length > 15 && node.name.length != name.length) {
-		name += "...";
-	}
-	var html = `
+    var name = node.name.replace(/^(.{15}[^\s]*).*/, "$1");
+    if (node.name.length > 15 && node.name.length != name.length) {
+        name += "...";
+    }
+    var html = `
     	<div class="p-node lv2">
     	<div data-original-title="${node.name}" onclick="init_form_by_node_id('${node.id}');" class="title" id="title-${node.id}">${name}</div>
     	<hr class='chart-line'/>
     	<div class="content">`;
-	
-	html += `<a class="pos-left" onclick="init_form_by_node_id('${node.id}');"><i class="material-icons btn-position-tree edit-position-tree" title="${gettext("Edit position")}" data-toggle="modal" data-target="#edit-position-modal">edit</i></a>`;
-	
 
-	if (node.data.people.length > 0) {
-	    if(node.getSubnodes().length!=1){
-		html += `<img class="img-circle content-img" style="" src="${node.data.people[0].avatar_url}">`;
+    html += `<a class="pos-left" onclick="init_form_by_node_id('${node.id}');"><i class="material-icons btn-position-tree edit-position-tree" title="${gettext("Edit position")}" data-toggle="modal" data-target="#edit-position-modal">edit</i></a>`;
+
+
+    if (node.data.people.length > 0) {
+        if (node.getSubnodes().length != 1) {
+            html += `<img class="img-circle content-img" style="" src="${node.data.people[0].avatar_url}">`;
+        } else {
+            html += `<img class="img-circle content-img" src="${node.data.people[0].avatar_url}">`;
         }
-        else{
-		html += `<img class="img-circle content-img" src="${node.data.people[0].avatar_url}">`;
-		}
-	}
-	if (node.data.people.length > 1) {
-		html += `<img class="img-circle content-img-2" src="${node.data.people[1].avatar_url}">`;
-	}
-	if (node.data.people.length > 2) {
-		html += `<div class="content-img-3">+${node.data.people.length - 2}</div>`;
-	}
-	if (!(node.getSubnodes().length == 1 && node.data.people.length > 1)) {
-		html += `<a class="pos-right" onclick="show_popup_add_position('${node.id}')"><i title="${gettext("Add position")}" class="material-icons btn-position-tree add-position-tree" style="float:right;margin-right:5px;">add</i></a>`;
     }
-	html +=	`</div></div>`;
-	$('.title').tooltip();
+    if (node.data.people.length > 1) {
+        html += `<img class="img-circle content-img-2" src="${node.data.people[1].avatar_url}">`;
+    }
+    if (node.data.people.length > 2) {
+        html += `<div class="content-img-3">+${node.data.people.length - 2}</div>`;
+    }
+    if (!(node.getSubnodes().length == 1 && node.data.people.length > 1)) {
+        html += `<a class="pos-right" onclick="show_popup_add_position('${node.id}')"><i title="${gettext("Add position")}" class="material-icons btn-position-tree add-position-tree" style="float:right;margin-right:5px;">add</i></a>`;
+    }
+    html += `</div></div>`;
+    $('.title').tooltip();
 
-	setTimeout(function () {
-		$('.add-position-tree').tooltip({container: 'body'});
+    setTimeout(function () {
+        $('.add-position-tree').tooltip({container: 'body'});
         $('.edit-position-tree').tooltip({container: 'body'});
-	},500);
+    }, 500);
 
-	return html;
+    return html;
 
 }
 
@@ -176,15 +175,15 @@ function init(data) {
             enable: true,
             onClick: function (node, eventInfo, e) {
                 if (node) {
-                	PositionApp.selected_node = node;
-                	init_node(node);
+                    PositionApp.selected_node = node;
+                    init_node(node);
                 }
             }
         },
         onBeforeCompute: function (node) {
-        	if (node) {
-        		console.log("loading " + node.name);
-        	}
+            if (node) {
+                console.log("loading " + node.name);
+            }
         },
         onAfterCompute: function () {
             console.log("done");
@@ -214,7 +213,7 @@ function init(data) {
             style.textAlign = 'center';
             style.paddingTop = '3px';
             setTimeout(function () {
-            	$('.title').tooltip();
+                $('.title').tooltip();
             }, 1000);
         },
 
@@ -228,8 +227,7 @@ function init(data) {
             //root node and the selected node.
             if (node.selected) {
                 node.data.$color = "#fff";
-            }
-            else {
+            } else {
                 delete node.data.$color;
                 //if the node belongs to the last plotted level
                 if (!node.anySubnode("exist")) {
@@ -254,15 +252,14 @@ function init(data) {
             if (adj.nodeFrom.selected && adj.nodeTo.selected) {
                 adj.data.$color = "#f00";
                 adj.data.$lineWidth = 3;
-            }
-            else {
+            } else {
                 delete adj.data.$color;
                 delete adj.data.$lineWidth;
             }
         }
     });
     if (data) {
-    	dataSource = data;
+        dataSource = data;
     }
     //load json data
     st.loadJSON(dataSource);
@@ -287,6 +284,7 @@ function init(data) {
         }
     };
 }
+
 var node_search_list = [];
 var auto_timeout_id = 0;
 
@@ -309,7 +307,7 @@ function adjust_node_ids() {
 
 }
 
-function search_position(id) {
+function search_position(id, mode = 'tree') {
 
     node_search_list = [];
 
@@ -318,40 +316,47 @@ function search_position(id) {
 
     if (name) {
         var found = false;
-        st.graph.eachNode(function (node) {
-            if (node.data.id == name) {
-                found = true;
-                st.onClick(node.id);
-                // neu ten ton trai tren cay co san, thi se click vao node do
-                init_node(node);
-                PositionApp.loading = false;
-                PositionApp.node_data = node.data;
-                return;
-            }
-        });
-        // if no node matched
-        // do get node line up, trigger existed node st.onClick(node.id)--> get node until reach searched node
-        if (!found) {
-            node_ids = [];
-            cloudjetRequest.ajax({
-                type: 'get',
-                async: false,
-                url: '/performance/position/node/?lineup=' + name,
-                success: function (res) {
-                    console.log(res)
-
-                    // node_ids=res.reverse();
-                    node_ids = res;
-                    //node_search_list = [1355, 1354, 1353, 99]
-                    node_search_list = res;
-                    node_search_list = adjust_node_ids(node_search_list);
-                    reach_node(node_search_list);
-                },
-                error: function () {
-                	PositionApp.loading = false;
+        if (mode === 'tree') {
+            // reset tree
+            $("#org-chart").html('');
+            init();
+        }
+        setTimeout(function () {
+            st.graph.eachNode(function (node) {
+                if (node.data.id == name) {
+                    found = true;
+                    st.onClick(node.id);
+                    // neu ten ton trai tren cay co san, thi se click vao node do
+                    //init_node(node);
+                    PositionApp.loading = false;
+                    PositionApp.node_data = node.data;
+                    return;
                 }
             });
-        }
+            // if no node matched
+            // do get node line up, trigger existed node st.onClick(node.id)--> get node until reach searched node
+            if (!found) {
+                node_ids = [];
+                cloudjetRequest.ajax({
+                    type: 'get',
+                    async: false,
+                    url: '/performance/position/node/?lineup=' + name,
+                    success: function (res) {
+                        console.log(res)
+
+                        // node_ids=res.reverse();
+                        node_ids = res;
+                        //node_search_list = [1355, 1354, 1353, 99]
+                        node_search_list = res;
+                        node_search_list = adjust_node_ids(node_search_list);
+                        reach_node(node_search_list);
+                    },
+                    error: function () {
+                        PositionApp.loading = false;
+                    }
+                });
+            }
+        }, 1000);
     } else {
         alert(gettext("Emloyee's name field cannot be empty or is incorrect"));
         $(".mango_search_input").focus();
@@ -371,7 +376,6 @@ function reach_node() {
                 console.log(node.id);
                 st.onClick(node.id);
                 init_node(node);
-                PositionApp.node_data = node.data;
                 return;
             }
         });
@@ -385,8 +389,7 @@ function reach_node() {
             auto_timeout_id = setInterval(function () {
                 if (!st.busy) {
                     st.onClick(found_node_id);
-                    init_node(node);
-                    PositionApp.node_data = node.data;
+                    init_node(st.graph.getNode(found_node_id));
                     PositionApp.loading = false;
                     clearInterval(auto_timeout_id);
                 }
@@ -396,6 +399,6 @@ function reach_node() {
             // st.refresh();
         }
     } else {
-    	PositionApp.loading = false;
+        PositionApp.loading = false;
     }
 }

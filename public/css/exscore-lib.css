@@ -15,7 +15,7 @@
 }
 #block-content .el-tabs.el-tabs--top{
     /*padding:10px 20px;*/
-    height: calc(100vh - 135px);
+    height: calc(100vh - 225px);
     background:white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.19);
 }
@@ -51,7 +51,7 @@
     width:71%;
 }
 #block-content .el-tabs__content{
-    height: calc(100vh - 210px);
+    height: calc(100vh - 300px);
     overflow-y: auto;
 }
 #exscore-lib .el-tabs__nav-wrap::after{

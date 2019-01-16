@@ -248,6 +248,22 @@ table.nocolor, table.nocolor tr, table.nocolor td {
     font-weight: bold;
     text-transform: uppercase;
 }
+#my-task .body-table .title-kpi-name{
+    color: #337ab7;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#my-task .body-table .title-kpi-name span{
+    display: block;
+}
+#my-task .body-table .title-kpi-name p {
+    color: #666;
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: none;
+    display: inline-block;
+}
 #my-task .option-list .radio-btn-task:checked + .label-status{
     color: #008b8b;
 }
@@ -324,6 +340,9 @@ table.nocolor, table.nocolor tr, table.nocolor td {
     color: #ababab;
     font-style: normal;
 }
+.task-infor .row-detail-task .task-description .date-created{
+    margin-top:-5px;
+}
 .task-infor .row-limit-date {
     padding-left: 5px;
     width: 17%;
@@ -351,12 +370,17 @@ table.nocolor, table.nocolor tr, table.nocolor td {
     font-size: 14px;
     font-weight: normal;
 }
+.task-infor .row-finish-date .date-early{
+    color: #008b8b;
+    font-size: 14px;
+    font-weight: normal;
+}
 .task-infor .row-finish-date .date-status{
     line-height: 8px;
 }
 .task-infor .row-finish-date .date-status .text{
-    color: #ababab;
-    font-size: 10px;
+    color: #666;
+    font-size: 12px;
     font-weight: normal;
 }
 .task-infor .row-icon-archive{
@@ -432,7 +456,6 @@ table.nocolor, table.nocolor tr, table.nocolor td {
     color: #ababab;
     font-weight: normal;
 }
-
 .create-new-task .input-select{
     background-color: white;
     padding-bottom: 0px;
@@ -827,8 +850,92 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 .cursor-no-drop{
     cursor: no-drop
 }
+.el-select-create-task-component .el-select-group .el-select-dropdown__item{
+    padding-left: 20px;
+    min-height: 50px;
+    line-height: 1px;
+}
+.el-select-create-task-component .el-select-group .todo-no-data {
+    padding-left: 20px !important;
+    min-height: 34px !important;
+    color: #999 !important;
+    line-height: 34px !important;
+    text-align: center;
+}
+.el-select-create-task-component .el-select-group .el-select-dropdown__item span{
+    font-size: 14px;
+    color: #333333;
+    font-weight: 600;
+    text-align: center;
+}
+.el-select-create-task-component .el-select-group .todo-no-data span{
+    font-size: 14px;
+    color: #999 !important;
+    font-weight: normal;
+}
+.el-select-create-task-component .el-select-group .el-select-dropdown__item p{
+    font-size: 12px;
+    color: #666666;
+}
+
+.el-select-create-task-component .el-select-group .el-select-dropdown__item.selected span{
+    color:#008b8b;
+}
+.el-select-create-task-component .el-select-group .el-select-dropdown__item.selected p{
+    color:#008b8b;
+    font-weight:normal;
+}
+.el-select-create-task-component .el-select-group__wrap:not(:last-of-type){
+    padding:0px;
+}
+.el-select-create-task-component .el-select-group__wrap:not(:last-of-type):after{
+    display:none;
+}
+
+#create-new-task .modal-body textarea{
+    border: solid 1px #ababab;
+}
+
+#create-new-task .modal-body textarea:focus{
+    border:solid 1px #008b8b;
+}
+#create-new-task .el-select .el-input .el-input__inner{
+    height:40px;
+}
+#create-new-task .bd-color-008b8b{
+    border:1px solid #008b8b;
+}
+#create-new-task .el-select{
+    width: 100%;
+}
+.qtip-dark.custom{
+	background:#333333!important;
+    height:40px;
+    min-width:170px;
+}
+.qtip-dark.custom .title-tooltip{
+	color:#ababab;
+}
+.qtip-dark.custom p{
+    margin-bottom:0px;
+}
+.qtip-dark.custom .result-tooltip{
+    color:white;
+}
+.qtip-dark.custom .block-1{
+    width:70px;
+    float:left;
+}
+.qtip-dark.custom .block-2{
+    width:auto;
+    text-align: left;
+    float:left;
+}
 .vue-wrapper.messenger .title-input-alert{
     font-size: 10px;
     color: #ababab;
     font-weight: normal;
+}
+.no-border{
+    border: none !important;
 }
