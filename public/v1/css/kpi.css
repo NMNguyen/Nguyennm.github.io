@@ -2905,7 +2905,7 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
     text-align: center;
     display: inline-block;
     position: absolute;
-    top:70px;
+    top: 0px;
     right: 0px;
     padding-right: 20px;
 }

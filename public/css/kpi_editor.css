@@ -4659,7 +4659,14 @@ button.close{
     background-color: #f9f9f9;
     border-radius: 3px;
 }
-
+/*#modal-kpi-lib {*/
+    /*!* Set this in front of el-dialog *!*/
+    /*z-index: 9998 !important;*/
+/*}*/
+/*#modal-kpi-lib-details{*/
+    /*!* Set this in front of #modal-kpi-lib. If you change, pls check modal add-kpi ES6 *!*/
+    /*z-index: 9999 !important;*/
+/*}*/
 #modal-kpi-lib-details select.form-control {
     padding: 6px 0;
 }

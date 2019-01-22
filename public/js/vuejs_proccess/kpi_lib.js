@@ -690,6 +690,10 @@ Vue.component('new-edit-card', {
         })
     },
 });
+
+Vue.component('detail-kpi-modal', {
+    template: $('')
+})
 Vue.component('add-kpi-to-card', {
     type: 'add-kpi-to-card',
     template: $('#add-kpi-to-collection').html(),
@@ -1030,7 +1034,8 @@ Vue.component('kpilib', {
 
 
             // EXTRA_FIELDS_KPI: [],
-
+            dialogKPILibVisible: false,
+            dialogKPILibDetailVisible: false,
             show_icon_carret: false,
             resultSearch_infor: false,
             isLoading: false,
@@ -1075,6 +1080,8 @@ Vue.component('kpilib', {
             selected_tags: "",
             next_url_kpi_lib: '',
             //searched_kpis: [], // same: searched_kpis_lib
+            // modal_element: null,
+            // kpilib_kpi_detail_modal_element: null,
 
 
         }
@@ -1152,17 +1159,43 @@ Vue.component('kpilib', {
     created: function () {
         this.storage_kpis = JSON.parse(localStorage.getItem('history_search_kpi')) || [];
         this.storage_kpis_template = this.storage_kpis;
+        window.haha = this;
     },
     mounted: function () {
         var that = this;
+
+        // this.modal_element = this.$refs.kpilib_modal;
+        // this.kpilib_kpi_detail_modal_element = this.$refs.kpilib_kpi_detail_modal;
+        //
+        // // $(this.modal_element).appendTo('#myContainer');
+        // $(this.modal_element).appendTo('body');
+        // $(this.kpilib_kpi_detail_modal_element).appendTo('body');
+
         this.addClassGoogleAnalytic();
         // get_data_kpilib for each time the modal show
-        $('#modal-kpi-lib').on('show.bs.modal', function (e) {
-            // alert('#modal-kpi-lib show');
-            that.get_data_kpilib();
-        })
+
     },
     methods: {
+        show_kpilib_modal: function(){
+            this.get_data_kpilib();
+            this.dialogKPILibVisible = true;
+            // $(this.modal_element).modal('show');
+        },
+        hide_kpilib_modal: function(){
+            this.dialogKPILibVisible = false;
+            // $(this.modal_element).modal('hide');
+        },
+
+        show_kpilib_kpi_detail_modal: function(){
+            this.dialogKPILibDetailVisible = true;
+            // $(this.kpilib_kpi_detail_modal_element).modal('show');
+        },
+        hide_kpilib_kpi_detail_modal: function(){
+            this.dialogKPILibDetailVisible = false;
+            // $(this.kpilib_kpi_detail_modal_element).modal('hide');
+        },
+
+
         search_kpi_input_focus:function(){
             $("#list_kpi_suggest").show();
             $(".arrow-up").show();
@@ -1500,7 +1533,7 @@ Vue.component('kpilib', {
             this.update_query_search();
         },
         filter_history: function () {
-            that = this;
+            var that = this;
             this.storage_kpis_template = this.storage_kpis.filter(function (item) {
                 return item.indexOf(that.query_kpilib_modal) != -1;
             });
@@ -1553,11 +1586,15 @@ Vue.component('kpilib', {
         },
         set__kpi_to_view: function (k) {
             this.kpi_to_view = k;
-            $('#modal-kpi-lib-details').modal('show');
-            $('#modal-kpi-lib-details').appendTo('body');
+            this.show_kpilib_kpi_detail_modal();
+            // this.dialogKPILibDetailVisible = true;
+            // $('#modal-kpi-lib-details').modal('show');
+            // $('#modal-kpi-lib-details').appendTo('body');
         },
         add_selected_kpilib: function (k) {
             this.$root.$emit('add_new_kpi_from_kpi_lib', k);
+            this.hide_kpilib_modal();
+            this.hide_kpilib_kpi_detail_modal();
             // v.add_selected_kpilib(k);
         },
         get_option_to_show: function (selected) {

@@ -165,13 +165,13 @@ Vue.component('decimal-input-edit-target', {
 
     data: function(){
         return {
-            target_kpi:this.value
+            target_kpi:''
         }
     },
     computed: {
         model:{
             get: function(){
-                var val = this.target_kpi;
+                var val = this.value;
                 // https://stackoverflow.com/a/33671045/6112615
                 return this.$options.filters.decimalDisplay(val);
             },
@@ -782,7 +782,7 @@ var targetPage = new Vue({
         },
         showModalEdit: function(kpi){
             // console.log('triggered show modal')
-            this.selected_kpi = kpi
+            this.$set(this,'selected_kpi', kpi)
             this.dialogFormVisible = true
         },
         getMonthsTarget: function (item) { // tao field thang theo tung quy

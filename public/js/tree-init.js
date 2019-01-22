@@ -78,7 +78,7 @@ function valid_input() {
         $('#msg-duplicate-email').hide();
             isError = true;
     }
-    
+
     if ($('#id-position-edit').val().trim() == ''){
     	$('#msg-invalid-position-edit').show();
     	    isError = true;
@@ -135,7 +135,7 @@ function load_data_node(node) {
     $("#id-user-id").val(node.data.user_id);
     $("#id-username").val(node.data.username);
     $("#id-email").val(node.data.email);
-    
+
     // var short_name = node.data.job_title_name.substring(0, 18);
     // if (node.data.job_title_name.length > short_name.length) {
     //     $("#id-role-name").html(short_name + "...");
@@ -408,7 +408,7 @@ function bind_new_person() {
         if (!valid_input()) {
             return;
         }
-        
+
         cloudjetRequest.ajax({
             type: 'POST',
             data: {
@@ -657,7 +657,9 @@ function init_node(node) {
         send_email();
     });
 
-    init_group_user_reset_password(node);
+    $(document).on('fetchedSubordinate','#' + node.id ,function(){
+        init_group_user_reset_password(node);
+    });
 
     $("#add-sub-person").unbind('click');
     $("#add-sub-person").click(function () {
@@ -774,6 +776,7 @@ function getTree(nodeId, level, onComplete) {
                 subtree.children = res.children;
                 data_node[nodeId] = res.children;
                 onComplete.onComplete(nodeId, subtree);
+                $('#' + nodeId).trigger('fetchedSubordinate');
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
