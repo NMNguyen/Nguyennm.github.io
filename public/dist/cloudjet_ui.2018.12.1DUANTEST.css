@@ -839,7 +839,7 @@
     min-height: 46px;
 }
 .notification-item__content-action[data-v-059df97e] {
-    word-break: break-word !important;
+    word-break: break-all !important;
 }
 .notification-item__content-action > a[data-v-059df97e] {
       background: none !important;
@@ -867,6 +867,7 @@
     background: none !important;
 }
 
+
 .notification-list[data-v-368d1cd4] {
   background: white;
   width: 400px;
@@ -879,6 +880,8 @@
     height: 323px;
     overflow: auto;
     overflow-x: hidden;
+    /* Property just working in Chrome, Firefox. Safari not working*/
+    overscroll-behavior-y: contain;
 }
 .notification-list__header[data-v-368d1cd4] {
     border-bottom: 1px solid #eee;
