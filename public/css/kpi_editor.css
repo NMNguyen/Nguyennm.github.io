@@ -1537,7 +1537,7 @@ ul.success {
 }
 
 .group-header .col-right {
-    width: calc(96% - 130px) !important;
+    width: calc(96% - 50px) !important;
     padding: 0 10px;
 }
 
