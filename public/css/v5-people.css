@@ -354,19 +354,20 @@
 .font12 {
 	font-size: 12px;
 }
-.info-functions a {
+.info-functions a, .info-functions span {
 	display: block;
 	margin-left: 10px;
 	margin-bottom: 5px;
 	font-size: 14px;
 	color: #333;
 	padding: 6px;
+    cursor: pointer;
     border-bottom: 1px solid #f9f9f9;
 }
 info-functions a:last-child {
 	border-bottom: none;
 }
-.info-functions a:hover {
+.info-functions span:hover, .info-functions a:hover {
 	color: #008b8b;
 }
 .avatar_box .stick {

@@ -630,7 +630,7 @@ function init_node(node) {
     $("#" + node.id + " span").css('font-weight', 'bolder');
     $('#submit_ava').hide();
     $("#id_open_team").text(interpolate(gettext("%s's KPIs"), [node.data.name]));
-    $('span.employee_name').html(node.data.name);
+    // $('span.employee_name').html(node.data.name);
     $("#id_open_team").attr('href', '/performance/kpi-editor/emp/' + node.data.user_id);
     load_data_node(node);
     bind_avatar_upload(node);
@@ -706,19 +706,6 @@ function init_node(node) {
         );
 
         });
-
-    $("#id_login_as_employee").unbind('click');
-    $("#id_login_as_employee").click(function () {
-        $.post("/performance/login/employee/", {user_id: node.data.user_id}, function (response) {
-            if (response == "ok") {
-                location.href = "/performance/home/";
-            } else {
-                alert(gettext("Login failed."))
-            }
-        }).fail(function () {
-            alert(gettext("Something wrong. Please try again."));
-        });
-    });
 
     node_old_active = node.data.active;
 
