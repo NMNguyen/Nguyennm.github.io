@@ -3213,7 +3213,7 @@ var v = new Vue({
         // nguyen 4
         move_kpi_to_new_group_kpi: function(data_kpi){
             var that = this;
-            that._reload_kpi(data_kpi.id);
+            that.$set(that.kpi_list, data_kpi.id, data_kpi);
         },
         get_kpis_by_group: function(kpi_group){
             let that = this;
