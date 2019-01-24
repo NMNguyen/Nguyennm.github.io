@@ -525,4 +525,22 @@
         max-height: 190px;
         overflow: auto;
     }
+    #option-choose-kpi .nav-tabs>li{
+        margin-bottom: -2px;
+    }
+    .el-dialog-kpilib .el-dialog__header{
+        border-bottom: 2px solid #ababab;
+        padding:10px;
+        padding-bottom: 0px;
+    }
+    .el-dialog-kpilib .el-dialog__body{
+        padding:0px;
+    }
+    .el-dialog-kpilib-detail .el-dialog__body{
+        padding:0px 20px;
+    }
+    .el-dialog-kpilib-detail .form-group{
+        margin-bottom: 0px;
+    }
+
 /* end css modal_add_kpi_to_collection_template.html */

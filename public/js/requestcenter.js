@@ -423,14 +423,16 @@ function initRequestCenterObject() {
     ;
     window.cloudjetRequest = cloudjetRequest;
 }
-
+var initRequestCenterTracker_timeout_id=null;
 function initRequestCenterTracker() {
     var elemRequestCenter = $("body");
     if (elemRequestCenter.length == 0) {
-        setTimeout(initRequestCenterTracker, 50);
+        clearTimeout(initRequestCenterTracker_timeout_id);
+        initRequestCenterTracker_timeout_id = setTimeout(initRequestCenterTracker, 50);
         console.log('triggered Tracker')
     }
     else {
+        console.log('initRequestCenterDisplay')
         initRequestCenterDisplay();
     }
 }

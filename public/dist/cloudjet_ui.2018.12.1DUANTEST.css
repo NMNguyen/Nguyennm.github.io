@@ -839,7 +839,7 @@
     min-height: 46px;
 }
 .notification-item__content-action[data-v-059df97e] {
-    word-break: break-all !important;
+    word-break: break-word !important;
 }
 .notification-item__content-action > a[data-v-059df97e] {
       background: none !important;
@@ -867,7 +867,6 @@
     background: none !important;
 }
 
-
 .notification-list[data-v-368d1cd4] {
   background: white;
   width: 400px;
@@ -880,8 +879,6 @@
     height: 323px;
     overflow: auto;
     overflow-x: hidden;
-    /* Property just working in Chrome, Firefox. Safari not working*/
-    overscroll-behavior-y: contain;
 }
 .notification-list__header[data-v-368d1cd4] {
     border-bottom: 1px solid #eee;
@@ -1242,18 +1239,9 @@
 }
 
 
-[data-v-4f2be898] .button-show-info-kpi{
-    cursor: pointer;
+.mg-tp-10[data-v-234df4ba] {
+  margin-top: 10px;
 }
-[data-v-4f2be898] .button-show-info-kpi i{
-    color:#008b8b;
-}
-[data-v-4f2be898] .el-dialog__body{
-    padding-top:10px;
-    padding-bottom:0px;
-}
-
-
 .create-kpi[data-v-234df4ba] {
   padding: 0 20px;
   width: 600px;
