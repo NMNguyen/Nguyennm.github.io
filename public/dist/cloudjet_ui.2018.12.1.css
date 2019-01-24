@@ -1235,31 +1235,13 @@
 }
 
 
-[data-v-4f2be898] .button-show-info-kpi{
-    cursor: pointer;
-}
-[data-v-4f2be898] .button-show-info-kpi i{
-    color:#008b8b;
-}
-[data-v-4f2be898] .el-dialog__body{
-    padding-top:10px;
-    padding-bottom:0px;
-}
-
-
 .create-kpi[data-v-234df4ba] {
   padding: 0 20px;
   width: 600px;
   display: block;
 }
-.create-kpi__name-kpi[data-v-234df4ba] {
-    font-style: italic;
-}
 .create-kpi__name-kpi__alert[data-v-234df4ba] {
-      color: red;
-}
-.create-kpi__name-kpi__success[data-v-234df4ba] {
-      color: darkcyan;
+    color: red;
 }
 
 
@@ -1270,15 +1252,16 @@
 .create-group__name-group .el-select[data-v-0462157f] {
   width: 100%;
 }
+.create-group[data-v-0462157f] {
+  padding: 0 20px;
+  width: 600px;
+  display: block;
+}
 .create-group__name-group[data-v-0462157f] {
-  margin-top: 20px;
-  font-style: italic;
+    margin-top: 20px;
 }
 .create-group__name-group__alert[data-v-0462157f] {
-    color: red;
-}
-.create-group__name-group__success[data-v-0462157f] {
-    color: darkcyan;
+      color: red;
 }
 
 
@@ -1287,52 +1270,78 @@
 }
 
 
-[data-v-66fde2ed] .el-dialog__body{
-    padding:10px 20px;
+.modal-add-group-kpi-strategy-map[data-v-66fde2ed] {
+  padding-top: 20px !important;
+  z-index: 2000 !important;
 }
-[data-v-66fde2ed] .create-group{
-    width:100%;
+.modal-footer[data-v-66fde2ed] {
+  border-top: 1px solid #f9f9f9;
 }
-[data-v-66fde2ed] .create-group .choose-add-kpi {
+.modal-header[data-v-66fde2ed] {
+  border-bottom: 1px solid #f9f9f9;
+}
+.modal-header__title[data-v-66fde2ed] {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333333;
+}
+.modal-header__btn-close[data-v-66fde2ed] {
+    float: right;
+    width: 18px;
+    font-size: 18px;
+    font-weight: normal;
+    color: #e4e4e4;
+    text-shadow: 0 1px 0 #fff;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+}
+.create-group[data-v-66fde2ed] {
+  padding: 0 20px;
+  width: 600px;
+  display: block;
+}
+.create-group .choose-add-kpi[data-v-66fde2ed] {
     margin-top: 30px;
     margin-bottom: 20px;
 }
-[data-v-66fde2ed] .create-group .choose-add-kpi .choose-add-kpi__text {
-    color: #008b8b
+.create-group .choose-add-kpi__text[data-v-66fde2ed] {
+      color: #008b8b;
 }
+
 /* scrollbar beautiful */
 /* Customize website's scrollbar like Mac OS Not supports in Firefox and IE */
-
 /* total width */
-[data-v-66fde2ed] .beautiful-scrollbar::-webkit-scrollbar {
-    background-color: #fff;
-    width: 16px
+.beautiful-scrollbar[data-v-66fde2ed]::-webkit-scrollbar {
+  background-color: #fff;
+  width: 16px;
 }
 
 /* background of the scrollbar except button or resizer */
-[data-v-66fde2ed] .beautiful-scrollbar::-webkit-scrollbar-track {
-    background-color: #fff
+.beautiful-scrollbar[data-v-66fde2ed]::-webkit-scrollbar-track {
+  background-color: #fff;
 }
-[data-v-66fde2ed] .beautiful-scrollbar::-webkit-scrollbar-track:hover {
-    background-color: #f4f4f4
+.beautiful-scrollbar[data-v-66fde2ed]::-webkit-scrollbar-track:hover {
+  background-color: #f4f4f4;
 }
 
 /* scrollbar itself */
-[data-v-66fde2ed] .beautiful-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #babac0;
-    border-radius: 16px;
-    border: 5px solid #fff
+.beautiful-scrollbar[data-v-66fde2ed]::-webkit-scrollbar-thumb {
+  background-color: #babac0;
+  border-radius: 16px;
+  border: 5px solid #fff;
 }
-[data-v-66fde2ed] .beautiful-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #a0a0a5;
-    border: 4px solid #f4f4f4
+.beautiful-scrollbar[data-v-66fde2ed]::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a5;
+  border: 4px solid #f4f4f4;
 }
 
 /* set button(top and bottom of the scrollbar) */
-[data-v-66fde2ed] .beautiful-scrollbar::-webkit-scrollbar-button {
-    display: none
+.beautiful-scrollbar[data-v-66fde2ed]::-webkit-scrollbar-button {
+  display: none;
 }
-
 
 
 .component-wrapper[data-v-37240d9e] {
@@ -1340,11 +1349,8 @@
 }
 
 
-[data-v-37240d9e] .sweet-alert p{
+.sweet-alert p{
     word-break: break-word;
-}
-[data-v-37240d9e] .el-button--small{
-    font-size:14px;
 }
 
 
