@@ -137,8 +137,6 @@ Vue.filter('monthDisplay',  function (val, quarter, order) {
 
 Vue.filter('decimalDisplay',  function (val) {
     return (val === 0) ? 0 : (val == null || val === '') ? '' : format(val);
-
-
 });
 
 
