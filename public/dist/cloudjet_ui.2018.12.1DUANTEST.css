@@ -384,6 +384,12 @@
 
 
 
+div.decimal-input__item .invalid-input[data-v-d7756746] > input {
+  border: 1px solid #F56C6C !important;
+}
+div.decimal-input__item .current-target[data-v-d7756746] > input {
+  border: 2px solid #ffb82d;
+}
 
 
 
@@ -449,6 +455,334 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* please double check this https://github.com/vuejs/vue-loader/issues/513 */
+div.el-popper.invalid-input{
+    border-color: #F56C6C!important;
+}
+div.el-popper.invalid-input > .popper__arrow {
+    border-top-color: #F56C6C!important;
+}
 
 
 
@@ -1239,9 +1573,18 @@
 }
 
 
-.mg-tp-10[data-v-234df4ba] {
-  margin-top: 10px;
+[data-v-4f2be898] .button-show-info-kpi{
+    cursor: pointer;
 }
+[data-v-4f2be898] .button-show-info-kpi i{
+    color:#008b8b;
+}
+[data-v-4f2be898] .el-dialog__body{
+    padding-top:10px;
+    padding-bottom:0px;
+}
+
+
 .create-kpi[data-v-234df4ba] {
   padding: 0 20px;
   width: 600px;

@@ -100,17 +100,17 @@ Vue.filter('createdat_format', function (value) {
     return moment(value).format('H:mm:ss - DD/MM/YYYY')
 });
 
-
-
-Vue.filter('weightDisplay', function (val) {
-    try {
-        return (val.toFixed(1) == 'NaN') ? 0 + "%" : val.toFixed(2) + "%"
-    }
-    catch (err) {
-        return val
-    }
-
-});
+//
+//
+// Vue.filter('weightDisplay', function (val) {
+//     try {
+//         return (val.toFixed(1) == 'NaN') ? 0 + "%" : val.toFixed(2) + "%"
+//     }
+//     catch (err) {
+//         return val
+//     }
+//
+// });
 
 Vue.filter('scoreDisplay', function (val) {
         try {
@@ -134,11 +134,13 @@ Vue.filter('monthDisplay',  function (val, quarter, order) {
 
 
 });
-
-Vue.filter('decimalDisplay',  function (val) {
-    return (val === 0) ? 0 : (val == null || val === '') ? '' : format(val);
-});
-
+//
+// Vue.filter('decimalDisplay',  function (val) {
+//     return (val === 0) ? 0 : (val == null || val === '') ? '' : format(val);
+//
+//
+// });
+//
 
 
 Vue.mixin({
@@ -178,7 +180,6 @@ Vue.mixin({
 
     },
     methods: {
-
         to_percent: function (val, total) {
             if (total > 0) {
                 return val * 100 / total;
@@ -964,9 +965,16 @@ Vue.component('kpi-config', {
                 jqxhr.done(function (data, statusText, jqXHR) {
                     if (jqXHR.status != 200) {
                         swal(gettext('Not successful'), gettext('Cannot delay/active this kpi'), "error");
+                    }else {
+                        swal({
+                            type: 'success',
+                            title: gettext("Active KPI success"),
+                            showConfirmButton: false,
+                            timer: 3000,
+                        });
                     }
                 });
-                jqxhr.error(function (e) {
+                jqxhr.fail(function (e) {
                         if (e.responseJSON.message != "" || e.responseJSON.message != null || e.responseJSON.message != undefined) {
                             swal(gettext('Not successful'), e.responseJSON.message, "error");
                         }
@@ -1195,7 +1203,7 @@ const EditKPIsWeightBaseModal =  {
 
         // register event to refesh parent_kpis data
         $(this.edit_kpis_weight_modal_element ).on('show.bs.modal', function (e) {
-
+            console.log("triggered this")
             that.internal_parent_kpis_to_show = that.get_parent_kpis();
             that.internal_parent_kpis = JSON.parse(JSON.stringify(that.internal_parent_kpis_to_show));
         })
@@ -1254,7 +1262,7 @@ const EditKPIsWeightBaseModal =  {
                 let total = 0;
 
                 Object.values(that.internal_parent_kpis_to_show).forEach(function (kpi) {
-                    if (kpi.bsc_category == category.value){
+                    if (kpi.bsc_category === category.value){
                         total += parseFloat(kpi.weight) || 0;
                     }
 
@@ -1275,7 +1283,7 @@ const EditKPIsWeightBaseModal =  {
             categories.forEach(function(category){
                 let total = 0;
                 Object.values(that.internal_parent_kpis).forEach(function (kpi) {
-                    if (kpi.bsc_category == category.value && (!that.is_delay_kpi || (that.is_delay_kpi && kpi.id != that.kpi.id))){
+                    if (kpi.bsc_category === category.value && (!that.is_delay_kpi || (that.is_delay_kpi && kpi.id !== that.kpi.id))){
                         total += parseFloat(kpi.weight) || 0;
                     }
 
@@ -1298,7 +1306,7 @@ const EditKPIsWeightBaseModal =  {
         get_parent_kpis_with_weight_changed: function(){
             let that = this;
             let kpis = Object.values(this.internal_parent_kpis).filter(function(parent_kpi){
-                return parent_kpi.weight != that.internal_parent_kpis_to_show[parent_kpi.id].weight
+                return parent_kpi.weight !== that.internal_parent_kpis_to_show[parent_kpi.id].weight
             });
 
             return kpis;
@@ -1416,9 +1424,10 @@ Vue.component('delay-kpi-modal', {
             });
 
             // UI
-            jqxhr.error(function () {
+            jqxhr.fail(function () {
                 that.error_on_delayed = true;
                 that.error_on_delayed_message = gettext('You do not have permission to delay this KPI!')
+                swal(gettext('Not successful'), gettext('Cannot delay/active this kpi'), "error")
             });
             jqxhr.done(function(){
                that.hide_edit_kpis_weight_modal();
@@ -2053,9 +2062,9 @@ Vue.component('kpi-row', {
         },
 
         update_quarter_x_target: function(update_data){
+            var that = this;
             let data = this.kpi;
-            let kpi_id = this.kpi.id;
-             let url = `/api/v2/kpi/${kpi_id}/update-quarter-target/` ;
+            let url = `/api/v2/kpi/${data.id}/update-quarter-target/` ;
             data.quarter_one_target = update_data[0].value;
             data.quarter_two_target = update_data[1].value;
             data.quarter_three_target = update_data[2].value;
@@ -2222,7 +2231,7 @@ Vue.component('kpi-row', {
                 contentType: contentType,
                 success: function(updated_kpi_data){},
                 error: function(jqxhr){
-                    alert('error on update kpi');
+                    // alert('error on update kpi');
                 },
             });
 
@@ -3107,15 +3116,17 @@ var v = new Vue({
             that.kpi_data_to_create = JSON.parse(JSON.stringify(kpi_data_from_kpi_lib));
         });
 
-        this.$on('modal-add-group-and-kpi-closed', function(onCloseHandler){
-            that.selected_kpi_group = {
-                "name": '',
-                "category": 'financial',
-            };
-            that.kpi_data_to_create = {
-                name:''
-            };
-            if ($.isFunction(onCloseHandler)) onCloseHandler();
+        this.$on('modal-add-group-and-kpi-closed', function(reset_modal=false){
+            if (reset_modal === true){
+                that.selected_kpi_group = {
+                    "name": '',
+                    "category": 'financial',
+
+                };
+                that.kpi_data_to_create = {
+                    name:''
+                };
+            }
         });
 
     },
@@ -3844,7 +3855,7 @@ var v = new Vue({
         toggle_adjusting_estimation: function () {
             var self = this;
             // self.$set('adjusting_kpi.enable_estimation', !self.adjusting_kpi.enable_estimation)
-            self.$set(self.$data, 'adjusting_kpi.enable_estimation', !self.adjusting_kpi.enable_estimation)
+            self.$set(self.adjusting_kpi, 'enable_estimation', !self.adjusting_kpi.enable_estimation)
             if (self.adjusting_kpi.enable_estimation === true) {
                 $('#adjuster-estimation').slideDown();
             }
