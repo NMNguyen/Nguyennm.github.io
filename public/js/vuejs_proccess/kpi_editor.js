@@ -87,15 +87,15 @@ Vue.filter('createdat_format', function (value) {
 //
 // });
 
-Vue.filter('scoreDisplay', function (val) {
-        try {
-            return typeof(val) == 'number' ? (val == 0 ? "0%" : (val.toFixed(2) + "%")) : "0%";
-        }
-        catch (err) {
-            return "0%";
-        }
-    }
-);
+// Vue.filter('scoreDisplay', function (val) {
+//         try {
+//             return typeof(val) == 'number' ? (val == 0 ? "0%" : (val.toFixed(2) + "%")) : "0%";
+//         }
+//         catch (err) {
+//             return "0%";
+//         }
+//     }
+// );
 
 Vue.filter('monthDisplay',  function (val, quarter, order) {
     try {
