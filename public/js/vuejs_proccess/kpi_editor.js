@@ -36,31 +36,6 @@ function getKPIParentOfViewedUser(kpi_list, excludeParentID=null){
 }
 
 
-function format(number) {
-
-    var decimalSeparator = ".";
-    var thousandSeparator = ",";
-
-    // make sure we have a string
-    var result = String(number);
-
-    // split the number in the integer and decimals, if any
-    var parts = result.split(decimalSeparator);
-
-    // reverse the string (1719 becomes 9171)
-    result = parts[0].split("").reverse().join("");
-
-    // add thousand separator each 3 characters, except at the end of the string
-    result = result.replace(/(\d{3}(?!$))/g, "$1" + thousandSeparator);
-
-    // reverse back the integer and replace the original integer
-    parts[0] = result.split("").reverse().join("");
-
-    // recombine integer with decimals
-    return parts.join(decimalSeparator);
-
-}
-
 function updateQueryStringParameter(uri, key, value) {
     var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
     var separator = uri.indexOf('?') !== -1 ? "&" : "?";
@@ -100,17 +75,17 @@ Vue.filter('createdat_format', function (value) {
     return moment(value).format('H:mm:ss - DD/MM/YYYY')
 });
 
-
-
-Vue.filter('weightDisplay', function (val) {
-    try {
-        return (val.toFixed(1) == 'NaN') ? 0 + "%" : val.toFixed(2) + "%"
-    }
-    catch (err) {
-        return val
-    }
-
-});
+//
+//
+// Vue.filter('weightDisplay', function (val) {
+//     try {
+//         return (val.toFixed(1) == 'NaN') ? 0 + "%" : val.toFixed(2) + "%"
+//     }
+//     catch (err) {
+//         return val
+//     }
+//
+// });
 
 Vue.filter('scoreDisplay', function (val) {
         try {
@@ -134,13 +109,13 @@ Vue.filter('monthDisplay',  function (val, quarter, order) {
 
 
 });
-
-Vue.filter('decimalDisplay',  function (val) {
-    return (val === 0) ? 0 : (val == null || val === '') ? '' : format(val);
-
-
-});
-
+//
+// Vue.filter('decimalDisplay',  function (val) {
+//     return (val === 0) ? 0 : (val == null || val === '') ? '' : format(val);
+//
+//
+// });
+//
 
 
 Vue.mixin({
@@ -180,7 +155,6 @@ Vue.mixin({
 
     },
     methods: {
-
         to_percent: function (val, total) {
             if (total > 0) {
                 return val * 100 / total;
@@ -966,9 +940,16 @@ Vue.component('kpi-config', {
                 jqxhr.done(function (data, statusText, jqXHR) {
                     if (jqXHR.status != 200) {
                         swal(gettext('Not successful'), gettext('Cannot delay/active this kpi'), "error");
+                    }else {
+                        swal({
+                            type: 'success',
+                            title: gettext("Active KPI success"),
+                            showConfirmButton: false,
+                            timer: 3000,
+                        });
                     }
                 });
-                jqxhr.error(function (e) {
+                jqxhr.fail(function (e) {
                         if (e.responseJSON.message != "" || e.responseJSON.message != null || e.responseJSON.message != undefined) {
                             swal(gettext('Not successful'), e.responseJSON.message, "error");
                         }
@@ -1031,11 +1012,11 @@ Vue.component('kpi-config', {
             });
         },
 
-        // Disabled this function is Editor
-        // change_kpi_category:function(kpi_id){
-        //     // this.$emit('change_category', kpi_id);
-        //     this.$root.$emit('change_category', kpi_id);
-        // },
+
+        change_kpi_category:function(kpi_id){
+            // this.$emit('change_category', kpi_id);
+            this.$root.$emit('change_category', kpi_id);
+        },
         // get_children_kpis: function(kpi_id){
         //     // this.$emit('get_children_kpis', kpi_id);
         //     this.$root.$emit('get_children_kpis', kpi_id);
@@ -1197,7 +1178,7 @@ const EditKPIsWeightBaseModal =  {
 
         // register event to refesh parent_kpis data
         $(this.edit_kpis_weight_modal_element ).on('show.bs.modal', function (e) {
-
+            console.log("triggered this")
             that.internal_parent_kpis_to_show = that.get_parent_kpis();
             that.internal_parent_kpis = JSON.parse(JSON.stringify(that.internal_parent_kpis_to_show));
         })
@@ -1256,7 +1237,7 @@ const EditKPIsWeightBaseModal =  {
                 let total = 0;
 
                 Object.values(that.internal_parent_kpis_to_show).forEach(function (kpi) {
-                    if (kpi.bsc_category == category.value){
+                    if (kpi.bsc_category === category.value){
                         total += parseFloat(kpi.weight) || 0;
                     }
 
@@ -1277,7 +1258,7 @@ const EditKPIsWeightBaseModal =  {
             categories.forEach(function(category){
                 let total = 0;
                 Object.values(that.internal_parent_kpis).forEach(function (kpi) {
-                    if (kpi.bsc_category == category.value && (!that.is_delay_kpi || (that.is_delay_kpi && kpi.id != that.kpi.id))){
+                    if (kpi.bsc_category === category.value && (!that.is_delay_kpi || (that.is_delay_kpi && kpi.id !== that.kpi.id))){
                         total += parseFloat(kpi.weight) || 0;
                     }
 
@@ -1300,7 +1281,7 @@ const EditKPIsWeightBaseModal =  {
         get_parent_kpis_with_weight_changed: function(){
             let that = this;
             let kpis = Object.values(this.internal_parent_kpis).filter(function(parent_kpi){
-                return parent_kpi.weight != that.internal_parent_kpis_to_show[parent_kpi.id].weight
+                return parent_kpi.weight !== that.internal_parent_kpis_to_show[parent_kpi.id].weight
             });
 
             return kpis;
@@ -1418,9 +1399,10 @@ Vue.component('delay-kpi-modal', {
             });
 
             // UI
-            jqxhr.error(function () {
+            jqxhr.fail(function () {
                 that.error_on_delayed = true;
                 that.error_on_delayed_message = gettext('You do not have permission to delay this KPI!')
+                swal(gettext('Not successful'), gettext('Cannot delay/active this kpi'), "error")
             });
             jqxhr.done(function(){
                that.hide_edit_kpis_weight_modal();
@@ -1465,7 +1447,7 @@ Vue.component('kpi-owner', {
     },
     computed:{
         search_url: function () {
-            return '/api/v2/searchable_peoplelist/?&limit=10&from_kpi_id=' + this.kpi.id + '&search_term='
+            return '/api/v2/searchable_peoplelist/?&limit=10&search_assign=1&from_kpi_id=' + this.kpi.id + '&search_term='
 
         },
         is_able_to_change_owner: function () {
@@ -1820,7 +1802,6 @@ Vue.component('kpi-group', {
         });
 
         this.$on('child_kpi_score_updated',function(){
-
             that.$root.get_current_employee_performance();
         });
 
@@ -2055,9 +2036,9 @@ Vue.component('kpi-row', {
         },
 
         update_quarter_x_target: function(update_data){
+            var that = this;
             let data = this.kpi;
-            let kpi_id = this.kpi.id;
-             let url = `/api/v2/kpi/${kpi_id}/update-quarter-target/` ;
+            let url = `/api/v2/kpi/${data.id}/update-quarter-target/` ;
             data.quarter_one_target = update_data[0].value;
             data.quarter_two_target = update_data[1].value;
             data.quarter_three_target = update_data[2].value;
@@ -2224,7 +2205,7 @@ Vue.component('kpi-row', {
                 contentType: contentType,
                 success: function(updated_kpi_data){},
                 error: function(jqxhr){
-                    alert('error on update kpi');
+                    // alert('error on update kpi');
                 },
             });
 
@@ -2355,10 +2336,10 @@ Vue.component('kpi-row', {
                         // TODO: NEED CHECK reload kpi function
                         that.is_child_kpis_loaded = true;
                         that.child_kpis = list_child_kpis;
-                        // that.$root.$set(that.kpi_list[that.kpi.id], 'children_data', list_child_kpis);
                         // that.$nextTick(function(){
                         //     that.child_kpis = list_child_kpis;
                         // });
+
 
 
                     },
@@ -2829,7 +2810,9 @@ var v = new Vue({
             is_parent_kpi: undefined,
             complete_review_confirm: that.complete_review_confirm,
             get_current_employee_performance: that.get_current_employee_performance,
-            capture_and_download: that.capture_and_download
+            capture_and_download: that.capture_and_download,
+            getPermissionBackupKPI: that.getPermissionToBackupKPI,
+
             // parent_kpis: that.parentKPIs,// <-- this will not work as expected
         }
     },
@@ -3095,6 +3078,7 @@ var v = new Vue({
             that.move_kpi_to_new_group_kpi(data_kpi);
         });
 
+
         // this.$on('set-current-group-kpi-to-add-kpi', function (data_group) {
         //     that.selected_kpi_group = data_group;
         //     that.$refs.addGroupAndKpi.show_modal_add_kpi();
@@ -3123,6 +3107,23 @@ var v = new Vue({
 
     },
     methods: {
+        getPermissionToBackupKPI: function(){
+            // Chỉ admin mới có toàn quyền: Xoá, thêm.
+            // Manager có quyền thêm.
+            if (this.is_user_system) return 'admin';
+            else if (COMMON.isManager==='True') return 'manager';
+            return 'normal_user';
+        },
+        reload_backup_kpi_list: function(is_remove=false){
+            this.$set(this.employee_performance, 'month_1_backup', false);
+            this.$set(this.employee_performance, 'month_2_backup', false);
+            this.$set(this.employee_performance, 'month_3_backup', false);
+            if (is_remove){
+                this.get_current_employee_performance();
+            }else{
+                this.get_backups_list();
+            }
+        },
         show_modal_add_kpi: function(){
             this.$refs.addGroupAndKpi.show_modal_add_kpi();
         },
@@ -3847,7 +3848,7 @@ var v = new Vue({
         toggle_adjusting_estimation: function () {
             var self = this;
             // self.$set('adjusting_kpi.enable_estimation', !self.adjusting_kpi.enable_estimation)
-            self.$set(self.$data, 'adjusting_kpi.enable_estimation', !self.adjusting_kpi.enable_estimation)
+            self.$set(self.adjusting_kpi, 'enable_estimation', !self.adjusting_kpi.enable_estimation)
             if (self.adjusting_kpi.enable_estimation === true) {
                 $('#adjuster-estimation').slideDown();
             }
@@ -4967,7 +4968,7 @@ var v = new Vue({
                 success: function (res) {
                     // that.$set(that.$data,  'employee_performance', res);
                     that.employee_performance=res;
-                    that.get_backups_list(true);
+                    that.get_backups_list();
                     // console.log('jahskjfkjsdaasdh');
                 },
                 error: function (res) {
@@ -5148,29 +5149,20 @@ var v = new Vue({
         //     this.get_current_employee_performance();
         // },
 
-
-
-        show_backup_kpi: function () {
-            $('#kpiscore-backup-help').modal('hide');
-            $('#backup-kpi-modal').modal();
-            this.get_backups_list(true);
-        },
-        get_backups_list: function (showModal) {
-            self = this;
-            if (showModal) $('#lb-load-backups-list').show();
+        get_backups_list: function () {
+            var that = this;
             cloudjetRequest.ajax({
                 type: 'get',
-                url: '/api/v2/user/backup_kpis/' + self.user_id + '/' + self.current_quarter.id,
+                url: '/api/v2/user/backup_kpis/' + that.user_id + '/' + that.quarter_by_id.id,
                 success: function (data) {
-                    $('#lb-load-backups-list').hide();
                     if ($.isArray(data)) {
-                        self.backups_list = data;
+                        that.backups_list = data;
                         data.forEach(function (_data) {
                             // self.$set(self.$data, 'employee_performance.month_' + _data.month + '_backup', true);
-                            self.$set(self.employee_performance, 'month_' + _data.month + '_backup', true);
+                            that.$set(that.employee_performance, 'month_' + _data.month + '_backup', true);
 
-                            if (self.backup_month.indexOf(_data.month) == -1) {
-                                self.backup_month.push(_data.month);
+                            if (that.backup_month.indexOf(_data.month) == -1) {
+                                that.backup_month.push(_data.month);
                             }
                         })
                     }
@@ -5250,110 +5242,6 @@ var v = new Vue({
         hide_message: function (idStr) {
             $('#' + idStr).css('display', 'none');
             $('#' + idStr).html('');
-        },
-        hide_backup_kpi_modal: function () {
-            $('#view-backup-kpi-modal').modal('hide');
-            $('#backup-kpi-modal').modal();
-        },
-        view_backup_kpis: function (id) {
-            var self = this;
-            $('#view-backup-kpi-modal').modal('show');
-            $('#backup-kpi-modal').modal('hide');
-            // find backup by id
-            self.current_backup = self.backups_list[id];
-            // console.log('fihihhihihc');
-
-            if (self.current_backup && self.current_backup.hasOwnProperty('data')) {
-                var kpis = self.current_backup.data;
-                var total_weight = 0;
-                self.current_backup.data.forEach(function(e){
-                    total_weight += e.weight;
-                })
-                self.backup_month_name = self['month_' + self.current_backup.month + '_name']
-                self.backup_kpis = kpis;
-                self.backup_kpis.forEach(function(e, i){
-                    self.backup_kpis[i].weight_percentage = parseFloat(e.weight/total_weight) * 100;
-                })
-            }
-        },
-        get_backup_month_score: function (index) {
-            var self = this;
-            var month = self.current_backup.month;
-            var backup_kpis_month_score = parseFloat(self.backup_kpis[index]['month_' + month + '_score']);
-            if ($.isNumeric(backup_kpis_month_score)){
-                return backup_kpis_month_score;
-            } else {
-                return null
-            }
-        },
-        get_backup_month_name: function (month) {
-            return self['month_' + month + '_name']
-        },
-        get_backup_month_target: function (index) {
-            var self = this;
-            var month = self.current_backup.month;
-            var backup_kpis_month_target = parseFloat(self.backup_kpis[index]['month_' + month + '_target']);
-            if ($.isNumeric(backup_kpis_month_target)) {
-                return backup_kpis_month_target.toFixed(2);
-            } else {
-                return null
-            }
-
-        },
-        get_backup_month_real: function (index) {
-            var self = this;
-            var month = self.current_backup.month;
-            var backup_kpis_month = parseFloat(self.backup_kpis[index]['month_' + month]);
-            if($.isNumeric(backup_kpis_month)){
-                return backup_kpis_month.toFixed(2);
-            }else {
-                return null
-            }
-
-        },
-        update_month_backup_display: function (month) {
-            var self = this;
-            if (month) {
-                self.$set(self.employee_performance, 'month_' + month + '_backup', true);
-            }
-        },
-        delete_backup: function (index) {
-            var self = this;
-            swal({
-                title: gettext('KPI Backup deleted can not be reversed'),
-                text: gettext('You want to delete KPI Backup, are you sure?'),
-                type: "warning",
-                showCancelButton: true,
-                cancelButtonText: gettext('Cancel'),
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: gettext('OK'),
-                closeOnConfirm: false
-            }, function () {
-                var backup_kpi = self.backups_list[index];
-                cloudjetRequest.ajax({
-                    url: '/api/v2/user/backup_kpis/' + self.user_id + '/' + self.current_quarter.id,
-                    type: 'delete',
-                    data: JSON.stringify({month: backup_kpi.month}),
-                    success: function (data, statusText, jqXHR) {
-                        if (statusText === 'success') {
-                            swal({
-                                title: gettext('Successful'),
-                                text: '<div style="padding: 5px;word-wrap: break-word;">' + gettext("KPI Backup deleted successful") + '</div>',
-                                type: "success",
-                                html: true,
-                                confirmButtonText: gettext('OK'),
-                            });
-                            self.backups_list = self.backups_list.filter(function (item) {
-                                return backup_kpi.month !== item.month;
-                            });
-                            self.backup_month.splice(self.backup_month.indexOf(backup_kpi.month), 1);
-                            self.$set(self.employee_performance, 'month_' + backup_kpi.month + '_backup', false);
-                            self.get_current_employee_performance();
-                            self.get_backups_list(false);
-                        }
-                    }
-                })
-            });
         },
         normalize_group_weight: function (group, new_total_weight) {
 

@@ -1,30 +1,7 @@
 Array.prototype.insert = function (index, item) {
     this.splice(index, 0, item);
 };
-function format_number(number) {
 
-    var decimalSeparator = ".";
-    var thousandSeparator = ",";
-
-    // make sure we have a string
-    var result = String(number);
-
-    // split the number in the integer and decimals, if any
-    var parts = result.split(decimalSeparator);
-
-    // reverse the string (1719 becomes 9171)
-    result = parts[0].split("").reverse().join("");
-
-    // add thousand separator each 3 characters, except at the end of the string
-    result = result.replace(/(\d{3}(?!$))/g, "$1" + thousandSeparator);
-
-    // reverse back the integer and replace the original integer
-    parts[0] = result.split("").reverse().join("");
-
-    // recombine integer with decimals
-    return parts.join(decimalSeparator);
-
-}
 // -------------------------------------------- seach usser---------------------------------------------
 $(function () {
     $("#search_user").focus(function () {
@@ -177,15 +154,6 @@ Vue.component('decimal-input-edit-target', {
             },
             set: function(val){
                 var newVal=val;
-                if (val === '') {
-                    newVal = '';
-                }
-                else {
-                    var number = val.split(",").join("");
-                    number = Number(number);
-                    // Toan note: ref https://stackoverflow.com/a/5963202/2599460
-                    newVal = isNaN(number) ? 0 : parseFloat(number.toFixed(4));
-                }
                 this.target_kpi = newVal
                 if(!this.showBtn){
                     this.$emit('input',newVal)
@@ -196,19 +164,6 @@ Vue.component('decimal-input-edit-target', {
         }
     },
     methods: {
-        check_number: function (e){
-            // With Firefox e.keyCode alway return 0
-            var charCode = e.which || e.keyCode;
-            var _number = String.fromCharCode(charCode);
-
-            // For firefox, include 'Arrow left, arrow right, backspace, delete'.
-            var controlKeyAllowPress = [37, 39, 8, 46];
-            if ('0123456789.'.indexOf(_number) !== -1 || controlKeyAllowPress.indexOf(charCode) !== -1) {
-                return _number;
-            }
-            e.preventDefault();
-            return false;
-        },
         check_paste: function (evt) {
             evt.preventDefault();
             evt.stopPropagation();
@@ -222,9 +177,6 @@ Vue.component('decimal-input-edit-target', {
         }
     }
 
-});
-Vue.filter('decimalDisplay',  function (val) {
-    return (val === 0) ? 0 : (val == null || val === '') ? '' : format_number(val);
 });
 Vue.component('modal-edit-target', {
         delimiters: ['${', '}$'],
@@ -701,24 +653,27 @@ var targetPage = new Vue({
             }
         },
         tableRowClassName: function ({row, rowIndex}) { // add class cho category
+            var list_classes = [];
             if (this.tableData[rowIndex].isGroup == true) {
                 if (this.tableData[rowIndex].ten_KPI == gettext('Financial')) {
-                    return 'target_fin_title';
+                    list_classes.push('target_fin_title');
                 } else if (this.tableData[rowIndex].ten_KPI == gettext('Customer')) {
-                    return 'target_client_title'
+                    list_classes.push('target_client_title');
                 }
                 else if (this.tableData[rowIndex].ten_KPI == gettext('Internal')) {
-                    return 'target_internal_title'
+                    list_classes.push('target_internal_title');
                 }
                 else if (this.tableData[rowIndex].ten_KPI == gettext('Learninggrowth')) {
-                    return 'target_clean_title'
+                    list_classes.push('target_clean_title');
                 }
                 else if (this.tableData[rowIndex].ten_KPI == gettext('More')) {
-                    return 'target_other_title'
-                } else {
+                    list_classes.push('target_other_title');
                 }
-                return '';
             }
+            if (row.weight == 0) {
+                list_classes.push("disabled");
+            }
+            return list_classes.join(" ");
         },
         createItem: function (item) { // created data cho tung kpi
             var self = this;
@@ -743,10 +698,9 @@ var targetPage = new Vue({
             // add field to export excel
             tempTableData.code = item.code == undefined ? "" : item.code;
             tempTableData.group = item.group == undefined ? "" : item.group;
+            tempTableData.weight = item.weight == undefined ? 0 : item.weight;
             if (item.refer_to){
                 tempTableData.weight_child = item.weight == undefined ? 0 : item.weight;
-            }else{
-                tempTableData.weight = item.weight == undefined ? 0 : item.weight;
             }
             tempTableData.owner_email = item.owner_email;
             tempTableData.unit = item.unit == undefined ? "" : item.unit;

@@ -13,7 +13,9 @@
 .ico-red:hover {
     color: #d9534f !important;
 }
-
+tr.row-no-background > td {
+    vertical-align: middle!important;
+}
 .qtip-dark {
     background: #333333;
     text-align: center !important;
