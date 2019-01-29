@@ -1,4 +1,32 @@
+function format(number) {
 
+    var decimalSeparator = ".";
+    var thousandSeparator = ",";
+
+    // make sure we have a string
+    var result = String(number);
+
+    // split the number in the integer and decimals, if any
+    var parts = result.split(decimalSeparator);
+
+    // reverse the string (1719 becomes 9171)
+    result = parts[0].split("").reverse().join("");
+
+    // add thousand separator each 3 characters, except at the end of the string
+    result = result.replace(/(\d{3}(?!$))/g, "$1" + thousandSeparator);
+
+    // reverse back the integer and replace the original integer
+    parts[0] = result.split("").reverse().join("");
+
+    // recombine integer with decimals
+    return parts.join(decimalSeparator);
+
+};
+Vue.filter('decimalDisplay',  function (val) {
+    return (val === 0) ? 0 : (val == null || val === '') ? '' : format(val);
+
+
+});
 Vue.component('decimal-input-import', {
     props: [
         'value',
