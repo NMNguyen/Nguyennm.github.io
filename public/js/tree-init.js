@@ -507,9 +507,9 @@ function send_email() {
     cloudjetRequest.ajax({
         type: 'POST',
         data: {
-            user_id: peopleApp.current_node.user_id,
-            username: peopleApp.current_node.username,
-            email: peopleApp.current_node.email
+            user_id: $("#id-user-id").val(),
+            username: $("#id-username").val(),
+            email: $("#id-email").val()
         },
         url: "/performance/people/reset-password/",
         beforeSend: function () {
