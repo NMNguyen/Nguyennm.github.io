@@ -1534,13 +1534,17 @@ ul.success {
 
 .group-header .col-left {
     width: 50px !important;
+    display: flex;
+    align-items: center;
 }
 
 .group-header .col-right {
-    width: calc(96% - 50px) !important;
+    /*width: calc(96% - 130px) !important;*/
     padding: 0 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
 }
-
 .kpi-table .kpi-row .kpi-detail-content .rows-table-sm.auto-height {
     height: auto;
     border-bottom: none;

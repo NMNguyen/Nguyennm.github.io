@@ -28,28 +28,29 @@ function clear_search() {
     }, 100);
 }
 
-function toggle_auto() {
-    var status = $('li.user-comment').css('display');
-    //alert(status);
-    if (status != 'none') {
-        $('li.user-comment').hide(500);
-    }
-    $('li.auto-comment').show(500);
-}
-
-function toggle_user() {
-    var status = $('li.auto-comment').css('display');
-    //alert(status);
-    if (status != 'none') {
-        $('li.auto-comment').hide(500);
-    }
-    $('li.user-comment').show(500);
-}
-
-function toggle_all() {
-    $('li.auto-comment').show(500);
-    $('li.user-comment').show(500);
-}
+// Không sử dụng nữa, đã convert qua ES6
+// function toggle_auto() {
+//     var status = $('li.user-comment').css('display');
+//     //alert(status);
+//     if (status != 'none') {
+//         $('li.user-comment').hide(500);
+//     }
+//     $('li.auto-comment').show(500);
+// }
+//
+// function toggle_user() {
+//     var status = $('li.auto-comment').css('display');
+//     //alert(status);
+//     if (status != 'none') {
+//         $('li.auto-comment').hide(500);
+//     }
+//     $('li.user-comment').show(500);
+// }
+//
+// function toggle_all() {
+//     $('li.auto-comment').show(500);
+//     $('li.user-comment').show(500);
+// }
 
 // var toggle = false;
 
@@ -252,24 +253,6 @@ $(function () {
 
     $(document).ready(function () {
         create_scrolltofixed();
-    });
-
-
-    $(document).on('click', ".kpi-table .kpi-comment [data-el='comment-icon']", function () {
-        // alert('kpi-comment click');
-        $(this).parent().qtip('hide');
-        var remote_url = $(this).attr('data-href');
-        $('#kpicoment-modal .modal-content').html('<div class="panel-body">Loading comment and KPI history...</div>');
-        //            $('#kpicoment-modal').modal('show');
-        cloudjetRequest.ajax({
-            url: remote_url,
-            type: 'get',
-            success: function (data) {
-                $('#kpicoment-modal .modal-content').html(data);
-                //              alert( "Load was performed." );
-            }
-        });
-
     });
 
 

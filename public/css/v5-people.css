@@ -354,7 +354,7 @@
 .font12 {
 	font-size: 12px;
 }
-.info-functions a, .info-functions span {
+.info-functions a{
 	display: block;
 	margin-left: 10px;
 	margin-bottom: 5px;
@@ -367,7 +367,7 @@
 info-functions a:last-child {
 	border-bottom: none;
 }
-.info-functions span:hover, .info-functions a:hover {
+.info-functions a:hover {
 	color: #008b8b;
 }
 .avatar_box .stick {
@@ -1410,4 +1410,9 @@ label.error{
     font-size: 16px;
     font-weight: bolder;
     color: #666666;
+}
+#tabs-people .font14, .modal-md .font14{
+        font-size: 14px;
+        padding-bottom: 3px;
+        line-height: 1px;
 }

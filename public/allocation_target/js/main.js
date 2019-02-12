@@ -1,30 +1,7 @@
 Array.prototype.insert = function (index, item) {
     this.splice(index, 0, item);
 };
-function format_number(number) {
 
-    var decimalSeparator = ".";
-    var thousandSeparator = ",";
-
-    // make sure we have a string
-    var result = String(number);
-
-    // split the number in the integer and decimals, if any
-    var parts = result.split(decimalSeparator);
-
-    // reverse the string (1719 becomes 9171)
-    result = parts[0].split("").reverse().join("");
-
-    // add thousand separator each 3 characters, except at the end of the string
-    result = result.replace(/(\d{3}(?!$))/g, "$1" + thousandSeparator);
-
-    // reverse back the integer and replace the original integer
-    parts[0] = result.split("").reverse().join("");
-
-    // recombine integer with decimals
-    return parts.join(decimalSeparator);
-
-}
 // -------------------------------------------- seach usser---------------------------------------------
 $(function () {
     $("#search_user").focus(function () {
@@ -168,10 +145,16 @@ Vue.component('decimal-input-edit-target', {
             target_kpi:''
         }
     },
+
+    watch: {
+        value: function (val) {
+            this.target_kpi = val
+        }
+    },
     computed: {
         model:{
             get: function(){
-                var val = this.value;
+                var val = JSON.parse(JSON.stringify(this.value));
                 // https://stackoverflow.com/a/33671045/6112615
                 return this.$options.filters.decimalDisplay(val);
             },
@@ -196,17 +179,22 @@ Vue.component('decimal-input-edit-target', {
             this.$emit('save')
         },
         cancel: function () {
+            this.target_kpi = this.value;
             this.$emit('cancel')
         }
     }
 
 });
+// Vue.filter('decimalDisplay',  function (val) {
+//     return (val === 0) ? 0 : (val == null || val === '') ? '' : format_number(val);
+// });
 Vue.component('modal-edit-target', {
         delimiters: ['${', '}$'],
-        props: ['kpi', 'showmodal', 'optionEditTarget'],
+        props: ['kpi','optionEditTarget','indexKpi'],
         template: $('#modal-edit-target').html(),
         data: function () {
             return {
+                showmodal:false,
                 if_kpi_not_edit:"",
                 tempMonth : [],
                 edit_target_data: {},
@@ -229,12 +217,13 @@ Vue.component('modal-edit-target', {
             // {#            console.log("======><><><><><><><kpppppppppppppppppppppppi><><><><><><><<><=======")#}
             // {#            this.edit_target_data = this.kpi#}
         },
+        inject: [
+            'updateTarget'
+        ],
         watch: {
             kpi: {
                 handler: function (newVal, oldVal) {
-                    // {#                    console.log("triggered change kpi object")#}
-                    // {#                    console.log(newVal)#}
-                    if (newVal.kpi_id !== undefined) {
+                    if (newVal.id !== undefined) {
                         this.edit_target_data = JSON.parse(JSON.stringify(newVal))
                         this.if_kpi_not_edit = JSON.parse(JSON.stringify(newVal))
                     }
@@ -246,6 +235,13 @@ Vue.component('modal-edit-target', {
             //            this.$off('dismiss')
         },
         methods: {
+            showEditTargetModal: function(){
+                let that = this
+                that.turnOffAllMessage();
+                that.showmodal = true;
+                that.edit_target_data = {}
+                that.$set(this,'edit_target_data', JSON.parse(JSON.stringify(this.kpi)));
+            },
             check_paste: function (evt) {
                 evt.preventDefault();
                 evt.stopPropagation();
@@ -267,11 +263,11 @@ Vue.component('modal-edit-target', {
                 if (quarter_to_edit < this.edit_target_data.current_quarter) return true
                 return this.edit_target_data.disable_edit
             },
-            triggeredCloseModal: function () {
-                var self = this
-                self.$emit('dismiss',this.if_kpi_not_edit)
-                self.turnOffAllMessage();
-            },
+            // triggeredCloseModal: function () {
+            //     var self = this
+            //     self.$emit('dismiss',this.if_kpi_not_edit)
+            //     self.turnOffAllMessage();
+            // },
             turnOffAllMessage: function () {
                 this.error_input.year = false;
                 this.error_input.quarter_1 = false;
@@ -280,58 +276,26 @@ Vue.component('modal-edit-target', {
                 this.error_input.quarter_4 = false;
             },
             updateAllTarget: function () {
-                var self = this;
-                self.turnOffAllMessage
-                self.checkMethodScoreType()
-                if (self.edit_target_data.year_data == undefined) {
-                    self.edit_target_data.year_data = {}
-                    self.edit_target_data.year_data['months_target'] = self.edit_target_data.months_target;
+                var that = this;
+                that.turnOffAllMessage()
+                that.checkMethodScoreType()
+                if (that.edit_target_data.year_data == undefined) {
+                    that.edit_target_data.year_data = {}
+                    that.edit_target_data.year_data['months_target'] = that.edit_target_data.months_target;
                 } else {
-                    if (self.edit_target_data.year_data.months_target == undefined) {
-                        self.edit_target_data.year_data['months_target'] = self.edit_target_data.months_target;
+                    if (that.edit_target_data.year_data.months_target == undefined) {
+                        that.edit_target_data.year_data['months_target'] = that.edit_target_data.months_target;
                     }else {
-                        self.edit_target_data.year_data.months_target = self.edit_target_data.months_target;
+                        that.edit_target_data.year_data.months_target = that.edit_target_data.months_target;
                     }
                 }
                 // lấy các target quý
-                var current_quarter = self.edit_target_data.current_quarter
-                self.tempMonth = [1,2,3].map(function(i){
-                     self.edit_target_data.months_target["quarter_" + current_quarter]["month_" + i] = !$.isNumeric(self.edit_target_data.months_target["quarter_" + current_quarter]["month_" + i])?null:parseFloat(self.edit_target_data.months_target["quarter_" + current_quarter]["month_" + i])
-                     return i = self.edit_target_data.months_target["quarter_" + current_quarter]["month_" + i]
-                })
-
                 if (this.is_correct_follow_score_calculation_type ) {
                     // check input đúng với phương pháp đo thi được request lên
-                    console.log("===========================xxxxxxxx")
-                    console.log(self.tempMonth)
-                    cloudjetRequest.ajax({
-                        type: 'post',
-                        url: '/api/v2/kpi/',
-                        dataType: "json",
-                        contentType: "application/json",
-                        data: JSON.stringify({
-                            id: self.edit_target_data.kpi_id,
-                            month_1_target: self.tempMonth[0],
-                            month_2_target: self.tempMonth[1],
-                            month_3_target: self.tempMonth[2],
-                            score_calculation_type: self.edit_target_data.score_calculation_type,
-                            year_target: self.edit_target_data.year === ""?null:self.edit_target_data.year,
-                            quarter_one_target: self.edit_target_data.quarter_1 === ""?null:self.edit_target_data.quarter_1,
-                            quarter_two_target: self.edit_target_data.quarter_2 === ""?null:self.edit_target_data.quarter_2,
-                            quarter_three_target: self.edit_target_data.quarter_3 === ""?null:self.edit_target_data.quarter_3,
-                            quarter_four_target: self.edit_target_data.quarter_4 === ""?null:self.edit_target_data.quarter_4,
-                            year_data: self.edit_target_data.year_data
-                        }),
-                        success: function (result) {
-                            console.log(result)
-                            self.edit_target_data
-                            console.log(self.tempMonth_1)
-                            self.$emit('dismiss', self.edit_target_data)
-                        },
-                        error: function () {
-
-                        }
-                    })
+                    let jqxhr = that.updateTarget(that.edit_target_data, that.indexKpi)
+                        jqxhr.done(function () {
+                            that.showmodal = false
+                        })
                 } else {
                 }
             },
@@ -342,7 +306,12 @@ Vue.component('modal-edit-target', {
                 // return true false -- true là đúng theo format phương pháp phân bổ chỉ tiêu
                 var self = this;
                 // Initialize pre condition
-
+                var obj_number = {
+                    '1': 'one',
+                    '2': 'two',
+                    '3': 'three',
+                    '4': 'four'
+                }
                 var quarterNeedTocheckSample = [1,2,3,4]
                 var intQuarterNumber = parseInt(this.edit_target_data.current_quarter)
                 var quarterNeedToCheck = []
@@ -358,7 +327,7 @@ Vue.component('modal-edit-target', {
                 // Process conditions
 
                 // year target bang voi tong target cac quy
-                var yearTargetValid = self.edit_target_data.year == total_year_follow_quarter
+                var yearTargetValid = self.edit_target_data.year_target == total_year_follow_quarter
                 var isTotalYear = total_year_follow_quarter
                 if(!yearTargetValid){
                     self.error_input['year'] = true
@@ -368,12 +337,12 @@ Vue.component('modal-edit-target', {
                 var quartersValid = quarterNeedToCheck.reduce(function(prevVal, element){
                     console.log(totalQuarterArray[element - 1])
                     console.log(self.edit_target_data["quarter_" + element])
-                    if((self.edit_target_data['quarter_' + element] == totalQuarterArray[element - 1]) == false){
+                    if((self.edit_target_data['quarter_' + obj_number[element] + '_target'] == totalQuarterArray[element - 1]) == false){
                         // show message lỗi
                         self.error_input['quarter_' + element] = true
 
                     }
-                    return prevVal && (self.edit_target_data['quarter_' + element] === totalQuarterArray[element - 1])
+                    return prevVal && (self.edit_target_data['quarter_' + obj_number[element] + '_target'] === totalQuarterArray[element - 1])
                 },true)
 
 
@@ -391,17 +360,23 @@ Vue.component('modal-edit-target', {
                 var data_quarter = [] // mang luu data 12 tháng convert thành kiểu float
                 var all_quarter = [] //  mang luu data 4 quý tháng convert thành kiểu float
                 var total_quarter =[] // mamg chứ total 4 quý 12 tháng theo pp phân bổ chỉ tiêu
+                var obj_number = {
+                    '1': 'one',
+                    '2': 'two',
+                    '3': 'three',
+                    '4': 'four'
+                }
                 // step 1 chuyển data thành kiểu float đê có thể tính toán
-                self.edit_target_data.year = !$.isNumeric(self.edit_target_data.year)?null:parseFloat(self.edit_target_data.year)
+                self.edit_target_data.year_target = $.isNumeric(self.edit_target_data.year_target)?parseFloat(self.edit_target_data.year_target):null
                 for (var i =1; i<5;i++){
                     data_quarter[i] = {}
                     // mảng chứa data 4 quý
-                    all_quarter[i] = self.edit_target_data['quarter_' +i] = !$.isNumeric(self.edit_target_data['quarter_' +i])?null:parseFloat(self.edit_target_data['quarter_' +i])
+                    all_quarter[i] = self.edit_target_data['quarter_' +obj_number[i]+'_target'] = $.isNumeric(self.edit_target_data['quarter_' +obj_number[i]+'_target'])?parseFloat(self.edit_target_data['quarter_' +obj_number[i]+'_target']):null
                     console.log(i)
                     // chứa data 3 tháng sắp xếp theo quý
-                    data_quarter[i]['month_1'] = self.edit_target_data.months_target['quarter_' +i].month_1 = !$.isNumeric(self.edit_target_data.months_target['quarter_' +i].month_1)?null:parseFloat(self.edit_target_data.months_target['quarter_' +i].month_1)
-                    data_quarter[i]['month_2'] = self.edit_target_data.months_target['quarter_' +i].month_2 = !$.isNumeric(self.edit_target_data.months_target['quarter_' +i].month_2)?null:parseFloat(self.edit_target_data.months_target['quarter_' +i].month_2)
-                    data_quarter[i]['month_3'] = self.edit_target_data.months_target['quarter_' +i].month_3 = !$.isNumeric(self.edit_target_data.months_target['quarter_' +i].month_3)?null:parseFloat(self.edit_target_data.months_target['quarter_' +i].month_3)
+                    data_quarter[i]['month_1_target'] = self.edit_target_data.months_target['quarter_' +i].month_1_target = $.isNumeric(self.edit_target_data.months_target['quarter_' +i].month_1_target)?parseFloat(self.edit_target_data.months_target['quarter_' +i].month_1_target):null
+                    data_quarter[i]['month_2_target'] = self.edit_target_data.months_target['quarter_' +i].month_2_target = $.isNumeric(self.edit_target_data.months_target['quarter_' +i].month_2_target)?parseFloat(self.edit_target_data.months_target['quarter_' +i].month_2_target):null
+                    data_quarter[i]['month_3_target'] = self.edit_target_data.months_target['quarter_' +i].month_3_target = $.isNumeric(self.edit_target_data.months_target['quarter_' +i].month_3_target)?parseFloat(self.edit_target_data.months_target['quarter_' +i].month_3_target):null
                 }
                 // step 2 tính toán total 4 quý và 12 tháng theo 3 pp phân bổ sum, average, most_recent_quarter
                 total_quarter[0] = calculateYearTotal(all_quarter)
@@ -461,8 +436,9 @@ var targetPage = new Vue({
     data: {
         loading:false,
         actorId: COMMON.ActorId,
-        nameActor: COMMON.UserName,
-        emailActor: COMMON.EmailActor,
+        user_viewed_id :COMMON.UserViewedId,
+        user_viewed_name: COMMON.UserViewedDisplayName,
+        user_viewed_email: COMMON.UserViewedEmail,
         enableFollowTarget: false,
         allow_edit_monthly_target:false,
         is_user_system:false,
@@ -474,8 +450,8 @@ var targetPage = new Vue({
         option: '',
         oldQuery: '',
         query: "",
-        user_profile:"",
-        user_profile_actor:"",
+        user_profile:{},
+        user_profile_actor:{},
         isShowMonth: true,
         currentUserId: '',
         kpiList: {},
@@ -489,13 +465,18 @@ var targetPage = new Vue({
         storage_user: [],
         list_user_searched: [],
         list_surbodinates_user_viewed: [],
-        organization: '',
+        organization: {},
     },
     components: {},
     computed: {
         dataToSearch: function () {
             return this.mergeSubordinateAndUserSearchList()
         },
+    },
+    provide: function () {
+        return {
+            updateTarget: this.updateTarget
+        }
     },
     methods: {
         check_paste: function (evt) {
@@ -517,7 +498,7 @@ var targetPage = new Vue({
         },
         refreshHistoryData: function () {
             var self = this;
-            self.$set(self, 'storage_user', self.getHistoryStorageByEmail(this.emailActor))
+            self.$set(self, 'storage_user', self.getHistoryStorageByEmail(this.user_viewed_email))
         },
         cloneObject: function (objectOriginal) {
             return JSON.parse(JSON.stringify(objectOriginal))
@@ -638,7 +619,7 @@ var targetPage = new Vue({
             self.tableData = []
             self.currentUserId = userId;
 
-            var _storage = self.getHistoryStorageByEmail(this.emailActor)
+            var _storage = self.getHistoryStorageByEmail(this.user_viewed_email)
 
             // Step 3: Update search history
 
@@ -660,7 +641,7 @@ var targetPage = new Vue({
 
 
             // Step 4: update to localStorage again
-            self.setHistoryStorageByEmail(this.emailActor, _storage)
+            self.setHistoryStorageByEmail(this.user_viewed_email, _storage)
 
             self.getCurrentQuarter();
             self.getUserProfile();
@@ -678,19 +659,20 @@ var targetPage = new Vue({
         tableRowClassName: function ({row, rowIndex}) { // add class cho category
             var list_classes = [];
             if (this.tableData[rowIndex].isGroup == true) {
-                if (this.tableData[rowIndex].ten_KPI == gettext('Financial')) {
+                if (this.tableData[rowIndex].name == gettext('Financial')) {
                     list_classes.push('target_fin_title');
-                } else if (this.tableData[rowIndex].ten_KPI == gettext('Customer')) {
+                } else if (this.tableData[rowIndex].name == gettext('Customer')) {
                     list_classes.push('target_client_title');
                 }
-                else if (this.tableData[rowIndex].ten_KPI == gettext('Internal')) {
+                else if (this.tableData[rowIndex].name == gettext('Internal')) {
                     list_classes.push('target_internal_title');
                 }
-                else if (this.tableData[rowIndex].ten_KPI == gettext('Learninggrowth')) {
+                else if (this.tableData[rowIndex].name == gettext('Learninggrowth')) {
                     list_classes.push('target_clean_title');
                 }
-                else if (this.tableData[rowIndex].ten_KPI == gettext('More')) {
+                else if (this.tableData[rowIndex].name == gettext('More')) {
                     list_classes.push('target_other_title');
+                } else {
                 }
             }
             if (row.weight == 0) {
@@ -701,16 +683,16 @@ var targetPage = new Vue({
         createItem: function (item) { // created data cho tung kpi
             var self = this;
             var tempTableData = {
-                kpi_id: '',
+                id: '',
                 disable_edit:'',
                 current_quarter:'',
-                ten_KPI: '',
-                year: '',
+                name: '',
+                year_target: '',
                 months_target: {},
-                quarter_1: "",
-                quarter_2: "",
-                quarter_3: "",
-                quarter_4: "",
+                quarter_one_target: "",
+                quarter_two_target: "",
+                quarter_three_target: "",
+                quarter_four_target: "",
                 isGroup: false,
                 score_calculation_type: "",
                 year_data: {},
@@ -718,38 +700,20 @@ var targetPage = new Vue({
                 refer_to:'',
                 name_kpi_parent:"",
             };
+            tempTableData = Object.assign(tempTableData,item);
             // add field to export excel
-            tempTableData.code = item.code == undefined ? "" : item.code;
-            tempTableData.group = item.group == undefined ? "" : item.group;
-            tempTableData.weight = item.weight == undefined ? 0 : item.weight;
-            if (item.refer_to){
+            // tempTableData.code = item.code == undefined ? "" : item.code;
+            // tempTableData.group = item.group == undefined ? "" : item.group;
+            if (item.parent){
                 tempTableData.weight_child = item.weight == undefined ? 0 : item.weight;
             }
-            tempTableData.owner_email = item.owner_email;
-            tempTableData.unit = item.unit == undefined ? "" : item.unit;
-            tempTableData.current_goal = item.current_goal == undefined ? "" : item.current_goal;     // measurement method
-            tempTableData.operator = item.operator == undefined ? "" : item.operator;
-            tempTableData.score_calculation_type = item.score_calculation_type;
-            tempTableData.assigned_to = item.assigned_to == undefined ? "" : item.assigned_to;
-            tempTableData.data_source = '';
-            // console.log(item.name)
-            tempTableData.ten_KPI = item.name == undefined ? "" : item.name;
-            tempTableData.year = item.year_target == undefined ? "" : item.year_target;
-            tempTableData.quarter_1 = item.quarter_one_target == undefined ? "" : item.quarter_one_target;
-            tempTableData.quarter_2 = item.quarter_two_target == undefined ? "" : item.quarter_two_target;
-            tempTableData.quarter_3 = item.quarter_three_target == undefined ? "" : item.quarter_three_target;
-            tempTableData.quarter_4 = item.quarter_four_target == undefined ? "" : item.quarter_four_target;
             tempTableData.edit = "";
             tempTableData.isGroup = item.isGroup == undefined ? false : true
-            tempTableData.score_calculation_type = item.score_calculation_type == undefined ? "" : item.score_calculation_type
-            tempTableData.refer_to = item.refer_to
             // biến sử dung truyền khi request lên server
             tempTableData.disable_edit = !self.checkPermissionToEditTarget(item)
-            tempTableData.kpi_id = item.id;
             tempTableData.current_quarter = self.get_current_quarter
             tempTableData.months_target = self.getMonthsTarget(item) == undefined ? "" : self.getMonthsTarget(item);
-            tempTableData.yeardata = item.year_data == undefined ? "" : item.year_data;
-            return tempTableData = tempTableData == undefined ? {} : tempTableData;
+            return tempTableData
         },
         triggeredDismissModal: function(e){
             this.selected_kpi = Object.assign(this.selected_kpi, e) // gan e cho vung nho this.selected_kpi
@@ -765,33 +729,36 @@ var targetPage = new Vue({
         getMonthsTarget: function (item) { // tao field thang theo tung quy
             var temp_months_target = {
                 quarter_1: {
-                    month_1: '',
-                    month_2: '',
-                    month_3: ''
+                    month_1_target: '',
+                    month_2_target: '',
+                    month_3_target: ''
                 },
                 quarter_2: {
-                    month_1: '',
-                    month_2: '',
-                    month_3: ''
+                    month_1_target: '',
+                    month_2_target: '',
+                    month_3_target: ''
                 },
                 quarter_3: {
-                    month_1: '',
-                    month_2: '',
-                    month_3: ''
+                    month_1_target: '',
+                    month_2_target: '',
+                    month_3_target: ''
                 },
                 quarter_4: {
-                    month_1: '',
-                    month_2: '',
-                    month_3: ''
+                    month_1_target: '',
+                    month_2_target: '',
+                    month_3_target: ''
                 }
             }
             if (item.year_data != undefined && item.year_data.months_target) {
-                Object.assign(temp_months_target, item.year_data.months_target);
+                Object.keys(temp_months_target).forEach(function (quarter) {
+                    Object.assign(temp_months_target[quarter], item.year_data.months_target[quarter] || {});
+                })
+
             }
-            var i = this.get_current_quarter
-            temp_months_target['quarter_' + i].month_1 = item.month_1_target == undefined ? "" : item.month_1_target;
-            temp_months_target['quarter_' + i].month_2 = item.month_2_target == undefined ? "" : item.month_2_target;
-            temp_months_target['quarter_' + i].month_3 = item.month_3_target == undefined ? "" : item.month_3_target;
+            // var i = this.get_current_quarter
+            // temp_months_target['quarter_' + i].month_1_target = item.month_1_target == undefined ? "" : item.month_1_target;
+            // temp_months_target['quarter_' + i].month_2_target = item.month_2_target == undefined ? "" : item.month_2_target;
+            // temp_months_target['quarter_' + i].month_3_target = item.month_3_target == undefined ? "" : item.month_3_target;
             return temp_months_target
         },
 
@@ -846,7 +813,7 @@ var targetPage = new Vue({
         },
 
         getCurrentQuarter: function() {
-            var self = this
+            let that = this
             cloudjetRequest.ajax({
                 url: "/api/quarter/",
                 dataType: "json",
@@ -857,18 +824,15 @@ var targetPage = new Vue({
                 success: function (res) {
                     // console.log("quarter")
                     console.log(res);
-                    self.get_current_quarter = res.fields.quarter
+                    that.$set(that.$data, 'get_current_quarter', res.fields.quarter);
                     // console.log(this.get_current_quarter)
-                    self.getListKpi()
+                    that.getListKpi()
                 },
                 error: function (a, b, c) {
                 }
             })
         },
-        updateTarget: function (kpi) { // update target khi edit tung field kpi
-            var tempMonth_1 = "";
-            var tempMonth_2 = "";
-            var tempMonth_3 = "";
+        updateTarget: function (kpi,index) { // update target khi edit tung field kpi
             var that = this;
             if (kpi.year_data == undefined) {
                 kpi.year_data = {}
@@ -880,30 +844,26 @@ var targetPage = new Vue({
                     kpi.year_data.months_target = kpi.months_target;
                 }
             }
-            var i = kpi.current_quarter
-            tempMonth_1 = kpi.months_target['quarter_' + i].month_1;
-            tempMonth_2 = kpi.months_target['quarter_' + i].month_2;
-            tempMonth_3 = kpi.months_target['quarter_' + i].month_3;
-            cloudjetRequest.ajax({
+            var jqXhr = cloudjetRequest.ajax({
                 type: 'post',
                 url: '/api/v2/kpi/',
                 dataType: "json",
                 data: JSON.stringify({
-                    id: kpi.kpi_id,
-                    month_1_target: tempMonth_1 === ""? null : parseFloat(tempMonth_1),
-                    month_2_target: tempMonth_2 === ""? null : parseFloat(tempMonth_2),
-                    month_3_target: tempMonth_3 === ""? null : parseFloat(tempMonth_3),
+                    id: kpi.id,
                     score_calculation_type: kpi.score_calculation_type,
-                    year_target: kpi.year === ""? null : parseFloat(kpi.year),
-                    quarter_one_target: kpi.quarter_1 === ""? null : parseFloat(kpi.quarter_1),
-                    quarter_two_target: kpi.quarter_2 === ""? null : parseFloat(kpi.quarter_2),
-                    quarter_three_target: kpi.quarter_3 === ""? null : parseFloat(kpi.quarter_3),
-                    quarter_four_target: kpi.quarter_4 === ""? null : parseFloat(kpi.quarter_4),
+                    year_target: $.isNumeric(kpi.year_target) ? parseFloat(kpi.year_target) : null,
+                    quarter_one_target: $.isNumeric(kpi.quarter_one_target )? parseFloat(kpi.quarter_one_target):null,
+                    quarter_two_target: $.isNumeric(kpi.quarter_two_target)?  parseFloat(kpi.quarter_two_target):null,
+                    quarter_three_target: $.isNumeric(kpi.quarter_three_target)? parseFloat(kpi.quarter_three_target):null,
+                    quarter_four_target: $.isNumeric(kpi.quarter_four_target)? parseFloat(kpi.quarter_four_target):null,
                     year_data: kpi.year_data
                 }),
                 success: function (result) {
                     // console.log("===================success============")
                     // console.log(result)
+                    that.tableData[index] = Object.assign(that.tableData[index],result)
+                    that.$set(that.tableData[index], 'months_target' , that.getMonthsTarget(result))
+                    // that.$set(that.tableData, index, result)
                     kpi.visible2 = false;
                     $('.el-popover').hide()
                 },
@@ -911,6 +871,7 @@ var targetPage = new Vue({
                     $('.el-popover').hide()
                 }
             })
+            return jqXhr
         },
         cancelEditTarget: function () {
             $('.el-popover').hide()
@@ -920,7 +881,7 @@ var targetPage = new Vue({
             self.loading = true
             cloudjetRequest.ajax({
                 type: 'GET',
-                url: '/api/v2/user/' + this.currentUserId + '/kpis/?include_childs=1',
+                url: '/api/v2/user/' + this.currentUserId + '/kpis/?include_childs=1&order_by_group_kpi=1',
                 success: function (result) {
 
                     self.kpiList = result.map(function(elmParent){
@@ -929,6 +890,7 @@ var targetPage = new Vue({
                         });
                         return elmParent
                     })
+                    // kpiList chỉ chứa các kpi của user_view đang đảm nhiệm
                     self.kpiList = result
                     self.groupFinancial = []
                     self.groupCustomer = []
@@ -986,10 +948,10 @@ var targetPage = new Vue({
             var self = this
             var temp = []
             temp.push(self.createItem(kpi));
-            var email_parent = kpi.owner_email
+            var email_parent = kpi.incharge_user_email
             if(kpi.children.length >0){
                 for(var i = 0; i < kpi.children.length; i++){
-                    if(email_parent === kpi.children[i].owner_email){
+                    if(email_parent === kpi.children[i].incharge_user_email){
                         temp.push(self.createItem(kpi.children[i]));
                     }
                 }
@@ -1056,7 +1018,7 @@ var targetPage = new Vue({
             cloudjetRequest.ajax({
                 method: "GET",
                 dataType: 'json',
-                url: '/api/team/?user_id=' + that.actorId,
+                url: '/api/team/?user_id=' + that.user_viewed_id,
                 success: function (data) {
                     // console.log(data)
                     that.list_surbodinates_user_viewed = data.length > 0 ? data : [];
@@ -1093,16 +1055,29 @@ var targetPage = new Vue({
                     id: null,
                     child: null,
                     text: gettext('KPI Code'),
-                    slug: 'code',
+                    slug: 'kpi_id',
                     width: '20',
                     style: 'center'
                 }, {
                     id: null,
                     child: null,
                     text: gettext('Group'),
-                    slug: 'group',
+                    slug: 'refer_group_name',
                     width: '20',
                     style: 'center'
+                }, {
+                    id: null,
+                    child: null,
+                    text: gettext('KPI name'),
+                    slug: 'name',
+                    width: '20',
+                    style: {
+                        alignment: {
+                            vertical: 'middle',
+                            horizontal: 'left',
+                            wrapText: true
+                        },
+                    }
                 }, {
                     id: null,
                     child: null,
@@ -1120,21 +1095,8 @@ var targetPage = new Vue({
                 }, {
                     id: null,
                     child: null,
-                    text: gettext('KPI name'),
-                    slug: 'ten_KPI',
-                    width: '20',
-                    style: {
-                        alignment: {
-                            vertical: 'middle',
-                            horizontal: 'left',
-                            wrapText: true
-                        },
-                    }
-                }, {
-                    id: null,
-                    child: null,
                     text: gettext('Assign to'),
-                    slug: 'owner_email',
+                    slug: 'incharge_user_email',
                     width: '25',
                     style: {
                         alignment: {
@@ -1207,87 +1169,87 @@ var targetPage = new Vue({
                     child: [
                         {
                             text: gettext("Year"),
-                            slug: 'year',
+                            slug: 'year_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 1"),
-                            slug: 'months_target.quarter_1.month_1',
+                            slug: 'months_target.quarter_1.month_1_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 2"),
-                            slug: 'months_target.quarter_1.month_2',
+                            slug: 'months_target.quarter_1.month_2_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 3"),
-                            slug: 'months_target.quarter_1.month_3',
+                            slug: 'months_target.quarter_1.month_3_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Quarter 1"),
-                            slug: 'quarter_1',
+                            slug: 'quarter_one_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 4"),
-                            slug: 'months_target.quarter_2.month_1',
+                            slug: 'months_target.quarter_2.month_1_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 5"),
-                            slug: 'months_target.quarter_2.month_2',
+                            slug: 'months_target.quarter_2.month_2_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 6"),
-                            slug: 'months_target.quarter_2.month_3',
+                            slug: 'months_target.quarter_2.month_3_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Quarter 2"),
-                            slug: 'quarter_2',
+                            slug: 'quarter_two_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 7"),
-                            slug: 'months_target.quarter_3.month_1',
+                            slug: 'months_target.quarter_3.month_1_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 8"),
-                            slug: 'months_target.quarter_3.month_2',
+                            slug: 'months_target.quarter_3.month_2_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 9"),
-                            slug: 'months_target.quarter_3.month_3',
+                            slug: 'months_target.quarter_3.month_3_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Quarter 3"),
-                            slug: 'quarter_3',
+                            slug: 'quarter_three_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 10"),
-                            slug: 'months_target.quarter_4.month_1',
+                            slug: 'months_target.quarter_4.month_1_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 11"),
-                            slug: 'months_target.quarter_4.month_2',
+                            slug: 'months_target.quarter_4.month_2_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Month 12"),
-                            slug: 'months_target.quarter_4.month_3',
+                            slug: 'months_target.quarter_4.month_3_target',
                             width: '20',
                             style: 'center',
                         },{
                             text: gettext("Quarter 4"),
-                            slug: 'quarter_4',
+                            slug: 'quarter_four_target',
                             width: '20',
                             style: 'center',
                         }
@@ -1577,7 +1539,7 @@ var targetPage = new Vue({
             function totalWeight(tableData) {
                 total = 0;
                 tableData.forEach(function (row) {
-                    if (row.weight != undefined && !row.refer_to ){
+                    if (row.weight != undefined && !row.parent){
                         total = total + row.weight;
                     }
                     this.total_weight = total;
@@ -1589,6 +1551,10 @@ var targetPage = new Vue({
                 var id_start = 'B';
                 var val = '';
                 var total_weight_percent = 0;
+                var start_row_merge_group = 0;
+                var end_row_merge_group = 0;
+                var is_same_group = false;
+                var ready_merge_group = false
                 tableData.forEach(function (row) {
                     if (!row.isGroup){
                         headerData.columns.forEach(function (col) {
@@ -1607,35 +1573,82 @@ var targetPage = new Vue({
                                 if (col.slug == 'score_calculation_type'){
                                     val = gettext(val);
                                     console.log("type:", val);
-                                }
-                                // if (!row.refer_to){}
-                                if (val == 'weight_percent') {
-                                    if (!row.refer_to){
-                                        val = (row.weight / this.total_weight);
+                                } else if (col.slug == 'refer_group_name') {
+                                    if (row.parent){
+                                        if(!is_same_group){
+                                            start_row_merge_group = id_start + (start_row -1);
+                                        }
+
+                                        val = ''
+                                        is_same_group = true
+
+                                    }else if (is_same_group && !row.parent){
+                                        is_same_group = false
+                                        end_row_merge_group = id_start + (start_row -1);
+                                        ready_merge_group = true
+                                    }else{
+                                        //not thing
+                                    }
+                                }else if (val == 'weight_percent') {
+                                    if (!row.parent){
+                                        if (this.total_weight > 0) {
+                                            val = (row.weight / this.total_weight);
+                                        } else {
+                                            val = null;
+                                        }
                                         total_weight_percent = total_weight_percent + val;
                                         setNumFormat(cell, '0.00%')
                                     }else{
                                         val = '';
                                     }
-
-                                }
-                                if (val == 'weight_child_percent'){
-                                    if (row.refer_to){
+                                } else if (col.slug == 'weight_child') {
+                                    val = null;
+                                    if (row.parent) {
+                                        var parent = _.find(tableData, {id: row.parent});
+                                        if (parent && parent.children_data && parent.children_data.children_weights) {
+                                            parent.children_data.children_weights.forEach(function (child) {
+                                                if (child.kpi_id == row.id) {
+                                                    val = child.weight;
+                                                }
+                                            });
+                                        }
+                                    }
+                                } else if (val == 'weight_child_percent'){
+                                    if (row.parent){
                                         var total_weight_child = 0;
-                                        tableData.forEach(function (_row) {
-                                            if (_row.refer_to == row.refer_to){
-                                                total_weight_child += _row.weight_child;
+                                        var parent = _.find(tableData, {id: row.parent});
+                                        if (parent && parent.children_data && parent.children_data.children_weights) {
+                                            parent.children_data.children_weights.forEach(function (child) {
+                                                total_weight_child += child.weight;
+                                                if (row.id == child.kpi_id) {
+                                                    row.weight_child = child.weight;
+                                                }
+                                            });
+                                            if (total_weight_child > 0) {
+                                                val = (row.weight_child / total_weight_child);
+                                            } else {
+                                                val = null;
                                             }
-                                        });
-                                        val = (row.weight_child / total_weight_child);
+                                        }
+
                                         setNumFormat(cell, '0.00%')
-                                    }else{
+                                    } else {
                                         val ='';
+                                    }
+                                } else if (col.slug == 'weight') {
+                                    if (row.parent) {
+                                        val = null
+                                    } else {
+                                        val = row.weight;
                                     }
                                 }
                                 setCellVal(cell, val);
                                 setFormatCell(cell, bodyFormat);
                                 setFormatCell(cell, col.style);
+                                if (col.slug == 'refer_group_name' && ready_merge_group) {
+                                    ws.mergeCells(start_row_merge_group+':' + end_row_merge_group);
+                                    ready_merge_group = false
+                                }
 
                             }
                             id_start = id_start.nextChar();
@@ -1647,10 +1660,10 @@ var targetPage = new Vue({
 
                 });
                 setValueCell((id_start + start_row ), gettext('Sum'));
-                setValueCell(('D' + start_row ), this.total_weight);
+                setValueCell(('E' + start_row ), this.total_weight);
 
-                setValueCell(('E' + start_row ), total_weight_percent);
-                setNumFormat('E' + start_row, '0.00%');
+                setValueCell(('F' + start_row ), total_weight_percent);
+                setNumFormat('F' + start_row, '0.00%');
                 headerData.columns.forEach(function (col) {         // set mau dong cuoi cung
                     cell = id_start + start_row;
                     if (col.child){
@@ -1760,8 +1773,8 @@ var targetPage = new Vue({
         this.isShowMonth = true;
         this.getOrg();
         this.getProfileActor()
-        this.setCurrentUser(self.actorId, self.nameActor);
-        this.storage_user = self.getHistoryStorageByEmail(self.emailActor);
+        this.setCurrentUser(this.user_viewed_id, this.user_viewed_name);
+        this.storage_user = this.getHistoryStorageByEmail(this.user_viewed_email);
         this.get_surbodinate_user_viewed();
         setInterval(function(){
             $('#launcher').hide();
