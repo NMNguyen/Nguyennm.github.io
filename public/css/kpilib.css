@@ -538,9 +538,13 @@
     }
     .el-dialog-kpilib-detail .el-dialog__body{
         padding:0px 20px;
+        max-height:600px;
+        overflow: auto;
     }
     .el-dialog-kpilib-detail .form-group{
         margin-bottom: 0px;
     }
-
+    .el-dialog-kpilib-detail .line-wrap{
+        white-space: pre-wrap;
+    }
 /* end css modal_add_kpi_to_collection_template.html */
