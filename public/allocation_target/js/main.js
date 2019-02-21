@@ -156,7 +156,7 @@ Vue.component('decimal-input-edit-target', {
             get: function(){
                 var val = JSON.parse(JSON.stringify(this.value));
                 // https://stackoverflow.com/a/33671045/6112615
-                return this.$options.filters.decimalDisplay(val);
+                return this.$options.filters.decimalDisplay(val, 5);
             },
             set: function(val){
                 var newVal=val;
