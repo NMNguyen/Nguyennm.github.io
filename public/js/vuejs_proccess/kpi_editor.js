@@ -611,120 +611,416 @@ Vue.component('kpi-children-weight-modal',{
         }
     },
 })
-
-Vue.component('evidence-button', {
+Vue.component('evidence-buttons', {
     delimiters: ['{$', '$}'],
     props: [
-        'month',
-        'list_evidences',
-        'title',
         'kpi',
+        'count_evidences'
     ],
-    data:function(){
+    data: function () {
         return {
-            // 'evidences':{},
-            'evidences':this.list_evidences,
-            'evidence_count': null,
+            dialogEvidenceVisible: false,
+            dialogPreviewVisible: false,
+            dialogRemoveVisible: false,
+            month: null,
+            evidences: [],
+            month_name: '',
+            file_url: '',
+            selected_evidence: null,
+            loading: false
         }
     },
-    template: `  
-        <button
-        v-tooltip="title"
-        
-        v-bind:class="'btn btn-default KPI_BTN_EVD ' + (evidence_count ? ' evidence-exist btn-evidences-2': ' btn-evidences-1')"
-        v-on:click="showModal_e(month, kpi)"
-        >
-        <i class="fa fa-file-text-o pull-left evidences-icon"></i> {$ evidence_count $}
-        </button>
-    `,
-    created: function(){
-        // this.evidences=this.list_evidences; // co can thiet khong khi da watch ?? <=== watch chi anh huong sau khi mounted va prop thay doi
-        // this.evidences=this.list_evidences; // co can thiet khong khi da assigned o data ??? <== khong can thiet
-        console.log('evidence-button created');
-
-        // if evidence-count not loaded yet --> load evidence-count /// ????
-        this.evidence_count = this.count_evidence(this.month, this.kpi_id);
-        if (this.evidence_count === null){
-            this.get_evidence(this.month, this.kpi_id);
-        }
-    },
-    mounted:function(){
-        console.log('evidence-button mounted');
-
-    },
-    watch:{
-        list_evidences:function (value, oldValue) {
-            //alert('list_evidences change' );
-            console.log('evidence-button list_evidences watch');
-            this.evidences=Object.assign({}, value);
-
-        },
-        evidences:function (value, oldValue) {
-            // alert('evidences change' );
-            //this.evidences=Object.assign({}, value);
-            console.log('evidence-button evidences watch');
-            this.evidence_count = this.count_evidence(this.month, this.kpi_id);
-        },
-        evidence_count: function(){},
-    },
+    inject: [
+        'disable_edit_target',
+    ],
+    template: '#evidence-buttons-template',
     computed:{
+        count_evidence_month_1: function () {
+            return this.count_evidences[1] || 0;
+        },
+        count_evidence_month_2: function () {
+            return this.count_evidences[2] || 0;
+        },
+        count_evidence_month_3: function () {
+            return this.count_evidences[3] || 0;
+        },
+    },
+    created: function () {
+        var that = this;
+        that.$on("show_evidence_modal", function (month) {
+            that.show_evidence_modal(month);
+        });
+        that.$on("show_preview_modal", function (file_url) {
+            that.show_preview_modal(file_url);
+        });
+
+        that.$on('add_evidence', function (evidence) {
+            that.add_evidence(evidence);
+        });
+
+        that.$on('show_modal_remove_evidence', function (evidence) {
+            that.show_modal_remove_evidence(evidence);
+        });
+
+        that.$on('remove_evidence', function (evidence) {
+            that.remove_evidence(evidence);
+        });
+
+        that.$on('close_remove_modal', function () {
+            that.close_remove_modal();
+        });
+
+        that.$on('close_preview_modal', function () {
+            that.close_preview_modal();
+        })
+
+        that.$on('close_evidence_modal', function () {
+            that.close_evidence_modal();
+        })
 
     },
     methods:{
-        count_evidence: function () {
-            var that = this;
-            if (that.evidences[this.kpi.id] == undefined || that.evidences[this.kpi.id][this.month] == undefined)
-                return null;
-            else
-                return that.evidences[this.kpi.id][this.month]
-
+        show_evidence_modal: function (month) {
+            this.evidences = [];
+            this.dialogEvidenceVisible = true;
+            this.month = month;
+            this.get_evidences(month);
         },
-        get_evidence: function () {
+        show_remove_evidence_modal: function (evidence) {
+            this.selected_evidence = evidence;
+            this.dialogRemoveVisible = true;
+        },
+        get_evidences: function (month_number) {
             var that = this;
-            // alert('get evidence')
+            var month_name = month_number == 1 ? v.month_1_name : month_number == 2 ? v.month_2_name : month_number == 3 ? v.month_3_name : '';
+            that.month_name = month_name;
+            that.month = month_number;
+            that.loading = true;
             cloudjetRequest.ajax({
                 url: '/api/v2/kpi/' + that.kpi.id + '/evidence/upload/',
                 type: 'get',
                 data: {
                     type: "json",
-                    month: that.month,
                     kpi_id: that.kpi.id,
-                    count: true,
+                    month: month_number,
                 },
                 success: function (response) {
-                    var count = response[0];
-
-                    // var evidence={ };
-                    // evidence[that.kpi_id]={};
-                    // evidence[that.kpi_id][that.month]= count;
-                    //
-                    // that.evidences = Object.assign({}, that.evidences, evidence);
-
-                    setObj(that.evidences, that.kpi.id+ '.'+ that.month, count);
-                    that.evidences = Object.assign({}, that.evidences);
-                    // that.$set(that.evidences[that.kpi_id], that.month, count);
-
-                    // emit event for parent to update evidences list
-                    that.$root.$emit('update_evidence_event_callback', that.kpi.id, that.month, count);
-
+                    that.$set(that.$data, 'evidences', response);
+                    that.loading = false;
+                },
+                error: function () {
+                    that.loading = false;
+                    alert("error");
+                },
+            });
+        },
+        show_preview_modal: function (file_url) {
+            this.file_url = file_url;
+            this.dialogPreviewVisible = true;
+        },
+        add_evidence: function (evidence) {
+            this.evidences.unshift(evidence);
+            this.$parent.$emit("update_evidence_count", this.month, 1);
+        },
+        show_modal_remove_evidence: function (evidence) {
+            this.selected_evidence = evidence;
+            this.dialogRemoveVisible = true;
+        },
+        remove_evidence: function (evidence) {
+            var that = this;
+            cloudjetRequest.ajax({
+                url: '/api/v2/kpi/' + this.kpi.id + '/evidence/upload/',
+                type: 'delete',
+                data: {
+                    type: "json",
+                    id: evidence.id,
+                    month: that.month
                 },
                 error: function () {
 
                 },
-            })
-
-
+            }).done(function () {
+                let index = that.evidences.indexOf(evidence);
+                if (index != -1) {
+                    that.evidences.splice(index, 1);
+                    that.dialogRemoveVisible = false;
+                    that.dialogEvidenceVisible = true;
+                    that.$parent.$emit("update_evidence_count", that.month, -1);
+                }
+            });
         },
-        showModal_e:function(month){
-            // alert('click evidence button');
-            this.$root.current_evidence_kpi = JSON.parse(JSON.stringify(this.kpi));
-            this.$root.$emit('showModal_e', month);
+        close_remove_modal: function () {
+            this.dialogRemoveVisible = false;
+        },
+        close_preview_modal: function () {
+            this.dialogPreviewVisible = false;
+        },
+        close_evidence_modal: function () {
+            this.dialogEvidenceVisible = false;
         }
     }
-
 });
 
+Vue.component('evidence-button', {
+    delimiters: ['{$', '$}'],
+    props: [
+        'month',
+        'count',
+        'title',
+        'kpi',
+    ],
+    data:function(){
+        return {
+        }
+    },
+    template: `  
+        <button
+            v-tooltip="title"
+            v-bind:class="'btn btn-default KPI_BTN_EVD ' + (count ? ' evidence-exist btn-evidences-2': ' btn-evidences-1')"
+            v-on:click="showModal_e(month)">
+            <i class="fa fa-file-text-o pull-left evidences-icon"></i> {$ count $}
+        </button>
+    `,
+    created: function(){
+        console.log('evidence-button created');
+    },
+    mounted:function(){
+        console.log('evidence-button mounted');
 
+    },
+    methods: {
+        showModal_e:function(month){
+            this.$parent.$emit('show_evidence_modal', month);
+        }
+    }
+});
+
+Vue.component('evidence-modal', {
+    delimiters: ['{$', '$}'],
+    props: [
+        'kpi',
+        'evidences',
+        'dialogEvidenceVisible',
+        'month_name',
+        'month',
+        'loading'
+    ],
+    data: function () {
+        return {
+            filename: '',
+            message_error_upload_evidence: '',
+            disable_upload: false,
+        }
+    },
+    inject: [
+        'get_organization'
+    ],
+    template: '#evidence-modal-template',
+    watch: {
+        dialogEvidenceVisible: function (val) {
+            var that = this;
+            if (val) {
+                that.filename = '';
+                that.message_error_upload_evidence = '';
+                $(`.evidence_kpi_${that.kpi.id} #file-upload`).val('');
+                $(`.evidence_kpi_${that.kpi.id} #e-content`).val('');
+                $(`.evidence_kpi_${that.kpi.id} .form-start`).show();
+                that.disable_upload = that.check_disable_upload_evidence();
+            }
+        },
+    },
+    methods: {
+        check_disable_upload_evidence: function () {
+            let organization = this.get_organization();
+            if (this.month == 1 && organization.enable_month_1_review == true && this.kpi.enable_review){
+                return false;
+            }
+            if (this.month == 2 && organization.enable_month_2_review == true && this.kpi.enable_review){
+                return false;
+            }
+            if (this.month == 3 && organization.enable_month_3_review == true && this.kpi.enable_review){
+                return false;
+            }
+            return true;
+        },
+        handleFile:function (e){
+            let width = 1, that=this;
+            $(`.evidence_kpi_${that.kpi.id} .form-start`).hide();
+            var file = $(`.evidence_kpi_${that.kpi.id} #file-upload`)[0].files[0];
+            var file_name = $(`.evidence_kpi_${that.kpi.id} #file-upload`)[0].files[0].name;
+            that.$set(that, 'filename', file_name);
+            let allowedExtensions = /(\.jpg|\.jpeg|\.png|\.docx|\.pdf|\.xls|\.xlsx|\.doc|\.bmp)$/i;
+            if(!allowedExtensions.exec(file_name)) {
+                that.message_error_upload_evidence = 'Định dạng file không đúng, vui lòng thử lại!';
+                return false;
+            }
+            else if(file.size/1024/1024 > 5){
+                that.message_error_upload_evidence = 'Kích thước file > 5mb, vui lòng thử lại!';
+                return false;
+            }
+            else {
+                that.message_error_upload_evidence = null;
+                var id = setInterval(frame, 10);
+            }
+            function frame() {
+                if (width >= 100) {
+                    clearInterval(id);
+                    $(`.evidence_kpi_${that.kpi.id} #ico-circle-check`).css('color','#7ed321');
+                    $(`.evidence_kpi_${that.kpi.id} #myBar`).hide();
+                    $(`.evidence_kpi_${that.kpi.id} #title-loading`).hide();
+                    $(`.evidence_kpi_${that.kpi.id} #e-content`).show();
+                    $(`.evidence_kpi_${that.kpi.id} #btn-cancel-evi`).show();
+                    $(`.evidence_kpi_${that.kpi.id} #btn-save-evi`).show();
+                } else {
+                    width++;
+                    $(`.evidence_kpi_${that.kpi.id} #percentage`).text(width+'%');
+                    $(`.evidence_kpi_${that.kpi.id} #myBar`).css('width', width + '%');
+                }
+            }
+        },
+        postEvidence: function () {
+            var formData = new FormData();
+            var that = this;
+            console.log("KPI_ID POST:" + that.kpi.id);
+            formData.append('content', $(`.evidence_kpi_${that.kpi.id} #e-content`).val().replace("\r\n", "<br/>"));
+            formData.append('month', that.month);
+            formData.append('attachment', $(`.evidence_kpi_${that.kpi.id} #file-upload`)[0].files[0]);
+            if ($(`.evidence_kpi_${that.kpi.id} #file-upload`)[0].files[0]) {
+                cloudjetRequest.ajax({
+                    url: '/api/v2/kpi/' + that.kpi.id + '/evidence/upload/',
+                    type: 'post',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        // The unshift() method adds new items to the beginning of an array, and returns the new length.
+                        that.$parent.$emit("add_evidence", response);
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                }).done(function () {
+                    // $('#save-evidence').attr('disabled', 'disabled');
+                    $(`.evidence_kpi_${that.kpi.id} #file-upload`).val('');
+                    that.$set(that, 'filename', "");
+                    $(`.evidence_kpi_${that.kpi.id} #e-content`).val('');
+                    $(`.evidence_kpi_${that.kpi.id} .form-start`).show();
+                });
+            }
+            else alert(gettext('Please select a file!'));
+        },
+        type_ico: function(type){
+            var img_type = ['jpg', 'jpeg', 'bmp', 'png'];
+
+            var type = type.split('.');
+            if(img_type.indexOf(type[type.length -1 ].toLowerCase()) > -1){
+                return true;
+            }
+            return false;
+        },
+        type_ico_url: function(type){
+            var doc_type = ['docx','pdf','xls','xlsx','doc'];
+            var img_type = ['jpg', 'jpeg', 'bmp', 'png'];
+
+            var type = type.split('.');
+            if(doc_type.indexOf(type[type.length -1 ].toLowerCase()) > -1){
+                return COMMON.StaticUrl+'images/ico-document-format.png';
+            }
+            if(img_type.indexOf(type[type.length -1 ].toLowerCase()) > -1){
+                return COMMON.StaticUrl+'images/ico-image-format.png';
+            }
+        },
+
+        refresh_Evidence: function () {
+            var that = this;
+            that.filename = '';
+            $(`.evidence_kpi_${that.kpi.id} .form-start`).show();
+            $(`.evidence_kpi_${that.kpi.id} #file-upload-form-${that.kpi.id}`)[0].reset();
+        },
+
+        show_modal_remove_evidence: function (evidence) {
+            this.$parent.$emit('show_modal_remove_evidence', evidence)
+        },
+        showPreview: function (file_url) {
+            this.$parent.$emit("show_preview_modal", file_url);
+        },
+        handleClose: function () {
+            this.$parent.$emit("close_evidence_modal");
+        }
+    }
+});
+Vue.component('evidence-preview-modal', {
+    delimiters: ['{$', '$}'],
+    props: [
+        'month_name',
+        'file_url',
+        'dialogPreviewVisible'
+    ],
+    data: function () {
+        return {
+            preview_attach_url: null,
+            is_img: false,
+        }
+    },
+    template: '#evidence-preview-modal-template',
+    created: function () {
+    },
+    watch: {
+        dialogPreviewVisible: function (val) {
+            if (val) {
+                this.showPreview(this.file_url)
+            }
+        }
+    },
+    methods: {
+        showPreview: function (file_url) {
+            if (window.location.protocol == 'https:' && file_url.match('^http://'))
+                file_url = file_url.replace("http://", "https://");
+            var patt1 = /\.[0-9a-z]+$/i;
+            this.preview_attach_url = file_url;
+            var file_ext = file_url.match(patt1);
+
+            if (['.png', '.jpg', '.bmp', '.gif', '.jpeg', '.pdf', '.odf'].indexOf(file_ext[0].toLowerCase()) < 0) {
+                window.open(file_url, 'Download');
+            }
+            else {
+                if (['.pdf', '.odf'].indexOf(file_ext[0]) >= 0) {
+                    this.is_img = false;
+                    this.preview_attach_url = COMMON.StaticUrl + 'ViewerJS/index.html#' + file_url;
+                }
+                else {
+                    this.is_img = true;
+                }
+            }
+        },
+        handleClose: function () {
+            this.$parent.$emit("close_preview_modal");
+        }
+    }
+});
+
+Vue.component('evidence-remove-modal', {
+    delimiters: ['{$', '$}'],
+    props: [
+        'current_evidence',
+        'dialogRemoveVisible'
+    ],
+    data: function () {
+        return {
+            preview_attach_url: null,
+            is_img: false,
+        }
+    },
+    template: '#evidence-remove-modal-template',
+    methods: {
+        removeEvidence: function () {
+            this.$parent.$emit('remove_evidence', this.current_evidence);
+        },
+        handleClose: function () {
+            this.$parent.$emit("close_remove_modal");
+        }
+    }
+});
 
 Vue.component('tag-search', {
     props: ['options', 'value'],
@@ -1153,7 +1449,7 @@ const EditKPIsWeightBaseModal =  {
             kpi: null,
             delay_reason:'',
             error_on_delayed: false,
-            error_on_delayed_message: '',
+            //error_on_delayed_message: '',
 
 
         }
@@ -1418,10 +1714,14 @@ Vue.component('delay-kpi-modal', {
             });
 
             // UI
-            jqxhr.fail(function () {
+            jqxhr.fail(function (e) {
                 that.error_on_delayed = true;
-                that.error_on_delayed_message = gettext('You do not have permission to delay this KPI!')
-                swal(gettext('Not successful'), gettext('Cannot delay/active this kpi'), "error")
+                //that.error_on_delayed_message = gettext('You do not have permission to delay this KPI!')
+                if (e.responseJSON.message != "" || e.responseJSON.message != null || e.responseJSON.message != undefined) {
+                    swal(gettext('Not successful'), e.responseJSON.message, "error");
+                }else{
+                    swal(gettext('Not successful'), gettext('Cannot delay/active this kpi'), "error")
+                }
             });
             jqxhr.done(function(){
                that.hide_edit_kpis_weight_modal();
@@ -1608,31 +1908,37 @@ Vue.component('kpi-progressbar', {
         'month_1_name',
         'month_2_name',
         'month_3_name',
-        'evidences',
         'is_parent_kpi',
         'list_kpi_group',
         'group',
         // 'is_user_system',
 
     ],
-    data:function(){
+    data:function() {
         return {
-
+            count_evidences: {}
         }
     },
     inject:[
         'update_kpi_with_score_affectability',
     ],
     template: $('#kpi-progressbar-template').html(),
-    created: function(){
-
+    provide: function () {
+        let that = this;
+        return {
+            disable_edit_target: this.disable_edit_target,
+            get_organization: function () {
+                return that.organization;
+            }
+        }
     },
     mounted:function(){
-
-
     },
-    watch:{
-
+    created: function () {
+        var that = this;
+        that.$on('update_evidence_count', function (month, num) {
+            that.update_evidence_count(month, num);
+        });
     },
     computed:{
         show_progress_bar_score: function(){
@@ -1640,7 +1946,32 @@ Vue.component('kpi-progressbar', {
         },
     },
     methods:{
+        get_count_evidence: function () {
+            var that = this;
+            cloudjetRequest.ajax({
+                url: '/api/v2/kpi/' + that.kpi.id + '/evidence/upload/',
+                type: 'get',
+                data: {
+                    kpi_id: that.kpi.id,
+                    count: true,
+                },
+                success: function (response) {
+                    that.count_evidences = response;
+                },
+                error: function () {
 
+                },
+            })
+        },
+        update_evidence_count: function (month, num) {
+            this.count_evidences[month] += num;
+        },
+        handleBtnReview: function () {
+            $('.reviewing' + this.kpi.id).toggleClass('hide');
+            if (!$('.reviewing' + this.kpi.id).hasClass("hide")) {
+                this.get_count_evidence();
+            }
+        },
         // copy_quarter_targets_into_month_targets: function () {
         //     let that = this;
         //     swal({
@@ -1660,8 +1991,8 @@ Vue.component('kpi-progressbar', {
         //     })
         // },
 
-        triggerAdjustPerformanceThreshold(kpi_id){
-            this.$root.$emit('adjust_performance_level',kpi_id)
+        triggerAdjustPerformanceThreshold(kpi){
+            this.$root.$emit('adjust_performance_level',kpi)
         },
 
 
@@ -1675,7 +2006,7 @@ Vue.component('kpi-progressbar', {
 
         },
         get_title_tooltip: function (kpi_month_value, disable, month_number, kpi_type) {
-            that = this;
+            var that = this;
             var message;
             var month_name = month_number == 1 ? that.month_1_name : month_number == 2 ? that.month_2_name : month_number == 3 ? that.month_3_name : '';
             switch (kpi_type) {
@@ -1782,7 +2113,6 @@ Vue.component('kpi-group', {
         // "group",
         "employee_performance",
         "company_params",
-        "evidences",
         "month_1_name",
         "month_2_name",
         "month_3_name",
@@ -1920,7 +2250,6 @@ Vue.component('kpi-row', {
         'group',
         'employee_performance',
         'company_params',
-        'evidences',
         'is_parent_kpi',
         'reset_child_kpis',
         'list_kpi_group'
@@ -2053,7 +2382,6 @@ Vue.component('kpi-row', {
         on_child_unlinked: function(kpi_id) {
             this.remove_child_kpi(kpi_id)
         },
-
         update_quarter_x_target: function(update_data){
             var that = this;
             let data = this.kpi;
@@ -2558,19 +2886,14 @@ var v = new Vue({
     // el: '#container',
     el: '#content',
     data: {
-        evidences: {},
-        current_evidence: null,
         filename: '',
         action_plan_filename:'',
         month: '',
         month_name: '',
-        list_evidence: [],
         list_action_plan_file:[],
         user_action_plan_permission: false,
-        evidence_id: '',
         content: '',
         kpi_list: {},
-        current_evidence_kpi:{},
         list_kpi_group: {
             customer: {
                 ungroup_kpis: [
@@ -2786,7 +3109,6 @@ var v = new Vue({
         total_edit_weight: {},
         kpi_list_cache: [],
         option_export: 'q-m',
-        message_error_upload_evidence: '',
         status_upload_action_plan: true,
         action_plan_to_be_deleted: null,
         preview_attach_modal_type:'',
@@ -2831,7 +3153,6 @@ var v = new Vue({
             get_current_employee_performance: that.get_current_employee_performance,
             capture_and_download: that.capture_and_download,
             getPermissionBackupKPI: that.getPermissionToBackupKPI,
-
             // parent_kpis: that.parentKPIs,// <-- this will not work as expected
         }
     },
@@ -3001,9 +3322,7 @@ var v = new Vue({
         this.$on('init_data_align_up_kpi', function(user_id, kpi_id, bsc_category) {
             that.init_data_align_up_kpi(user_id, kpi_id, bsc_category);
         });
-        this.$on('update_evidence_event_callback', function(kpi_id, month, count) {
-            that.update_evidence_event_callback(kpi_id, month, count);
-        });
+
         this.$on('showModal_e', function(month_number) {
             that.showModal_e(month_number);
         });
@@ -3029,8 +3348,8 @@ var v = new Vue({
             that.update_kpi(kpi, show_blocking_modal, callback);
         });
 
-        this.$on("adjust_performance_level", function(kpi_id) {
-            that.adjust_performance_level(kpi_id)
+        this.$on("adjust_performance_level", function(kpi) {
+            that.adjust_performance_level(kpi)
         })
         this.$on('parent_kpi_reloaded', function (kpi_data) {
             that.update_data_on_parent_kpi_reloaded(kpi_data);
@@ -4168,7 +4487,6 @@ var v = new Vue({
                     self.$set(self.$data, 'kpi_list[' + self.adjusting_kpi.id + ']', res);
                     self.reset_adjust();
 
-
                 },
                 error: function (res) {
                 }
@@ -4180,10 +4498,10 @@ var v = new Vue({
             // Reset to month 1
 
         },
-        init_adjust: function (kpi_id) {
+        init_adjust: function (kpi) {
             var self = this;
             // Clone to temp object
-            self.adjusting_kpi = Object.assign({}, self.kpi_list[kpi_id]);
+            self.adjusting_kpi = Object.assign({}, kpi);
             // Setup adjusting month to regenerate chart
 
             $.extend(true, self.adjusting_kpi, {
@@ -4230,9 +4548,9 @@ var v = new Vue({
             self.update_adjusting_chart();
 
         },
-        adjust_performance_level: function (kpi_id) {
+        adjust_performance_level: function (kpi) {
             var self = this;
-            self.init_adjust(kpi_id);
+            self.init_adjust(kpi);
             console.log(self.adjusting_kpi)
             $('#performance-level-adjust').modal();
             self.resetErrorWhenShow();
@@ -4568,35 +4886,6 @@ var v = new Vue({
             });
         },
 
-
-        showModal_e: function (month_number) {
-            var that = this;
-            var current_evidence_kpi = that.current_evidence_kpi;
-            var month_name = month_number == 1 ? v.month_1_name : month_number == 2 ? v.month_2_name : month_number == 3 ? v.month_3_name : '';
-            this.month_name = month_name;
-            this.month = month_number;
-            this.disable_upload = this.check_disable_upload_evidence(current_evidence_kpi);
-            that.$set(that.$data, 'evidence_id', current_evidence_kpi.id);
-            cloudjetRequest.ajax({
-                url: '/api/v2/kpi/' + current_evidence_kpi.id + '/evidence/upload/',
-                type: 'get',
-                data: {
-                    type: "json",
-                    kpi_id: current_evidence_kpi.id,
-                    month: month_number,
-                },
-                success: function (response) {
-                    that.$set(that.$data, 'list_evidence', response);
-                },
-                error: function () {
-                    alert("error");
-                },
-            }).done(function () {
-                $('#evidence-modal').modal('show');
-            });
-
-        },
-
         showModal_kpi_action_plan: function(){
             var that = this;
             // alert('hello guys');
@@ -4631,47 +4920,6 @@ var v = new Vue({
             // $('#kpi_action_plan-modal').modal('show');
 
         },
-
-        check_disable_upload_evidence: function (kpi) {
-            if (this.month == 1 && this.organization.enable_month_1_review == true && kpi.enable_review){
-                return false;
-            }
-            if (this.month == 2 && this.organization.enable_month_2_review == true && kpi.enable_review){
-                return false;
-            }
-            if (this.month == 3 && this.organization.enable_month_3_review == true && kpi.enable_review){
-                return false;
-            }
-            return true;
-
-
-        },
-
-        showPreview: function (file_url) {
-            if (window.location.protocol == 'https:' && file_url.match('^http://'))
-                file_url = file_url.replace("http://", "https://");
-            var patt1 = /\.[0-9a-z]+$/i;
-            this.preview_attach_url = file_url;
-            var file_ext = file_url.match(patt1);
-
-            if (['.png', '.jpg', '.bmp', '.gif', '.jpeg', '.pdf', '.odf'].indexOf(file_ext[0].toLowerCase()) < 0) {
-                window.open(file_url, 'Download');
-            }
-            else {
-                if (['.pdf', '.odf'].indexOf(file_ext[0]) >= 0) {
-                    this.is_img = false;
-                    this.preview_attach_url = COMMON.StaticUrl + 'ViewerJS/index.html#' + file_url;
-                }
-                else {
-                    this.is_img = true;
-                }
-                this.preview_attach_modal_type='evidence';
-                $('#evidence-modal').modal('hide');
-                $('#preview-attach-modal').modal('show');
-
-            }
-        },
-
 
         showPreview_action_plan: function (file_url) {
             if (window.location.protocol == 'https:' && file_url.match('^http://'))
@@ -4742,96 +4990,13 @@ var v = new Vue({
             $("#kpi_action_plan-modal .form-start").show();
             $("#file-upload-action-plan-form")[0].reset();
         },
-        postEvidence: function () {
-            var formData = new FormData();
-            var that = this;
-            console.log("KPI_ID POST:" + that.evidence_id);
-            formData.append('content', $("#e-content").val().replace("\r\n", "<br/>"));
-            formData.append('month', that.month);
-            formData.append('attachment', $("#file-upload")[0].files[0]);
-            if ($("#file-upload")[0].files[0]) {
-                cloudjetRequest.ajax({
-                    url: '/api/v2/kpi/' + that.evidence_id + '/evidence/upload/',
-                    type: 'post',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        // The unshift() method adds new items to the beginning of an array, and returns the new length.
-                        that.list_evidence.unshift(response);
-                        that.list_evidence[0].avatar = COMMON.UserAvatar;
-                        that.list_evidence[0].actor = COMMON.UserDisplayName;
-                        var tmp = that.evidences[that.evidence_id][that.month];
-                        that.$set(that.evidences[that.evidence_id], that.month, tmp + 1);
-                        console.log(tmp);
 
-                        if (that.evidences[that.evidence_id]==undefined){
-                            that.evidences[that.evidence_id]={};
-                        }
-                        // that.evidences[kpi_id][month_number]=res;
-                        that.evidences[that.evidence_id][that.month]=tmp + 1;
-                        // that.$set(that.$data, 'evidences', that.evidences);
-                        that.evidences = Object.assign({}, that.evidences)
-
-
-
-                    },
-                    error: function () {
-                        alert("error");
-                    }
-                }).done(function () {
-                    // $('#save-evidence').attr('disabled', 'disabled');
-                    $('#file-upload').val('');
-                    that.filename = '';
-                    $('#e-content').val('');
-                    $('.form-start').show();
-                });
-            }
-            else alert(gettext('Please select a file!'));
-        },
-        show_Modal_delevi: function(index){
-            var that = this;
-            that.current_evidence = that.list_evidence[index];
-            that.current_evidence.kpi = that.current_evidence_kpi;
-            $('#evidence-modal').modal('hide');
-            $('#confirm-delete-evidence').modal('show');
-        },
         show_modal_delete_action_plan: function(index){
             var that = this;
             that.action_plan_to_be_deleted = that.list_action_plan_file[index];
             $('#kpi_action_plan-modal').modal('hide');
             $("#confirm-delete-action-plan-modal").modal('show');
 
-        },
-
-
-        deleteEvidence: function(id, month){
-            var that = this;
-            var current_evidence_kpi = that.current_evidence_kpi;
-            var current_evidence_count=that.evidences[current_evidence_kpi.id][month];
-            cloudjetRequest.ajax({
-                url: '/api/v2/kpi/' + current_evidence_kpi.id + '/evidence/upload/',
-                type: 'delete',
-                data: {
-                    type: "json",
-                    id: id,
-                    month: month
-                },
-                success: function (response) {
-
-                },
-                error: function () {
-                    // alert("error");
-                    $("#confirm-delete-evidence").modal('hide');
-                    $('#evidence-modal').modal('show');
-                },
-            }).done(function () {
-                $("#confirm-delete-evidence").modal('hide');
-                that.showModal_e(month, current_evidence_kpi);
-                // that.get_evidence(month,kpi_id);
-                setObj(that.evidences, current_evidence_kpi.id + '.' + month, current_evidence_count-1 );
-                that.evidences=Object.assign({}, that.evidences);
-            });
         },
 
         delete_action_plan: function(id){
@@ -4857,43 +5022,6 @@ var v = new Vue({
                 that.showModal_kpi_action_plan(); // fucking, this will be request to server again
 
             });
-        },
-
-        handleFile:function (e){
-            $('.form-start').hide();
-            var width = 1, that=this;
-            var file = $('#file-upload')[0].files[0];
-            var file_name = $('#file-upload')[0].files[0].name;
-            this.filename = file_name;
-            var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.docx|\.pdf|\.xls|\.xlsx|\.doc|\.bmp)$/i;
-            if(!allowedExtensions.exec(file_name)) {
-                that.message_error_upload_evidence = 'Định dạng file không đúng, vui lòng thử lại!';
-                return false;
-            }
-            else if(file.size/1024/1024 > 5){
-                that.message_error_upload_evidence = 'Kích thước file > 5mb, vui lòng thử lại!';
-                return false;
-            }
-            else{
-                that.message_error_upload_evidence = null;
-                var id = setInterval(frame, 10);
-            }
-            function frame() {
-                if (width >= 100) {
-                    clearInterval(id);
-                    $("#ico-circle-check").css('color','#7ed321');
-                    $("#myBar").hide();
-                    $("#title-loading").hide();
-                    $("#e-content").show();
-                    $("#btn-cancel-evi").show();
-                    $("#btn-save-evi").show();
-
-                } else {
-                    width++;
-                    $("#percentage").text(width+'%');
-                    $("#myBar").css('width', width + '%');
-                }
-            }
         },
 
         // Done
@@ -5515,45 +5643,6 @@ var v = new Vue({
             }
             return total;
         },
-
-
-
-        update_evidence_event_callback: function (kpi_id, month, count){
-            var that = this;
-            var evidence={ };
-            evidence[kpi_id]={};
-            evidence[kpi_id][month]= count;
-
-            // We don't want to reactive that.evidences here
-            // because this evidence value is from component value
-            // if reactive occur here, then component will be re-render, that not we want
-            // that.evidences = Object.assign({}, that.evidences, evidence);
-            setObj(that.evidences, kpi_id+ '.'+ month, count);
-
-
-        }
-
     },
-
-
-
-});
-
-
-
-$(function () {
-    $('#preview-attach-modal').on('hide.bs.modal', function () {
-        if (v.$data.preview_attach_modal_type == 'action_plan'){
-            $('#kpi_action_plan-modal').modal('show');
-        }
-        else if (v.$data.preview_attach_modal_type == 'evidence') {
-            $('#evidence-modal').modal('show');
-        }
-        else {
-            //do nothing
-        }
-
-
-    })
 });
 
