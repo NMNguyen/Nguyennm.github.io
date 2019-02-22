@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc mocha --recursive \"./**/*test*/test_*.js\"",
-    "deploy": "find . -name \"*.md\" -type f -delete && git add . && git commit -am \"build and commit\" && git push origin master -f"
+    "deploy": "find ./public/dist -name \"*\" -type f -delete && find . -name \"*.md\" -type f -delete && git add . && git commit -am \"build and commit\" && git push origin master -f"
   },
   "repository": {
     "type": "git",
