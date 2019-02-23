@@ -1,32 +1,11 @@
-function format(number) {
+/*
+  quocduan note: this method is the fucking trick,
+*  so, we should check later for the better way to archive what we want
+* */
 
-    var decimalSeparator = ".";
-    var thousandSeparator = ",";
-
-    // make sure we have a string
-    var result = String(number);
-
-    // split the number in the integer and decimals, if any
-    var parts = result.split(decimalSeparator);
-
-    // reverse the string (1719 becomes 9171)
-    result = parts[0].split("").reverse().join("");
-
-    // add thousand separator each 3 characters, except at the end of the string
-    result = result.replace(/(\d{3}(?!$))/g, "$1" + thousandSeparator);
-
-    // reverse back the integer and replace the original integer
-    parts[0] = result.split("").reverse().join("");
-
-    // recombine integer with decimals
-    return parts.join(decimalSeparator);
-
+window.parseFloatWeight = function(weight_percent){
+    return $.isNumeric(weight_percent) ? Decimal.mul(parseFloat(weight_percent), 100).toNumber() : NaN;
 };
-Vue.filter('decimalDisplay',  function (val) {
-    return (val === 0) ? 0 : (val == null || val === '') ? '' : format(val);
-
-
-});
 Vue.component('decimal-input-import', {
     props: [
         'value',
@@ -229,6 +208,34 @@ methods: {
                 }
             });
         },
+
+    renderHeaderButton(h, {column}) {
+        var self = this
+        var result = h('el-button', {
+            props: {
+                size: 'mini',
+                type: 'primary',
+                icon: 'el-icon-plus'
+            },
+            style: 'font-weight: normal;padding: 2px 4px',
+            on: {
+                click(e) {
+                    if (confirm("Bạn muốn thêm tất cả KPI?")) {
+                        self.kpis.forEach(function (kpi, index) {
+                            if (kpi.msg && kpi.msg.length == 0 && $(`#add_kpi${index}`).length > 0) {
+                                setTimeout(function (index) {
+                                    self.add_kpi(index)
+                                }, 200 + index * 150, index);
+                            }
+                        })
+                    }
+                }
+            }
+        })
+        return h('el-tooltip', {props: {content: "Thêm tất cả", placement: "top"}}, [result])
+    },
+
+
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
         if (columnIndex === 0) {
             return [0, 0];
@@ -445,15 +452,9 @@ methods: {
                 last_goal_index = row;
             }
 
-            if (kpi.trim().length != 0 && (goal == undefined || goal == '')) {
-
-                if (last_goal == "") {
-                    throw "KPI Goal is missing";
-                }
-                else {
-                    goal = last_goal;
-                    check_goal = "Check goal"
-                }
+            if (kpi.length != 0 && (goal == undefined || goal == '')) {
+                goal = last_goal;
+                check_goal = "Check goal"
             } else {
                 last_goal = goal;
             }
@@ -643,7 +644,7 @@ methods: {
                 "q3": $.isNumeric(q3) ?parseFloat(q3): q3,
                 "q4": $.isNumeric(q4) ?parseFloat(q4): q4,
                 'year': $.isNumeric(year) ?parseFloat(year): year,
-                "weight": $.isNumeric(weight) ?parseFloat(weight)*100: weight,
+                "weight": $.isNumeric(weight)?parseFloatWeight(weight):weight,
                 "email": email,
                 "check_error_year": false,
                 "check_error_quarter_1": false,
@@ -955,14 +956,14 @@ methods: {
                 if (self.enable_allocation_target){
                     kpi = self.validateTargetScoreFollowAllocationTarget(kpi)
                 }
-                if (isNaN(parseFloat(kpi.weight)) && kpi.weight) {
+                if (isNaN(kpi.weight) && kpi.weight) {
                     kpi.validated = false;
                     kpi.msg.push({
                         'field_name': 'Trọng số',
                         'message': ' không đúng định dạng'
                     });
                 }
-                if (parseFloat(kpi.weight) <= 0) {
+                if (!isNaN(kpi.weight) && kpi.weight != '' && parseFloatWeight(kpi.weight) <= 0 ) {
                     kpi.validated = false;
                     kpi.msg.push({
                         'field_name': 'Trọng số',
@@ -1116,7 +1117,7 @@ methods: {
                     self.info_msg_box.type_msg = "error";
                     self.info_msg_box.tite_msg = "Chỉnh sửa KPI không thành công"
                     self.data_edit_kpi.data.msg.forEach(function (field) {
-                        self.info_msg_box.array_msg.push(field.field_name + ":" + field.message )
+                        self.info_msg_box.array_msg.push(field.field_name + ": " + field.message )
                     })
 
                 }else{
@@ -1166,24 +1167,24 @@ methods: {
             year_data: {
                 months_target: {
                     quarter_1: {
-                        month_1: kpi.t1,
-                        month_2: kpi.t2,
-                        month_3: kpi.t3
+                        month_1_target: kpi.t1,
+                        month_2_target: kpi.t2,
+                        month_3_target: kpi.t3
                     },
                     quarter_2: {
-                        month_1: kpi.t4,
-                        month_2: kpi.t5,
-                        month_3: kpi.t6
+                        month_1_target: kpi.t4,
+                        month_2_target: kpi.t5,
+                        month_3_target: kpi.t6
                     },
                     quarter_3: {
-                        month_1: kpi.t7,
-                        month_2: kpi.t8,
-                        month_3: kpi.t9
+                        month_1_target: kpi.t7,
+                        month_2_target: kpi.t8,
+                        month_3_target: kpi.t9
                     },
                     quarter_4: {
-                        month_1: kpi.t10,
-                        month_2: kpi.t11,
-                        month_3: kpi.t12
+                        month_1_target: kpi.t10,
+                        month_2_target: kpi.t11,
+                        month_3_target: kpi.t12
                     }
                 }
             }

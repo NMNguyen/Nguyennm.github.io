@@ -2844,6 +2844,7 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
 
 .target-page .el-table .cell {
     line-height: 1.29;
+    word-break: break-word;
 }
 
 #target .search-target-staff {
@@ -3063,7 +3064,7 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
     display: inline-block;
 }
 
-#target .error-msg {
+.modal-edit-target .error-msg {
     color: #d9534f;
     font-size: 12px;
     /*margin-left: 10px;*/

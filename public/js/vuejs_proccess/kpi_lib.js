@@ -1586,6 +1586,7 @@ Vue.component('kpilib', {
         },
         set__kpi_to_view: function (k) {
             this.kpi_to_view = k;
+            console.log(this.kpi_to_view);
             this.show_kpilib_kpi_detail_modal();
             // this.dialogKPILibDetailVisible = true;
             // $('#modal-kpi-lib-details').modal('show');
