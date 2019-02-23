@@ -827,71 +827,8 @@ table.nocolor, table.nocolor tr, table.nocolor td {
 .cursor-no-drop{
     cursor: no-drop
 }
-.el-select-create-task-component .el-select-group .el-select-dropdown__item{
-    padding-left: 20px;
-    min-height: 50px;
-    line-height: 1px;
-}
-.el-select-create-task-component .el-select-group .todo-no-data {
-    padding-left: 20px !important;
-    min-height: 34px !important;
-    color: #999 !important;
-    line-height: 34px !important;
-    text-align: center;
-}
-.el-select-create-task-component .el-select-group .el-select-dropdown__item span{
-    font-size: 14px;
-    color: #333333;
-    font-weight: 600;
-    text-align: center;
-    display: inline-block;
-}
-.el-select-create-task-component .el-select-group .todo-no-data span{
-    font-size: 14px;
-    color: #999 !important;
-    font-weight: normal;
-}
-.el-select-create-task-component .el-select-group .el-select-dropdown__item p{
-    font-size: 12px;
-    color: #666666;
-}
-
-.el-select-create-task-component .el-select-group .el-select-dropdown__item.selected span{
-    color:#008b8b;
-}
-.el-select-create-task-component .el-select-group .el-select-dropdown__item.selected p{
-    color:#008b8b;
-    font-weight:normal;
-}
-.el-select-create-task-component .el-select-group__wrap:not(:last-of-type){
-    padding:0px;
-}
-.el-select-create-task-component .el-select-group__wrap:not(:last-of-type):after{
-    display:none;
-}
-
-#create-new-task .modal-body textarea{
-    border: solid 1px #ababab;
-}
-
-#create-new-task .modal-body textarea:focus{
-    border:solid 1px #008b8b;
-}
-#create-new-task .el-select .el-input .el-input__inner{
-    height:40px;
-}
-#create-new-task .bd-color-008b8b{
-    border:1px solid #008b8b;
-}
-#create-new-task .el-select{
-    width: 100%;
-}
 .vue-wrapper.messenger .title-input-alert{
     font-size: 10px;
     color: #ababab;
     font-weight: normal;
-}
-
-.no-border{
-    border: none !important;
 }

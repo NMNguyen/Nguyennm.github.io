@@ -346,8 +346,7 @@ function remove_person(node, delete_kpis) {
             data: JSON.stringify({
                 id: node.id,
                 user_id: node.data.user_id,
-                delete_kpis: delete_kpis,
-                permanently_deleted: false
+                delete_kpis: delete_kpis
             }),
             url: "/api/user/delete/",
             beforeSend: function () {
@@ -369,7 +368,7 @@ function remove_person(node, delete_kpis) {
                         clickOneNode(parent_node);
                     }
 
-                    peopleApp.getAllBackupUser();
+                    peopleApp.get_list_backup_user();
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -508,9 +507,9 @@ function send_email() {
     cloudjetRequest.ajax({
         type: 'POST',
         data: {
-            user_id: peopleApp.current_node.user_id,
-            username: peopleApp.current_node.username,
-            email: peopleApp.current_node.email
+            user_id: $("#id-user-id").val(),
+            username: $("#id-username").val(),
+            email: $("#id-email").val()
         },
         url: "/performance/people/reset-password/",
         beforeSend: function () {

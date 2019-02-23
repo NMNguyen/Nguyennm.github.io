@@ -2844,7 +2844,6 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
 
 .target-page .el-table .cell {
     line-height: 1.29;
-    word-break: break-word;
 }
 
 #target .search-target-staff {
@@ -3064,7 +3063,7 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
     display: inline-block;
 }
 
-.modal-edit-target .error-msg {
+#target .error-msg {
     color: #d9534f;
     font-size: 12px;
     /*margin-left: 10px;*/
@@ -3399,13 +3398,5 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
     visibility: visible;
     opacity: 1;
     transition: opacity .15s;
-}
-.disabled-edit-year-data{
-    cursor: not-allowed;
-}
-.disabled-edit-year-data td .cell{
-    pointer-events: none;
-    opacity: 0.6;
-
 }
 /* end v-tooltip css */
