@@ -5414,4 +5414,32 @@ button.close{
     color: #008b8b!important;
     vertical-align: unset!important;
 }
-
+.el-evidence-modal .el-dialog__body {
+    padding: 0px 20px;
+}
+.el-pre-evidence-modal .el-dialog__body {
+    padding: 0px 20px 20px 20px;
+}
+.el-del-evidence-modal .el-dialog__body {
+    padding: 0px 20px;
+}
+.el-evidence-modal #content-li {
+    width: 85%;
+    float: left;
+    text-align: left;
+}
+.el-evidence-modal .el-dialog__body textarea {
+    width: 100% !important;
+    height: 40px;
+    font-size: 12px;
+    min-height: 0 !important;
+}
+.el-evidence-modal .form-start .uploader {
+    max-width: 100%;
+}
+.el-evidence-modal .el-dialog__title,
+.el-pre-evidence-modal .el-dialog__title,
+.el-del-evidence-modal .el-dialog__title {
+    font-size: 16px;
+    font-weight: bold;
+}

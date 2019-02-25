@@ -221,13 +221,15 @@ methods: {
             on: {
                 click(e) {
                     if (confirm("Bạn muốn thêm tất cả KPI?")) {
+                        let promise = $.when();
                         self.kpis.forEach(function (kpi, index) {
-                            if (kpi.msg && kpi.msg.length == 0 && $(`#add_kpi${index}`).length > 0) {
-                                setTimeout(function (index) {
-                                    self.add_kpi(index)
-                                }, 200 + index * 150, index);
-                            }
-                        })
+                            promise = promise.then(function () {
+                                if (kpi.msg && kpi.msg.length == 0 && $(`#add_kpi${index}`).length > 0) {
+                                    return self.add_kpi(index);
+                                }
+                                return;
+                            });
+                        });
                     }
                 }
             }
@@ -1220,7 +1222,7 @@ methods: {
 
         var kpi_data_import = self.convertNewStructData(kpi)
         $('.add_kpi_' + index).button('loading')
-        cloudjetRequest.ajax({
+        let jqxhr = cloudjetRequest.ajax({
             type: "POST",
             url: "/api/kpis/import/add",
             data: JSON.stringify(kpi_data_import),
@@ -1268,7 +1270,7 @@ methods: {
             contentType: "application/json"
 
         });
-
+        return jqxhr;
     },
     add_all_kpi: function () {
         this.kpis.forEach(function (kpi, index) {

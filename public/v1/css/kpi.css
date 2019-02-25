@@ -3400,4 +3400,12 @@ input[type="checkbox"] .styled:checked + label::after, input[type="radio"] .styl
     opacity: 1;
     transition: opacity .15s;
 }
+.disabled-edit-year-data{
+    cursor: not-allowed;
+}
+.disabled-edit-year-data td .cell{
+    pointer-events: none;
+    opacity: 0.6;
+
+}
 /* end v-tooltip css */
