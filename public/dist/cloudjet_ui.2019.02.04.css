@@ -1695,14 +1695,11 @@ div.el-popper.invalid-input > .popper__arrow {
   width: 600px;
   display: block;
 }
-.create-kpi__name-kpi[data-v-234df4ba] {
-    font-style: italic;
-}
 .create-kpi__name-kpi__alert[data-v-234df4ba] {
-      color: red;
+    color: red;
 }
 .create-kpi__name-kpi__success[data-v-234df4ba] {
-      color: darkcyan;
+    color: darkcyan;
 }
 
 
@@ -1715,7 +1712,6 @@ div.el-popper.invalid-input > .popper__arrow {
 }
 .create-group__name-group[data-v-0462157f] {
   margin-top: 20px;
-  font-style: italic;
 }
 .create-group__name-group__alert[data-v-0462157f] {
     color: red;

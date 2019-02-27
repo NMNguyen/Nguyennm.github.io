@@ -156,7 +156,7 @@ Vue.component('decimal-input-edit-target', {
             get: function(){
                 var val = JSON.parse(JSON.stringify(this.value));
                 // https://stackoverflow.com/a/33671045/6112615
-                return this.$options.filters.decimalDisplay(val);
+                return this.$options.filters.decimalDisplay(val, 5);
             },
             set: function(val){
                 var newVal=val;
@@ -667,16 +667,16 @@ var targetPage = new Vue({
                 else if (this.tableData[rowIndex].name == gettext('Internal')) {
                     list_classes.push('target_internal_title');
                 }
-                else if (this.tableData[rowIndex].name == gettext('Learninggrowth')) {
+                else if (this.tableData[rowIndex].name == gettext('Learn & Growth')) {
                     list_classes.push('target_clean_title');
                 }
-                else if (this.tableData[rowIndex].name == gettext('More')) {
+                else if (this.tableData[rowIndex].name == gettext('Others')) {
                     list_classes.push('target_other_title');
                 } else {
                 }
             }
             if (row.weight == 0) {
-                list_classes.push("disabled");
+                list_classes.push("disabled-edit-year-data");
             }
             return list_classes.join(" ");
         },
@@ -927,11 +927,11 @@ var targetPage = new Vue({
                         self.tableData.push.apply(self.tableData, self.tableData.concat.apply([], self.groupInternal));
                     }
                     if (self.groupLearn.length > 0) {
-                        self.tableData.push(self.createItem({name: gettext('Learninggrowth'), isGroup: true}));
+                        self.tableData.push(self.createItem({name: gettext('Learn & Growth'), isGroup: true}));
                         self.tableData.push.apply(self.tableData, self.tableData.concat.apply([], self.groupLearn));
                     }
                     if (self.groupMore.length > 0) {
-                        self.tableData.push(self.createItem({name: gettext('More'), isGroup: true}));
+                        self.tableData.push(self.createItem({name: gettext('Others'), isGroup: true}));
                         self.tableData.push.apply(self.tableData, self.tableData.concat.apply([], self.groupMore));
                     }
                     // console.log(self.tableData)
@@ -1547,7 +1547,9 @@ var targetPage = new Vue({
             }
 
             function renderData(tableData, headerData) {
-                start_row = 11;
+                var start_row = 11;
+                var data_start_row = 11
+                var number_category = 0
                 var id_start = 'B';
                 var val = '';
                 var total_weight_percent = 0;
@@ -1556,6 +1558,9 @@ var targetPage = new Vue({
                 var is_same_group = false;
                 var ready_merge_group = false
                 tableData.forEach(function (row) {
+                    if(row.isGroup){
+                        number_category++
+                    }
                     if (!row.isGroup){
                         headerData.columns.forEach(function (col) {
                             setWidthCol(id_start, col.width);
@@ -1648,6 +1653,9 @@ var targetPage = new Vue({
                                 if (col.slug == 'refer_group_name' && ready_merge_group) {
                                     ws.mergeCells(start_row_merge_group+':' + end_row_merge_group);
                                     ready_merge_group = false
+                                }else if( col.slug == 'refer_group_name' && is_same_group && start_row == ((tableData.length -1) + data_start_row - number_category)){
+                                    //case for merge group : khi kpi cuối cùng có kpi con cần merge chung ô group lại
+                                    ws.mergeCells(start_row_merge_group+':' +id_start+ start_row)
                                 }
 
                             }

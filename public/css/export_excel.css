@@ -731,4 +731,11 @@ div[id^='modalCreateFilter'] .left{
 .el-table--small{
     height: calc(100vh - 250px)!important;
 }
+
 /*[END]------------performance/templates/report/report-score-excel.html------------[END]*/
+
+/*employee_and_score.html*/
+.el-table tr.row-inactive-user{
+    text-decoration: line-through;
+}
+/* End employee_and_score.html*/
