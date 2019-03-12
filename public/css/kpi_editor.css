@@ -5083,6 +5083,18 @@ button.close{
     table-layout: fixed;
 }
 
+.el-tooltip-measurement-method {
+    background: #CAED9E !important;
+    color: #3F6219 !important;
+    width: 500px;
+}
+
+.el-tooltip-measurement-method .popper__arrow::after, .el-tooltip-measurement-method .popper__arrow{
+    border-top-color: #CAED9E !important;
+    border-bottom-color: #CAED9E !important;
+
+}
+
 #table-list-kpi-search .col-sm-10:hover{
     cursor: pointer;
 }

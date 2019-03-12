@@ -1,35 +1,35 @@
-function getQtip() {
-    Vue.directive('settooltip', function (el) {
-        var text = "<div><span class='pd-bt-5'><strong>" + gettext('Measurement methods') + "</strong></span><br/>";
-        var txt = $(el).children('.tooltip-content').text();
-        if (txt != null || txt.length > 0) {
-            txt = txt.trim();
-            txt = '<span>' + txt + '</span>';
-            txt = text + txt + '</div>';
-        }
-        $(el).qtip({
-            content: {
-                text: txt.replace(/(?:\r\n|\r|\n)/g, '<br/>')
-            },
-            style: {
-                classes: 'qtip-green qtip-custom'
-            },
-            position: {
-                my: 'bottom center',
-                at: 'top center',
-                target: $(el),
-                adjust: {
-                    x: 10
-                }
-            },
-            show:{
-                delay : 250
-            }
-        });
-    });
-}
-
-getQtip();
+// function getQtip() {
+//     Vue.directive('settooltip', function (el) {
+//         var text = "<div><span class='pd-bt-5'><strong>" + gettext('Measurement methods') + "</strong></span><br/>";
+//         var txt = $(el).children('.tooltip-content').text();
+//         if (txt != null || txt.length > 0) {
+//             txt = txt.trim();
+//             txt = '<span>' + txt + '</span>';
+//             txt = text + txt + '</div>';
+//         }
+//         $(el).qtip({
+//             content: {
+//                 text: txt.replace(/(?:\r\n|\r|\n)/g, '<br/>')
+//             },
+//             style: {
+//                 classes: 'qtip-green qtip-custom'
+//             },
+//             position: {
+//                 my: 'bottom center',
+//                 at: 'top center',
+//                 target: $(el),
+//                 adjust: {
+//                     x: 10
+//                 }
+//             },
+//             show:{
+//                 delay : 250
+//             }
+//         });
+//     });
+// }
+//
+// getQtip();
 $('#input-search-kpi').focusout(function () {
     setTimeout(function () {
         $("#list_kpi_suggest").hide();
@@ -1154,7 +1154,7 @@ Vue.component('kpilib', {
     },
     updated: function () {
         this.check_icon_carret_show();
-        getQtip();
+        // getQtip();
     },
     created: function () {
         this.storage_kpis = JSON.parse(localStorage.getItem('history_search_kpi')) || [];
