@@ -417,6 +417,86 @@ Vue.component('decimal-input', {
 
 });
 
+Vue.component('kpi-unique-code-modal',{
+    delimiters: ['{$', '$}'],
+    template:'#kpi-unique-code-template',
+    props:{
+        kpi:{
+            type: Object,
+            required: true
+        },
+    },
+    inject: [
+        'update_kpi_with_score_affectability',
+    ],
+    data: function () {
+        return {
+            hide_help_tip: false,
+            kpi_unique_code_modal: null,
+            current_kpi: this.kpi,
+            link_kpi_unique_code: `${COMMON.LinkKPIUniqueCode}?kpi_id=${this.kpi.id}`,
+            unique_code: '',
+        }
+    },
+    mounted:function(){
+        this.kpi_unique_code_modal=this.$refs.kpi_unique_code_modal;
+        $(this.kpi_unique_code_modal).appendTo("body");
+    },
+    computed:{
+
+    },
+    methods:{
+        showModal: function () {
+            $(this.kpi_unique_code_modal).modal('show');
+            this.get_kpi_unique_code();
+
+        },
+        hideModal: function(){
+            $(this.kpi_unique_code_modal).modal('hide');
+        },
+        get_kpi_unique_code: function(){
+            let that = this;
+            var jqxhr = cloudjetRequest.ajax({
+                type: 'get',
+                url: that.link_kpi_unique_code,
+                success: function (data) {
+                    that.unique_code=data.unique_code;
+                }
+            });
+        },
+
+        update_kpi_unique_code: function () {
+
+            let that = this;
+            let update_data = {
+                'id':this.kpi.id,
+                'unique_code':this.unique_code
+            };
+
+
+            let jqxhr = that.update_kpi_with_score_affectability('update_kpi_unique_code',update_data);
+
+            jqxhr.done(function () {
+
+                swal({
+                    type: 'success',
+                    title: 'Cập nhật "Mã liên kết" thành công.',
+                    showConfirmButton: false,
+                    timer: 1000,
+                });
+
+            });
+            jqxhr.fail(function(){
+                swal(gettext('Not successful'), "Không thành công!!!", "error");
+            });
+
+
+        }
+    },
+});
+
+
+
 Vue.component('kpi-children-weight-modal',{
     delimiters: ['{$', '$}'],
     template:'#kpi-children-weight-auto-score-calculation-method',
@@ -1318,9 +1398,7 @@ Vue.component('kpi-config', {
         //     this.$root.$emit('get_children_kpis', kpi_id);
         // },
 
-        show_unique_code_modal: function(kpi_id){
-            this.$root.$emit('show_unique_code_modal', kpi_id)
-        },
+
 
         init_data_align_up_kpi:function(user, kpi_id, bsc_category){
             this.$root.$emit('init_data_align_up_kpi', user, kpi_id, bsc_category);
@@ -1328,6 +1406,458 @@ Vue.component('kpi-config', {
 
     }
 
+});
+
+Vue.component('point-calculation-methods-modal',{
+    delimiters: ['{$', '$}'],
+    props:[
+        'kpi',
+        'organization',
+        'month_1_name',
+        'month_2_name',
+        'month_3_name',
+    ],
+    inject:[
+        'reload_kpi'
+    ],
+    data:function () {
+        return{
+            adjusting_kpi: {},
+            adjusting_chart: null,
+            estimated_result_with_threshold: '',
+            dialogVisible: false
+        }
+    },
+    created:function () {
+    },
+    template:  $('#point-calculation-methods-modal-template').html(),
+    mounted() {
+    },
+    watch:{
+    },
+    computed:{
+        // adjust_min_performance: function () {
+        //     let that = this;
+        //     return ((that.adjusting_kpi.achievement_calculation_method_extra.bottom.target / that.adjusting_kpi['month_' + that.adjusting_kpi.adjusting_month + '_target']) * 100).toFixed(2);
+        // },
+    },
+    methods:{
+        show_modal_point_calculation_methods: function () {
+            let that =this;
+            that.dialogVisible = true;
+            that.adjusting_chart = null;
+            setTimeout(function () {
+                that.init_adjust();
+            },200);
+            that.resetErrorWhenShow();
+        },
+        resetErrorWhenShow: function() {
+            $('#error-input-1').css('display','none');
+            $('#error-input-2').css('display','none');
+            $('#error-input-3').css('display','none');
+            $('#error-input-4').css('display','none');
+        },
+        init_adjust: function () {
+            let that = this;
+            // Clone to temp object
+            that.adjusting_kpi = JSON.parse(JSON.stringify(that.kpi));
+            // Setup adjusting month to regenerate chart
+            $.extend(true, that.adjusting_kpi, {
+                adjusting_month: 1,
+                enable_estimation: false,
+                estimated_result: 0
+            });
+            if (that.adjusting_kpi.achievement_calculation_method_extra === null) {
+                that.$set(that.adjusting_kpi, 'achievement_calculation_method_extra', Object.assign({}, {
+                    month_1: {
+                        top: '',
+                        bottom: ''
+                    },
+                    month_2: {
+                        top: '',
+                        bottom: ''
+                    },
+                    month_3: {
+                        top: '',
+                        bottom: ''
+                    },
+                    quarter: {
+                        top: '',
+                        bottom: ''
+                    }
+                }))
+            } else {
+                try {
+                    that.adjusting_kpi.achievement_calculation_method_extra = JSON.parse(that.adjusting_kpi.achievement_calculation_method_extra);
+                } catch (err) {
+
+                }
+            }
+            // Default tab will be related to achievement_calculation_method
+            let default_tab = 1;
+            if (that.adjusting_kpi.achievement_calculation_method === 'topbottom') {
+                default_tab = 2;
+            }
+            $('#performance-result-based .nav-pills li:nth-child(' + default_tab + ')').tab('show');
+            $('#adjusting-dashboard .nav-tabs li:nth-child(' + that.adjusting_kpi.adjusting_month + ')').tab('show'); // reset tab 1
+            that.update_adjusting_chart();
+        },
+        update_adjusting_chart: function () {
+            let that = this;
+            if (that.adjusting_chart === null) {
+                that.init_adjusting_chart();
+            }
+            let data = that.fetch_chart_data();
+
+            that.adjusting_chart.data.datasets[1].data = data; // update performance chart
+            if (that.adjusting_kpi.enable_estimation) {
+                that.adjusting_chart.data.datasets[0].data = [
+                    {
+                        x: that.estimated_result_with_threshold,
+                        y: that.calculate_score_with_level(that.estimated_result_with_threshold)
+                    }
+                ]; // update estimated result chart
+            } else { // remove if false
+                that.adjusting_chart.data.datasets[0].data = [];
+            }
+            that.adjusting_chart.update()
+        },
+        init_adjusting_chart: function () {
+            let that = this;
+            let element_chart = $('#performance-adjusting-chart');
+            let data = that.fetch_chart_data();
+            let chart = new Chart(element_chart, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: gettext('Esimated result'), // Estimated result chart, index = 0
+                            data: [],
+                            fill: true,
+                            showLine: false,
+                            lineTension: 0,
+                            borderDashOffset: false,
+                            backgroundColor: [
+                                'rgba(182, 52, 52,1)'
+                            ],
+                            borderColor: [
+                                'rgba(182, 52, 52,1)'
+                            ],
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: 'red'
+                        },
+                        {
+                            label: gettext("Performance"), // Performance chart, index = 1
+                            data: data,
+                            fill: true,
+                            showLine: true,
+                            lineTension: 0,
+                            borderDashOffset: false,
+                            backgroundColor: [
+                                'rgba(51, 122, 183, 0.15)'
+                            ],
+                            borderColor: [
+                                'rgba(51, 122, 183, 1.0)'
+                            ],
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: 'red'
+                        },
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        xAxes: [{
+                            gridLines: {
+                                display: false,
+                                color: "rgba(51, 122, 183, 0.6)",
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                display: false
+
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: gettext("Result")
+                            },
+
+                        }],
+                        yAxes: [{
+                            gridLines: {
+                                display: false,
+                                color: "rgba(51, 122, 183, 0.15)",
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                display: false
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: gettext("Performance"),
+                            }
+                        }]
+                    }
+                }
+            });
+            that.adjusting_chart = chart;
+
+        },
+        toggle_adjusting_estimation: function () {
+            let that = this;
+            that.$set(that.adjusting_kpi, 'enable_estimation', !that.adjusting_kpi.enable_estimation);
+            if (that.adjusting_kpi.enable_estimation === true) {
+                $('#adjuster-estimation').slideDown();
+            }
+            else {
+                $('#adjuster-estimation').slideUp();
+            }
+            that.update_adjusting_chart();
+        },
+        get_adjusting_key: function () {
+            let that = this;
+            if (that.adjusting_kpi.adjusting_month === 'quarter') {
+                return 'quarter';
+            }
+            else {
+                return 'month_' + that.adjusting_kpi.adjusting_month;
+            }
+        },
+        // Calculate for adjusting_kpi object, calculate by month
+        calculate_score_with_level: function (_result = null) {
+            let that = this;
+            let _month = that.adjusting_kpi.adjusting_month; // get month
+            let _target = 0;
+            _target = parseFloat(that.adjusting_kpi['month_' + _month + '_target']); // get target
+            if (_month === 'quarter') {
+                _target = parseFloat(that.adjusting_kpi['target']);
+            }
+            if (_result === null) { // calculate fof default values
+                _result = parseFloat(that.adjusting_kpi['month_' + _month]);
+                if (_month === 'quarter') {
+                    _result = parseFloat(that.adjusting_kpi['real']);
+                }
+            } // get result}
+            let _min = 0;
+            let _max = 0;
+            let _max_score = parseFloat(that.organization.max_score);
+            let _operator = that.adjusting_kpi.operator;
+
+            if (_operator === '>=') {
+                _min = parseFloat(that.adjusting_kpi.achievement_calculation_method_extra[that.get_adjusting_key()].bottom); // get min target
+                _max = parseFloat(that.adjusting_kpi.achievement_calculation_method_extra[that.get_adjusting_key()].top); // get max target
+                let score = calculate_with_operator_greater();
+                if (score < 0) return (0.0).toFixed(2);
+                return score;
+            }
+            if (_operator === '<=') {
+                _min = parseFloat(that.adjusting_kpi.achievement_calculation_method_extra[that.get_adjusting_key()].top); // get min target
+                _max = parseFloat(that.adjusting_kpi.achievement_calculation_method_extra[that.get_adjusting_key()].bottom); // get max target
+                let score = calculate_with_operator_less();
+                if (score < 0) return (0.0).toFixed(2);
+                return score;
+            }
+
+            function calculate_with_operator_greater() {
+                let score = (0.0).toFixed(2);
+
+                if (_result < _min) {
+                    return (0.0).toFixed(2); // zero if less than min
+                }
+                if (_result <= _target && _result >= _min) {
+                    score = ((_result / _target) * 100).toFixed(2); // follow with function in document
+                    return score;
+                }
+                if (_result >= _target && _result < _max) {
+                    score = (
+                        (_result - _target) / (_max - _target) * (_max_score - 100) + 100 // follow with function in document
+                    ).toFixed(2);
+                    return score;
+                }
+                if (_result >= _max) {
+                    return _max_score.toFixed(2); // max score gained if greater than max
+                }
+            }
+
+            function calculate_with_operator_less() {
+                let score = (0.0).toFixed(2);
+
+
+                if (_result <= _min) {
+                    return _max_score.toFixed(2); // max score gained if less than or equal to min
+                }
+                if (_result > _min && _result <= _target) {
+                    score = (
+                        (_result - _min) / (_target - _min) * (100 - _max_score) + _max_score // follow with function in document
+                    ).toFixed(2);
+                    return score;
+                }
+                if (_result >= _target && _result <= _max) {
+                    score = (
+                        (2 - _result / _target) * 100  // follow with function in document
+                    ).toFixed(2);
+                    return score;
+                }
+                if (_result > _max) {
+                    return (0.0).toFixed(2); // zero if greater than max
+                }
+            }
+        },
+        fetch_chart_data: function () {
+            let that = this;
+            let data = [];
+            if (that.adjusting_kpi.operator === '>=') {
+                data = [
+                    {
+                        x: that.adjusting_kpi.achievement_calculation_method_extra[that.get_adjusting_key()].bottom,
+                        y: that.calculate_score_with_level(that.adjusting_kpi.achievement_calculation_method_extra[that.get_adjusting_key()].bottom)
+                    }, {
+                        x: that.adjusting_kpi.adjusting_month === 'quarter' ? that.adjusting_kpi['target'] : that.adjusting_kpi['month_' + that.adjusting_kpi.adjusting_month + '_target'],
+                        y: 100
+                    }, {
+                        x: that.adjusting_kpi.achievement_calculation_method_extra[that.get_adjusting_key()].top,
+                        y: that.organization.max_score
+                    }]
+            }
+            else if (that.adjusting_kpi.operator === '<=') {
+                data = [
+                    {
+                        x: that.adjusting_kpi.achievement_calculation_method_extra[that.get_adjusting_key()].top,
+                        y: that.organization.max_score
+
+                    }, {
+                        x: that.adjusting_kpi.adjusting_month === 'quarter' ? that.adjusting_kpi['target'] : that.adjusting_kpi['month_' + that.adjusting_kpi.adjusting_month + '_target'],
+                        y: 100
+                    }, {
+                        x: that.adjusting_kpi.achievement_calculation_method_extra[that.get_adjusting_key()].bottom,
+                        y: that.calculate_score_with_level(that.adjusting_kpi.achievement_calculation_method_extra[that.get_adjusting_key()].bottom)
+                    }]
+            }
+            return data;
+
+        },
+        confirm_adjust: function () {
+            let that = this;
+            cloudjetRequest.ajax({
+                type: 'post',
+                url: '/api/kpi/services/',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: that.adjusting_kpi.id,
+                    achievement_calculation_method: that.adjusting_kpi.achievement_calculation_method,
+                    achievement_calculation_method_extra: that.adjusting_kpi.achievement_calculation_method_extra,
+                    command: 'update_kpi_threshold'
+                }),
+                success: function (res) {
+                    let enable_edit = that.adjusting_kpi.enable_edit;
+                    let enable_review = that.adjusting_kpi.enable_review;
+                    let enable_delete = that.adjusting_kpi.enable_delete;
+
+                    res.enable_edit = enable_edit;
+                    res.enable_review = enable_review;
+                    res.enable_delete = enable_delete;
+                    that.$set(that.kpi, `${that.adjusting_kpi.id }`, res);
+                    that.reset_adjust();
+                    that.reload_kpi();
+                },
+                error: function (res) {
+                }
+            });
+        },
+        reset_adjust: function () {
+            let that = this;
+            that.adjusting_kpi = {};
+            that.dialogVisible = false;
+            // Reset to month 1
+
+        },
+        checkInput1: function (input_1,target) {
+            let id = $('.row.col-sm-12.evaluate-chart').attr('id');
+            if(input_1 >= target || input_1 < 0 ) {
+                if( id == '<=')
+                    $('#error-input-1').css('display','');
+                else
+                    $('#error-input-3').css('display','');
+            }
+            else {
+                if( id == '<=')
+                    $('#error-input-1').css('display','none');
+                else
+                    $('#error-input-3').css('display','none');
+            }
+        },
+        checkInput3: function(input_3,target) {
+            let id = $('.row.col-sm-12.evaluate-chart').attr('id');
+            if(input_3 <= target ) {
+                if( id == '<=')
+                    $('#error-input-2').css('display','');
+                else
+                    $('#error-input-4').css('display','');
+            }
+            else {
+                if( id == '<=')
+                    $('#error-input-2').css('display','none');
+                else
+                    $('#error-input-4').css('display','none');
+            }
+        },
+        triggerClickTab: function(tab,e){
+            let that = this;
+            that.$set(that.adjusting_kpi,'adjusting_month',tab);
+            that.update_adjusting_chart();
+            that.checkConditon(e);
+        },
+        checkConditionInput1: function() {
+            let that = this;
+            let current_tab = $('.row.col-sm-12.evaluate-chart').find('.tab-pane.fade.in.active');
+            let target = parseFloat(current_tab.find('#input-2').val());
+            let input_1 =  parseFloat(current_tab.find('#input-1').val());
+            that.checkInput1(input_1,target);
+            that.update_adjusting_chart()
+        },
+        checkConditionInput3: function() {
+            let that = this;
+            let current_tab = $('.row.col-sm-12.evaluate-chart').find('.tab-pane.fade.in.active');
+            let target = parseFloat(current_tab.find('#input-2').val());
+            let input_3 = parseFloat(current_tab.find('#input-3').val());
+            that.checkInput3(input_3,target);
+            that.update_adjusting_chart()
+        },
+        checkConditon: function (e) {
+            let that = this;
+            $('#error-input-1').css('display','none');
+            $('#error-input-2').css('display','none');
+            $('#error-input-3').css('display','none');
+            $('#error-input-4').css('display','none');
+            let id = $(e).find('a').attr('href');
+            let input_1 = parseFloat($(id).find('#input-1').val());
+            let target = parseFloat($(id).find('#input-2').val());
+            let input_3 = parseFloat($(id).find('#input-3').val());
+            that.checkInput1(input_1,target);
+            that.checkInput3(input_3,target);
+        },
+        check_number: function(e){
+            let charCode = e.which || e.keyCode; //It will work in chrome and firefox.
+            let _number = String.fromCharCode(charCode);
+            if (e.key !== undefined && e.charCode === 0) {
+                // FireFox key Del - Supr - Up - Down - Left - Right
+                return;
+            }
+            if ('0123456789.'.indexOf(_number) !== -1) {
+                return _number;
+            }
+            e.preventDefault();
+            return false;
+        },
+        check_paste: function (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+        },
+    }
 });
 
 Vue.component('verify-and-save-results-modal',{
@@ -1993,12 +2523,6 @@ Vue.component('kpi-progressbar', {
         //
         //     })
         // },
-
-        triggerAdjustPerformanceThreshold(kpi){
-            this.$root.$emit('adjust_performance_level',kpi)
-        },
-
-
         percent_progressbar: function(kpi){
             return kpi.latest_score*100/this.organization.max_score;
         },
@@ -2513,6 +3037,10 @@ Vue.component('kpi-row', {
                 case 'parent_auto_score':
                      url = `/api/v2/kpi/children_weights/${kpi_id}/` ;
                      data = Object.assign({}, update_data);
+                    break;
+                case 'update_kpi_unique_code':
+                    url = COMMON.LinkKPIAPI ;
+                    data = Object.assign({}, update_data);
                     break;
 
 
@@ -3082,9 +3610,6 @@ var v = new Vue({
         },
         temp_value: {},
         cache_weight: '',
-        adjusting_kpi: {},
-        adjusting_chart: null,
-        estimated_result_with_threshold: '',
         query: '',
         email_confirm: '',
         status_confirm: false,
@@ -3108,7 +3633,7 @@ var v = new Vue({
         selected_kpilib: {},
         // BSC_CATEGORY: COMMON.BSCCategory,
         // EXTRA_FIELDS: COMMON.ExtraFields,
-        unique_code_cache: '',
+
         total_edit_weight: {},
         kpi_list_cache: [],
         option_export: 'q-m',
@@ -3165,12 +3690,6 @@ var v = new Vue({
             var kpis = getKPIParentOfViewedUser(this.kpi_list);
             return kpis;
         },
-
-        adjust_min_performance: function () {
-            var self = this;
-            return ((self.adjusting_kpi.achievement_calculation_method_extra.bottom.target / self.adjusting_kpi['month_' + self.adjusting_kpi.adjusting_month + '_target']) * 100).toFixed(2);
-        },
-
     },
     mounted: function () {
 
@@ -3318,9 +3837,6 @@ var v = new Vue({
         //     that.get_children_v2(kpi_id);
         // });
 
-        this.$on('show_unique_code_modal', function(kpi_id) {
-            that.show_unique_code_modal(kpi_id);
-        });
 
         this.$on('init_data_align_up_kpi', function(user_id, kpi_id, bsc_category) {
             that.init_data_align_up_kpi(user_id, kpi_id, bsc_category);
@@ -3351,9 +3867,6 @@ var v = new Vue({
             that.update_kpi(kpi, show_blocking_modal, callback);
         });
 
-        this.$on("adjust_performance_level", function(kpi) {
-            that.adjust_performance_level(kpi)
-        })
         this.$on('parent_kpi_reloaded', function (kpi_data) {
             that.update_data_on_parent_kpi_reloaded(kpi_data);
         });
@@ -3455,8 +3968,8 @@ var v = new Vue({
             // Chỉ admin mới có toàn quyền: Xoá, thêm.
             // Manager có quyền thêm.
             if (this.is_user_system) return 'admin';
-            else if (COMMON.isManager==='True') return 'manager';
-            return 'normal_user';
+            else if (COMMON.IsManager==='True') return 'manager';
+            else return 'normal_user';
         },
         reload_backup_kpi_list: function(is_remove=false){
             this.$set(this.employee_performance, 'month_1_backup', false);
@@ -4193,441 +4706,6 @@ var v = new Vue({
                 }
             }, 300);
         },
-        toggle_adjusting_estimation: function () {
-            var self = this;
-            // self.$set('adjusting_kpi.enable_estimation', !self.adjusting_kpi.enable_estimation)
-            self.$set(self.adjusting_kpi, 'enable_estimation', !self.adjusting_kpi.enable_estimation)
-            if (self.adjusting_kpi.enable_estimation === true) {
-                $('#adjuster-estimation').slideDown();
-            }
-            else {
-                $('#adjuster-estimation').slideUp();
-            }
-            self.update_adjusting_chart();
-        },
-        get_adjusting_key: function () {
-            var self = this;
-            if (self.adjusting_kpi.adjusting_month === 'quarter') {
-                console.log('quarter')
-                return 'quarter';
-            }
-            else {
-                console.log('month_' + self.adjusting_kpi.adjusting_month)
-                return 'month_' + self.adjusting_kpi.adjusting_month;
-            }
-
-        },
-        // Calculate for adjusting_kpi object, calculate by month
-        calculate_score_with_level: function (_result = null) {
-            var self = this;
-            var _month = self.adjusting_kpi.adjusting_month; // get month
-            var _target = 0;
-            _target = parseFloat(self.adjusting_kpi['month_' + _month + '_target']); // get target
-            if (_month === 'quarter') {
-                _target = parseFloat(self.adjusting_kpi['target']);
-            }
-            console.log(_result)
-            if (_result === null) { // calculate fof default values
-
-                _result = parseFloat(self.adjusting_kpi['month_' + _month]);
-                if (_month === 'quarter') {
-                    _result = parseFloat(self.adjusting_kpi['real']);
-
-                }
-
-            } // get result}
-
-
-            var _min = 0;
-            var _max = 0;
-            var _max_score = parseFloat(self.organization.max_score);
-            var _operator = self.adjusting_kpi.operator;
-
-            if (_operator === '>=') {
-                console.log(calculate_with_operator_greater())
-                console.log(_result)
-                _min = parseFloat(self.adjusting_kpi.achievement_calculation_method_extra[self.get_adjusting_key()].bottom); // get min target
-                _max = parseFloat(self.adjusting_kpi.achievement_calculation_method_extra[self.get_adjusting_key()].top); // get max target
-                var score = calculate_with_operator_greater();
-                if (score < 0) return (0.0).toFixed(2);
-                return score;
-
-            }
-            if (_operator === '<=') {
-                _min = parseFloat(self.adjusting_kpi.achievement_calculation_method_extra[self.get_adjusting_key()].top); // get min target
-                _max = parseFloat(self.adjusting_kpi.achievement_calculation_method_extra[self.get_adjusting_key()].bottom); // get max target
-                var score = calculate_with_operator_less();
-                if (score < 0) return (0.0).toFixed(2);
-                return score;
-            }
-
-            function calculate_with_operator_greater() {
-                var score = (0.0).toFixed(2);
-
-                if (_result < _min) {
-                    return (0.0).toFixed(2); // zero if less than min
-                }
-                if (_result <= _target && _result >= _min) {
-                    score = ((_result / _target) * 100).toFixed(2); // follow with function in document
-                    return score;
-                }
-                if (_result >= _target && _result < _max) {
-                    score = (
-                        (_result - _target) / (_max - _target) * (_max_score - 100) + 100 // follow with function in document
-                    ).toFixed(2);
-                    return score;
-                }
-                if (_result >= _max) {
-                    return _max_score.toFixed(2); // max score gained if greater than max
-                }
-            }
-
-            function calculate_with_operator_less() {
-                var score = (0.0).toFixed(2);
-
-
-                if (_result <= _min) {
-                    return _max_score.toFixed(2); // max score gained if less than or equal to min
-                }
-                if (_result > _min && _result <= _target) {
-                    score = (
-                        (_result - _min) / (_target - _min) * (100 - _max_score) + _max_score // follow with function in document
-                    ).toFixed(2);
-                    return score;
-                }
-                if (_result >= _target && _result <= _max) {
-                    score = (
-                        (2 - _result / _target) * 100  // follow with function in document
-                    ).toFixed(2);
-                    return score;
-                }
-                if (_result > _max) {
-                    return (0.0).toFixed(2); // zero if greater than max
-                }
-            }
-        },
-        fetch_chart_data: function () {
-            var self = this;
-            var data = [];
-            if (self.adjusting_kpi.operator === '>=') {
-                data = [
-                    {
-                        x: self.adjusting_kpi.achievement_calculation_method_extra[self.get_adjusting_key()].bottom,
-                        y: self.calculate_score_with_level(self.adjusting_kpi.achievement_calculation_method_extra[self.get_adjusting_key()].bottom)
-                    }, {
-                        x: self.adjusting_kpi.adjusting_month === 'quarter' ? self.adjusting_kpi['target'] : self.adjusting_kpi['month_' + self.adjusting_kpi.adjusting_month + '_target'],
-                        y: 100
-                    }, {
-                        x: self.adjusting_kpi.achievement_calculation_method_extra[self.get_adjusting_key()].top,
-                        y: self.organization.max_score
-                    }]
-            }
-            else if (self.adjusting_kpi.operator === '<=') {
-                data = [
-                    {
-                        x: self.adjusting_kpi.achievement_calculation_method_extra[self.get_adjusting_key()].top,
-                        y: self.organization.max_score
-
-                    }, {
-                        x: self.adjusting_kpi.adjusting_month === 'quarter' ? self.adjusting_kpi['target'] : self.adjusting_kpi['month_' + self.adjusting_kpi.adjusting_month + '_target'],
-                        y: 100
-                    }, {
-                        x: self.adjusting_kpi.achievement_calculation_method_extra[self.get_adjusting_key()].bottom,
-                        y: self.calculate_score_with_level(self.adjusting_kpi.achievement_calculation_method_extra[self.get_adjusting_key()].bottom)
-                    }]
-            }
-            return data;
-
-        },
-        resetErrorWhenShow: function() {
-            $('#error-input-1').css('display','none');
-            $('#error-input-2').css('display','none');
-            $('#error-input-3').css('display','none');
-            $('#error-input-4').css('display','none');
-        },
-        check_number: function(e){
-            var charCode = e.which || e.keyCode; //It will work in chrome and firefox.
-            var _number = String.fromCharCode(charCode);
-            if (e.key !== undefined && e.charCode === 0) {
-                // FireFox key Del - Supr - Up - Down - Left - Right
-                return;
-            }
-            if ('0123456789.'.indexOf(_number) !== -1) {
-                return _number;
-            }
-            e.preventDefault();
-            return false;
-        },
-        update_adjusting_chart: function () {
-            var self = this;
-            console.log('triggered')
-            console.log(self.adjusting_kpi.achievement_calculation_method_extra[self.get_adjusting_key()])
-            if (self.adjusting_chart === null) {
-                self.init_adjusting_chart();
-            }
-            var data = self.fetch_chart_data();
-
-            self.adjusting_chart.data.datasets[1].data = data; // update performance chart
-            if (self.adjusting_kpi.enable_estimation) {
-                self.adjusting_chart.data.datasets[0].data = [
-                    {
-                        x: self.estimated_result_with_threshold,
-                        y: self.calculate_score_with_level(self.estimated_result_with_threshold)
-                    }
-                ]; // update estimated result chart
-            } else { // remove if false
-                self.adjusting_chart.data.datasets[0].data = [];
-            }
-            self.adjusting_chart.update()
-        },
-        init_adjusting_chart: function () {
-            var self = this;
-            var element_chart = $('#performance-adjusting-chart');
-            var data = self.fetch_chart_data();
-            var chart = new Chart(element_chart, {
-                type: 'scatter',
-                data: {
-                    datasets: [
-                        {
-                            label: gettext('Esimated result'), // Estimated result chart, index = 0
-                            data: [],
-                            fill: true,
-                            showLine: false,
-                            lineTension: 0,
-                            borderDashOffset: false,
-                            backgroundColor: [
-                                'rgba(182, 52, 52,1)'
-                            ],
-                            borderColor: [
-                                'rgba(182, 52, 52,1)'
-                            ],
-                            pointHoverRadius: 5,
-                            pointHoverBackgroundColor: 'red'
-                        },
-                        {
-                            label: gettext("Performance"), // Performance chart, index = 1
-                            data: data,
-                            fill: true,
-                            showLine: true,
-                            lineTension: 0,
-                            borderDashOffset: false,
-                            backgroundColor: [
-                                'rgba(51, 122, 183, 0.15)'
-                            ],
-                            borderColor: [
-                                'rgba(51, 122, 183, 1.0)'
-                            ],
-                            pointHoverRadius: 5,
-                            pointHoverBackgroundColor: 'red'
-                        },
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        xAxes: [{
-                            gridLines: {
-                                display: false,
-                                color: "rgba(51, 122, 183, 0.6)",
-                            },
-                            ticks: {
-                                stepSize: 20,
-                                beginAtZero: true,
-                                display: false
-
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: gettext("Result")
-                            },
-
-                        }],
-                        yAxes: [{
-                            gridLines: {
-                                display: false,
-                                color: "rgba(51, 122, 183, 0.15)",
-                            },
-                            ticks: {
-                                stepSize: 150,
-                                beginAtZero: true,
-                                display: false
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: gettext("Performance"),
-                            }
-                        }]
-                    }
-                }
-            });
-            self.adjusting_chart = chart;
-
-        },
-        confirm_adjust: function (elm) {
-            var self = this;
-            cloudjetRequest.ajax({
-                type: 'post',
-                url: '/api/kpi/services/',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    id: self.adjusting_kpi.id,
-                    achievement_calculation_method: self.adjusting_kpi.achievement_calculation_method,
-                    achievement_calculation_method_extra: self.adjusting_kpi.achievement_calculation_method_extra,
-                    command: 'update_kpi_threshold'
-                }),
-                success: function (res) {
-                    var enable_edit = self.kpi_list[self.adjusting_kpi.id].enable_edit;
-                    var enable_review = self.kpi_list[self.adjusting_kpi.id].enable_review;
-                    var enable_delete = self.kpi_list[self.adjusting_kpi.id].enable_delete;
-
-                    res.enable_edit = enable_edit;
-                    res.enable_review = enable_review;
-                    res.enable_delete = enable_delete;
-                    self.$set(self.$data, 'kpi_list[' + self.adjusting_kpi.id + ']', res);
-                    self.reset_adjust();
-
-                },
-                error: function (res) {
-                }
-            });
-        },
-        reset_adjust: function () {
-            var self = this;
-            self.adjusting_kpi = {};
-            // Reset to month 1
-
-        },
-        init_adjust: function (kpi) {
-            var self = this;
-            // Clone to temp object
-            self.adjusting_kpi = Object.assign({}, kpi);
-            // Setup adjusting month to regenerate chart
-
-            $.extend(true, self.adjusting_kpi, {
-                adjusting_month: 1,
-                enable_estimation: false,
-                estimated_result: 0
-            })
-
-            if (self.adjusting_kpi.achievement_calculation_method_extra === null) {
-
-                self.$set(self.adjusting_kpi, 'achievement_calculation_method_extra', Object.assign({}, {
-                    month_1: {
-                        top: '',
-                        bottom: ''
-                    },
-                    month_2: {
-                        top: '',
-                        bottom: ''
-                    },
-                    month_3: {
-                        top: '',
-                        bottom: ''
-                    },
-                    quarter: {
-                        top: '',
-                        bottom: ''
-                    }
-                }))
-            } else {
-                try {
-                    self.adjusting_kpi.achievement_calculation_method_extra = JSON.parse(self.adjusting_kpi.achievement_calculation_method_extra);
-                } catch (err) {
-
-                }
-            }
-
-            // Default tab will be related to achievement_calculation_method
-            var default_tab = 1;
-            if (self.adjusting_kpi.achievement_calculation_method === 'topbottom') {
-                default_tab = 2;
-            }
-            $('#performance-result-based .nav-pills li:nth-child(' + default_tab + ')').tab('show');
-            $('#adjusting-dashboard .nav-tabs li:nth-child(' + self.adjusting_kpi.adjusting_month + ')').tab('show') // reset tab 1
-            self.update_adjusting_chart();
-
-        },
-        adjust_performance_level: function (kpi) {
-            var self = this;
-            self.init_adjust(kpi);
-            console.log(self.adjusting_kpi)
-            $('#performance-level-adjust').modal();
-            self.resetErrorWhenShow();
-        },
-
-        checkInput1: function (input_1,target) {
-            var id = $('.row.col-sm-12.evaluate-chart').attr('id');
-            if(input_1 >= target || input_1 < 0 ) {
-                if( id == '<=')
-                    $('#error-input-1').css('display','');
-                else
-                    $('#error-input-3').css('display','');
-            }
-            else {
-                if( id == '<=')
-                    $('#error-input-1').css('display','none');
-                else
-                    $('#error-input-3').css('display','none');
-            }
-        },
-        check_paste: function (evt) {
-            evt.preventDefault();
-            evt.stopPropagation();
-        },
-        checkInput3: function(input_3,target) {
-            var id = $('.row.col-sm-12.evaluate-chart').attr('id');
-            if(input_3 <= target ) {
-                if( id == '<=')
-                    $('#error-input-2').css('display','');
-                else
-                    $('#error-input-4').css('display','');
-            }
-            else {
-                if( id == '<=')
-                    $('#error-input-2').css('display','none');
-                else
-                    $('#error-input-4').css('display','none');
-            }
-        },
-        triggerClickTab: function(current_tab,e){
-            var self = this
-            self.$set('adjusting_kpi.adjusting_month',current_tab);
-            self.update_adjusting_chart();
-            self.checkConditon(e);
-        },
-        checkConditionInput1: function() {
-            var self = this
-            var current_tab = $('.row.col-sm-12.evaluate-chart').find('.tab-pane.fade.in.active');
-            var target = parseFloat(current_tab.find('#input-2').val());
-            var input_1 =  parseFloat(current_tab.find('#input-1').val());
-            self.checkInput1(input_1,target);
-            self.update_adjusting_chart()
-        },
-        checkConditionInput3: function() {
-            var self = this
-            var current_tab = $('.row.col-sm-12.evaluate-chart').find('.tab-pane.fade.in.active');
-            var target = parseFloat(current_tab.find('#input-2').val());
-            var input_3 = parseFloat(current_tab.find('#input-3').val());
-            self.checkInput3(input_3,target);
-            self.update_adjusting_chart()
-        },
-        checkConditon: function (e) {
-            var self = this
-            $('#error-input-1').css('display','none');
-            $('#error-input-2').css('display','none');
-            $('#error-input-3').css('display','none');
-            $('#error-input-4').css('display','none');
-            var id = $(e).find('a').attr('href');
-            var input_1 = parseFloat($(id).find('#input-1').val());
-            var target = parseFloat($(id).find('#input-2').val());
-            var input_3 = parseFloat($(id).find('#input-3').val());
-            self.checkInput1(input_1,target);
-            self.checkInput3(input_3,target);
-        },
         formatTime: function (time) {
             if (COMMON.LanguageCode == 'en'){
                 return moment(time).format('YYYY-MM-DD HH:mm:ss');
@@ -4818,21 +4896,6 @@ var v = new Vue({
             });
 
 
-        },
-
-        show_unique_code_modal: function (kpi_id) {
-            var kpi=this.kpi_list[kpi_id];
-            var that =  this;
-            if (!kpi.unique_code){
-                kpi.unique_code = kpi.id + "_" + slugify(kpi.name).substring(0,10);
-                that.update_kpi(kpi);
-
-            }
-
-            this.current_kpi = kpi;
-
-            this.unique_code_cache = kpi.unique_code;
-            $('#kpi-uniquecode').modal();
         },
 
         update_kpi: function (kpi, show_blocking_modal, callback) {
