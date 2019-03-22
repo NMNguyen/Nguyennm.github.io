@@ -1636,12 +1636,13 @@ Vue.component('point-calculation-methods-modal',{
             if (_month === 'quarter') {
                 _target = parseFloat(that.adjusting_kpi['target']);
             }
-            if (_result === null) { // calculate fof default values
-                _result = parseFloat(that.adjusting_kpi['month_' + _month]);
-                if (_month === 'quarter') {
-                    _result = parseFloat(that.adjusting_kpi['real']);
-                }
-            } // get result}
+            // Not set default in https://a.happyworking.life/project/fountainhead-cloudjet-kpi/us/6601
+            // if (_result === null) { // calculate fof default values
+            //     _result = parseFloat(that.adjusting_kpi['month_' + _month]);
+            //     if (_month === 'quarter') {
+            //         _result = parseFloat(that.adjusting_kpi['real']);
+            //     }
+            // } // get result}
             let _min = 0;
             let _max = 0;
             let _max_score = parseFloat(that.organization.max_score);
