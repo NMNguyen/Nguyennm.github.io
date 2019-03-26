@@ -73,20 +73,10 @@ body{
     color:#008b8b!important;
 }
 .search-employee{
-    position:fixed;
+    position:absolute;
     right:15px;
-    top:95px;
+    top:10px;
 }
-@media (max-width: 1140px) {
-    #position-chart{
-        margin-top:35px;
-    }
-    .search-employee{
-        position: fixed;
-        top: 70px;
-    }
-}
-
 #tab-content .segment{
     border:none;
     box-shadow:none;

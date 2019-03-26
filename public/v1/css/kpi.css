@@ -2328,6 +2328,7 @@ a:hover {
 }
 
 .performance-based span {
+    width: 89px;
     height: 17px;
     font-size: 14px;
     font-weight: normal;
