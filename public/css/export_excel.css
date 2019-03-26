@@ -738,4 +738,12 @@ div[id^='modalCreateFilter'] .left{
 .el-table tr.row-inactive-user{
     text-decoration: line-through;
 }
+/*
+https://stackoverflow.com/questions/19529100/line-through-cannot-be-removed-in-sublist/19529256#19529256
+https://stackoverflow.com/questions/1823341/how-do-i-get-this-css-text-decoration-override-to-work
+*/
+.el-table tr.row-inactive-user.hover-row .view-kpi-btn span{
+    text-decoration: none;
+    display: inline-block;
+}
 /* End employee_and_score.html*/

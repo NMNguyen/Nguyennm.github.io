@@ -4079,6 +4079,9 @@ button.close{
     padding-top: 0px;
     padding-bottom: 1px;
 }
+.threshold-modal .el-dialog__footer .btn-cus-pd{
+    padding: 9px 0px;
+}
 
 .threshold-modal .adjusting-header{
     margin-right: 0px;
