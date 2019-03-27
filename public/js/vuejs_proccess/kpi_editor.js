@@ -4815,7 +4815,7 @@ var v = new Vue({
                         data[i]['zero'].forEach(function (e){
                            zero_score = parseFloat(that.employee_performance['month_'+i+'_score']);
                            e.month = i;
-                           e.employee_points = -zero_score;
+                           e.employee_points = zero_score;
                            minus[i] = -zero_score ;
                            plus[i] = 0;
                            that.fetched_data_exscore_user.push(e);

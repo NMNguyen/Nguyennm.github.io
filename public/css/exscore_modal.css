@@ -510,6 +510,9 @@
     background: #007777;
 }
 
+#add-exscore-lib-modal .pre-wrap-line{
+    white-space: pre-wrap;
+}
 
 #msg-exscore-lib-modal .modal-dialog{
     max-width: 465px;
