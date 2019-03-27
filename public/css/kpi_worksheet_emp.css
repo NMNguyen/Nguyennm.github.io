@@ -679,32 +679,29 @@ div.filter-wrapper input {
 /*end bonus component */
 
 /* kpi unique_code */
-#kpi-uniquecode {
+.kpi-uniquecode {
     font-family: 'Open sans', sans-serif;
 }
 
-#kpi-uniquecode .modal-title {
+.kpi-uniquecode .modal-title {
     color: #333333;
     font-size: 20px;
     font-weight: bold;
 
 }
 
-#kpi-uniquecode .notice-kpi-unicode {
+.kpi-uniquecode .notice-kpi-unicode {
     background-color: rgba(51, 122, 183, 0.15);
     padding: 10px 10px;
     font-size: 14px;
     border-radius: 3px;
 }
 
-#kpi-uniquecode .notice-kpi-unicode p {
+.kpi-uniquecode .notice-kpi-unicode p {
     margin-bottom: 3px;
     color: #337ab7;
 }
 
-#input-unique:focus {
-    border: 1px solid #008b8b !important;
-}
 
 /* end kpi unique code*/
 
@@ -816,24 +813,20 @@ div.filter-wrapper input {
 /* end copy_kpi.html */
 
 /*unique_code.html*/
-#kpi-uniquecode .notice-kpi-unicode {
+.kpi-uniquecode .notice-kpi-unicode {
     background-color: rgba(51, 122, 183, 0.15);
     padding: 10px 10px;
     font-size: 14px;
     border-radius: 3px;
 }
 
-#kpi-uniquecode .notice-kpi-unicode p {
+.kpi-uniquecode .notice-kpi-unicode p {
     margin-bottom: 3px;
     color: #337ab7;
 }
 
-#input-unique:focus {
-    border: 1px solid #008b8b !important;
-}
-
-div#unique-content {
-    height: 560px;
+div.unique-content {
+    /*height: 560px;*/
     max-height: 800px;
 }
 

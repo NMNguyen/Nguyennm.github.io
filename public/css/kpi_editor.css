@@ -4034,7 +4034,7 @@ button.close{
 }
 
 .chart-container.chart-calculation-method{
-    width:590px;
+    width: 91%;
     height: 240px;
     margin-top: 50px;
 }
@@ -4074,10 +4074,19 @@ button.close{
     margin-left: 20px;
     margin-top: 8px;
 }
-#adjusting-dashboard> .nav-tabs-ratio {
-    position: fixed;
-    top: 67px;
+
+.threshold-modal> .el-dialog__body{
+    padding-top: 0px;
+    padding-bottom: 1px;
 }
+.threshold-modal .el-dialog__footer .btn-cus-pd{
+    padding: 9px 0px;
+}
+
+.threshold-modal .adjusting-header{
+    margin-right: 0px;
+}
+
 #adjusting-dashboard> .nav-tabs-ratio>li {
     float: left;
     margin-bottom: -1px;
