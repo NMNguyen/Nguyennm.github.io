@@ -568,3 +568,66 @@
     border:none;
     background:#e4e4e4;
 }
+.exscore-evidence-upload{
+    margin-top:17px;
+}
+.exscore-evidence-upload .inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+.exscore-evidence-upload .inputfile + label {
+    font-size: 14px;
+    line-height: normal;
+    display: flex;
+    cursor: pointer;
+    color: #3564E0;
+}
+.exscore-evidence-upload .inputfile + label p {
+    /*display: inline;*/
+    text-decoration-line: underline;
+    margin: auto;
+    margin-left: 0px;
+}
+.exscore-evidence-upload .inputfile + label i{
+    font-size:24px;
+}
+/*.inputfile:focus + label,*/
+/*.inputfile + label:hover {*/
+    /*background-color: red;*/
+/*}*/
+.el-alert--info{
+    background-color:#F7FAFC;
+    color: #3564E0;
+    margin-top:16px;
+    padding:8px 8px;
+}
+.el-alert--info .el-alert__content{
+    display:flex;
+    width:100%;
+    padding:0px;
+}
+.el-alert--info .el-alert__content p{
+    margin-top:4px;
+    margin-bottom:0px;
+    width: calc(100% - 55px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: underline;
+    text-overflow: ellipsis;
+}
+
+.el-alert--info .el-alert__content i{
+    font-size:24px;
+    margin-right:4px;
+}
+
+.el-alert--info .el-alert__closebtn{
+    top:8px;
+    right:9px;
+    font-weight:bold;
+    color:#929DA3;
+}

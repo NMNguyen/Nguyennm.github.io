@@ -466,6 +466,9 @@ var targetPage = new Vue({
         list_user_searched: [],
         list_surbodinates_user_viewed: [],
         organization: {},
+        month_1_name:'',
+        month_2_name:'',
+        month_3_name:''
     },
     components: {},
     computed: {
@@ -479,6 +482,11 @@ var targetPage = new Vue({
         }
     },
     methods: {
+        cancelRequestEditKpi: function(kpi_id,row_index){
+            if(this.tableData[row_index] && this.tableData[row_index].id == kpi_id){
+                this.$set(this.tableData[row_index],'is_approved', true)
+            }
+        },
         check_paste: function (evt) {
             evt.preventDefault();
             evt.stopPropagation();
@@ -672,7 +680,6 @@ var targetPage = new Vue({
                 }
                 else if (this.tableData[rowIndex].name == gettext('Others')) {
                     list_classes.push('target_other_title');
-                } else {
                 }
             }
             if (row.weight == 0) {
@@ -699,6 +706,7 @@ var targetPage = new Vue({
                 visible2: false,
                 refer_to:'',
                 name_kpi_parent:"",
+                is_approved:"",
             };
             tempTableData = Object.assign(tempTableData,item);
             // add field to export excel
@@ -723,7 +731,7 @@ var targetPage = new Vue({
         },
         showModalEdit: function(kpi){
             // console.log('triggered show modal')
-            this.$set(this,'selected_kpi', kpi)
+            this.selected_kpi = kpi
             this.dialogFormVisible = true
         },
         getMonthsTarget: function (item) { // tao field thang theo tung quy
@@ -824,7 +832,11 @@ var targetPage = new Vue({
                 success: function (res) {
                     // console.log("quarter")
                     console.log(res);
+                    //that.get_current_quarter = res.fields.quarter;
                     that.$set(that.$data, 'get_current_quarter', res.fields.quarter);
+                    that.$set(that.$data, 'month_1_name', res.month_1_name);
+                    that.$set(that.$data, 'month_2_name', res.month_2_name);
+                    that.$set(that.$data, 'month_3_name', res.month_3_name);
                     // console.log(this.get_current_quarter)
                     that.getListKpi()
                 },
@@ -1162,7 +1174,7 @@ var targetPage = new Vue({
                     style: 'center'
                 },{
                     id: null,
-                    text: gettext('Target'),
+                    text: gettext('Targets'),
                     slug: 'target',
                     width: '20',
                     style: 'center',

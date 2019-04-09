@@ -304,12 +304,21 @@ var importKpiPosition = new Vue({
             return h('el-tooltip', {props: {content: "Thêm tất cả", placement: "top"}}, [result])
         },
         getPositionKpiId: function (position_id) {
-            var that = this
+            let that = this;
+            let new_kpis =[];
             cloudjetRequest.ajax({
                 method: "GET",
                 url: "/api/v2/position-kpi/get-kpilib/?position=" + position_id,
                 success: function (data) {
                     that.position_kpi_id = data.id;
+                    if(that.kpis.length > 0){
+                         new_kpis = that.kpis;
+                         new_kpis.slice().forEach(function (kpi, index) {
+                             kpi.status = null;
+                             return kpi
+                        });
+                        that.kpis = new_kpis;
+                    }
                 },
                 error: function () {
                 }
@@ -371,6 +380,7 @@ var importKpiPosition = new Vue({
             return str;
         },
         handleDropFile: function (e) {
+            let that = this;
             e.stopPropagation();
             e.preventDefault();
             var files = e.dataTransfer.files;
@@ -382,7 +392,7 @@ var importKpiPosition = new Vue({
                 $("#file-upload-form")[0].reset();
                 return;
             }
-            this.handleFile(e);
+            that.handleFile(e);
         },
         handleFile: function (e) {
             var that = this;
@@ -478,233 +488,237 @@ var importKpiPosition = new Vue({
             $("#file-upload-form, #upload-form")[0].reset();
         },
         parseDataImport: function(sheet, row,last_goal){
-        var self = this
-        var last_goal_index = 2
-        var kpi={}
-        try {
-            var kpi_code = '';
+            var self = this
+            var last_goal_index = 2
+            var kpi={}
             try {
-                 kpi_code = String(sheet["A" + row].v).trim();
-            } catch (err) {
-                 kpi_code = '';
-            }
-            var goal = '';
-            try {
-                 goal = String(sheet["B" + row].v).trim();
+                var kpi_code = '';
+                try {
+                     kpi_code = String(sheet["A" + row].v).trim();
+                } catch (err) {
+                     kpi_code = '';
+                }
+                var goal = '';
+                try {
+                     goal = String(sheet["B" + row].v).trim();
 
-                if (goal != undefined) {
-                    goal = goal.toUpperCase();
+                    if (goal != undefined) {
+                        goal = goal.toUpperCase();
+                    }
+
+                } catch (err) {
+                     goal = ''
+                }
+                var check_goal = "";
+                var kpi = "";
+                try {
+                    kpi = String(sheet["C" + row].v).trim();
+                } catch (err) {
+                    kpi = ""
+                    last_goal_index = row;
                 }
 
-            } catch (err) {
-                 goal = ''
-            }
-            var check_goal = "";
-            var kpi = "";
-            try {
-                kpi = String(sheet["C" + row].v).trim();
-            } catch (err) {
-                kpi = ""
-                last_goal_index = row;
-            }
+                if (kpi.trim().length != 0 && (goal == undefined || goal == '')) {
+                    goal = last_goal;
+                    check_goal = "Check goal"
+                } else {
+                    last_goal = goal;
+                }
 
-            if (kpi.trim().length != 0 && (goal == undefined || goal == '')) {
-                goal = last_goal;
-                check_goal = "Check goal"
-            } else {
-                last_goal = goal;
-            }
+                var unit = '';
+                try {
+                     unit = String(sheet["D" + row].v).trim();
+                } catch (err) {
+                     unit = '';
+                }
 
-            var unit = '';
-            try {
-                 unit = String(sheet["D" + row].v).trim();
-            } catch (err) {
-                 unit = '';
-            }
-
-            var measurement = '';
-            try {
-                 measurement = String(sheet["E" + row].v).trim();
-            } catch (err) {
-                 measurement = '';
-            }
-            var data_source = '';
-            try {
-                 data_source = String(sheet["F" + row].v).trim();
-            } catch (err) {
-                 data_source = '';
-            }
-            var method = '';
-            try {
-                method = String(sheet["G" + row].v).trim();
-            } catch (err) {
-                method = '';
-            }
-            var operator = '';
-            try {
-                var operator = String(sheet["H" + row].v).trim();
-            } catch (err) {
+                var measurement = '';
+                try {
+                     measurement = String(sheet["E" + row].v).trim();
+                } catch (err) {
+                     measurement = '';
+                }
+                var data_source = '';
+                try {
+                     data_source = String(sheet["F" + row].v).trim();
+                } catch (err) {
+                     data_source = '';
+                }
+                var method = '';
+                try {
+                    method = String(sheet["G" + row].v).trim();
+                } catch (err) {
+                    method = '';
+                }
                 var operator = '';
-            }
+                try {
+                    var operator = String(sheet["H" + row].v).trim();
+                } catch (err) {
+                    var operator = '';
+                }
 
-            var year = null;
-            try {
-                 year = String(sheet["I" + row].v).trim();
-            } catch (err) {
-                 year = null;
-            }
+                var year = null;
+                try {
+                     year = String(sheet["I" + row].v).trim();
+                } catch (err) {
+                     year = null;
+                }
 
-            var t1 = null;
-            try {
-                 t1 = String(sheet["J" + row].v).trim();
-            } catch (err) {
-                 t1 = null;
-            }
+                var t1 = null;
+                try {
+                     t1 = String(sheet["J" + row].v).trim();
+                } catch (err) {
+                     t1 = null;
+                }
 
-            var t2 = null;
-            try {
-                 t2 = String(sheet["K" + row].v).trim();
-            } catch (err) {
-                 t2 = null;
-            }
+                var t2 = null;
+                try {
+                     t2 = String(sheet["K" + row].v).trim();
+                } catch (err) {
+                     t2 = null;
+                }
 
-            var t3 = null;
-            try {
-                 t3 = String(sheet["L" + row].v).trim();
-            } catch (err) {
-                 t3 = null;
-            }
+                var t3 = null;
+                try {
+                     t3 = String(sheet["L" + row].v).trim();
+                } catch (err) {
+                     t3 = null;
+                }
 
-            var q1 = null;
-            try {
-                 q1 = String(sheet["M" + row].v).trim();
+                var q1 = null;
+                try {
+                     q1 = String(sheet["M" + row].v).trim();
+                } catch (err) {
+                     q1 = null;
+                }
+                var t4 = null;
+                try {
+                     t4 = String(sheet["N" + row].v).trim();
+                } catch (err) {
+                     t4 = null;
+                }
+                var t5 = null;
+                try {
+                     t5 = String(sheet["O" + row].v).trim();
+                } catch (err) {
+                     t5 = null;
+                }
+                var t6 = null;
+                try {
+                     t6 = String(sheet["P" + row].v).trim();
+                } catch (err) {
+                     t6 = null;
+                }
+                var q2 = null;
+                try {
+                     q2 = String(sheet["Q" + row].v).trim();
+                } catch (err) {
+                     q2 = null;
+                }
+                var t7 = null;
+                try {
+                     t7 = String(sheet["R" + row].v).trim();
+                } catch (err) {
+                     t7 = null;
+                }
+                var t8 = null;
+                try {
+                     t8 = String(sheet["S" + row].v).trim();
+                } catch (err) {
+                     t8 = null;
+                }
+                var t9 = null;
+                try {
+                     t9 = String(sheet["T" + row].v).trim();
+                } catch (err) {
+                     t9 = null;
+                }
+                var q3 = null;
+                try {
+                     q3 = String(sheet["U" + row].v).trim();
+                } catch (err) {
+                     q3 = null;
+                }
+                var t10 = null;
+                try {
+                     t10 = String(sheet["V" + row].v).trim();
+                } catch (err) {
+                     t10 = null;
+                }
+                var t11 = null;
+                try {
+                    t11 = String(sheet["W" + row].v).trim();
+                } catch (err) {
+                    t11 = null;
+                }
+                var t12 = null;
+                try {
+                     t12 = String(sheet["X" + row].v).trim();
+                } catch (err) {
+                     t12 = null;
+                }
+                var q4 = null;
+                try {
+                     q4 = String(sheet["Y" + row].v).trim();
+                } catch (err) {
+                     q4 = null;
+                }
+                 var weight = null;
+                try {
+                     weight = String(sheet["Z" + row].v).trim();
+                } catch (err) {
+                     weight = null;
+                }
+                 kpi = {
+                    "kpi_code": kpi_code,
+                    "check_goal": check_goal,
+                    "goal": goal,
+                    "kpi": kpi,
+                    "unit": unit,
+                    "measurement": measurement,
+                    "data_source": data_source,
+                    "score_calculation_type": method,
+                    "operator": operator,
+                    "t1": $.isNumeric(t1) ?self.config_decimal_input(t1): t1,
+                    "t2": $.isNumeric(t2) ?self.config_decimal_input(t2): t2,
+                    "t3": $.isNumeric(t3) ?self.config_decimal_input(t3): t3,
+                    "t4": $.isNumeric(t4) ?self.config_decimal_input(t4): t4,
+                    "t5": $.isNumeric(t5) ?self.config_decimal_input(t5): t5,
+                    "t6": $.isNumeric(t6) ?self.config_decimal_input(t6): t6,
+                    "t7": $.isNumeric(t7) ?self.config_decimal_input(t7): t7,
+                    "t8": $.isNumeric(t8) ?self.config_decimal_input(t8): t8,
+                    "t9": $.isNumeric(t9) ?self.config_decimal_input(t9): t9,
+                    "t10": $.isNumeric(t10) ?self.config_decimal_input(t10): t10,
+                    "t11": $.isNumeric(t11) ?self.config_decimal_input(t11): t11,
+                    "t12": $.isNumeric(t12) ?self.config_decimal_input(t12): t12,
+                    "q1": $.isNumeric(q1) ?self.config_decimal_input(q1): q1,
+                    "q2": $.isNumeric(q2) ?self.config_decimal_input(q2): q2,
+                    "q3": $.isNumeric(q3) ?self.config_decimal_input(q3): q3,
+                    "q4": $.isNumeric(q4) ?self.config_decimal_input(q4): q4,
+                    'year': $.isNumeric(year) ?self.config_decimal_input(year): year,
+                    "weight": $.isNumeric(weight)?self.config_decimal_input(parseFloatWeight(weight)):weight,
+                    "check_error_year": false,
+                    "check_error_quarter_1": false,
+                    "check_error_quarter_2": false,
+                    "check_error_quarter_3": false,
+                    "check_error_quarter_4": false,
+                    "index": "",
+                    "msg":[],
+                    "_uuid": makeid(),
+                    "code_kpi_existed":false,
+                    "email_is_incorrect":false
+                };
+                console.log(self.kpis);
             } catch (err) {
-                 q1 = null;
+                self.is_error = true;
+                return false
             }
-            var t4 = null;
-            try {
-                 t4 = String(sheet["N" + row].v).trim();
-            } catch (err) {
-                 t4 = null;
-            }
-            var t5 = null;
-            try {
-                 t5 = String(sheet["O" + row].v).trim();
-            } catch (err) {
-                 t5 = null;
-            }
-            var t6 = null;
-            try {
-                 t6 = String(sheet["P" + row].v).trim();
-            } catch (err) {
-                 t6 = null;
-            }
-            var q2 = null;
-            try {
-                 q2 = String(sheet["Q" + row].v).trim();
-            } catch (err) {
-                 q2 = null;
-            }
-            var t7 = null;
-            try {
-                 t7 = String(sheet["R" + row].v).trim();
-            } catch (err) {
-                 t7 = null;
-            }
-            var t8 = null;
-            try {
-                 t8 = String(sheet["S" + row].v).trim();
-            } catch (err) {
-                 t8 = null;
-            }
-            var t9 = null;
-            try {
-                 t9 = String(sheet["T" + row].v).trim();
-            } catch (err) {
-                 t9 = null;
-            }
-            var q3 = null;
-            try {
-                 q3 = String(sheet["U" + row].v).trim();
-            } catch (err) {
-                 q3 = null;
-            }
-            var t10 = null;
-            try {
-                 t10 = String(sheet["V" + row].v).trim();
-            } catch (err) {
-                 t10 = null;
-            }
-            var t11 = null;
-            try {
-                t11 = String(sheet["W" + row].v).trim();
-            } catch (err) {
-                t11 = null;
-            }
-            var t12 = null;
-            try {
-                 t12 = String(sheet["X" + row].v).trim();
-            } catch (err) {
-                 t12 = null;
-            }
-            var q4 = null;
-            try {
-                 q4 = String(sheet["Y" + row].v).trim();
-            } catch (err) {
-                 q4 = null;
-            }
-             var weight = null;
-            try {
-                 weight = String(sheet["Z" + row].v).trim();
-            } catch (err) {
-                 weight = null;
-            }
-             kpi = {
-                "kpi_code": kpi_code,
-                "check_goal": check_goal,
-                "goal": goal,
-                "kpi": kpi,
-                "unit": unit,
-                "measurement": measurement,
-                "data_source": data_source,
-                "score_calculation_type": method,
-                "operator": operator,
-                "t1": $.isNumeric(t1) ?parseFloat(t1): t1,
-                "t2": $.isNumeric(t2) ?parseFloat(t2): t2,
-                "t3": $.isNumeric(t3) ?parseFloat(t3): t3,
-                "t4": $.isNumeric(t4) ?parseFloat(t4): t4,
-                "t5": $.isNumeric(t5) ?parseFloat(t5): t5,
-                "t6": $.isNumeric(t6) ?parseFloat(t6): t6,
-                "t7": $.isNumeric(t7) ?parseFloat(t7): t7,
-                "t8": $.isNumeric(t8) ?parseFloat(t8): t8,
-                "t9": $.isNumeric(t9) ?parseFloat(t9): t9,
-                "t10": $.isNumeric(t10) ?parseFloat(t10): t10,
-                "t11": $.isNumeric(t11) ?parseFloat(t11): t11,
-                "t12": $.isNumeric(t12) ?parseFloat(t12): t12,
-                "q1": $.isNumeric(q1) ?parseFloat(q1): q1,
-                "q2": $.isNumeric(q2) ?parseFloat(q2): q2,
-                "q3": $.isNumeric(q3) ?parseFloat(q3): q3,
-                "q4": $.isNumeric(q4) ?parseFloat(q4): q4,
-                'year': $.isNumeric(year) ?parseFloat(year): year,
-                "weight": $.isNumeric(weight)?parseFloatWeight(weight):weight,
-                "check_error_year": false,
-                "check_error_quarter_1": false,
-                "check_error_quarter_2": false,
-                "check_error_quarter_3": false,
-                "check_error_quarter_4": false,
-                "index": "",
-                "msg":[],
-                "_uuid": makeid(),
-                "code_kpi_existed":false,
-                "email_is_incorrect":false
-            };
-            console.log(self.kpis);
-        } catch (err) {
-            self.is_error = true;
-            return false
-        }
-        return kpi
-    },
+            return kpi
+        },
+        config_decimal_input: function(val,maxDecimalLength = 5){
+            val = Decimal(val).toFixed(maxDecimalLength)
+            return parseFloat(val)
+        },
         addRowError: function (uuid) {
             var self = this;
             if (self.id_row_error.indexOf(uuid) === -1) {
@@ -760,114 +774,71 @@ var importKpiPosition = new Vue({
             }
             return count == that.kpis.length ? false : true;
         },
-        checkValidate: function (kpi, sum_q, totalQuarterArray, sum_year) {
-            var self = this;
-            // Initialize pre condition
-
-            var quarterNeedTocheckSample = [1, 2, 3, 4]
-            var quarterNeedToCheck = []
-
-            // Process conditions
-
-            // year target bang voi tong target cac quy
-            var year_target_input = !$.isNumeric(kpi.year) ? null : parseFloat(kpi.year).toFixed(15)
-            sum_q = !$.isNumeric(sum_q) ? null : parseFloat(sum_q).toFixed(15)
-            var yearTargetValid = year_target_input == sum_q
-            if (!yearTargetValid) {
-                kpi.check_error_year = true
-            }
-            //bao loi khi thang khong theo phuong phap phan quy
-            for (var i = 1; i < 5; i++) {
-                var quarter_target_input = !$.isNumeric(kpi['q' + i]) ? null : parseFloat(kpi['q' + i]).toFixed(15)
-                totalQuarterArray[i - 1] = !$.isNumeric(totalQuarterArray[i - 1]) ? null : parseFloat(totalQuarterArray[i - 1]).toFixed(15)
-                if (!(quarter_target_input == totalQuarterArray[i - 1])) {
-                    kpi['check_error_quarter_' + i] = true
+        convert_data_target_to_valid: function(kpi){
+        let data = {
+            current_quarter: 0,// import not check current quater
+            calculation_method_type:kpi.score_calculation_type,
+            year_target: kpi.year,
+            quarter_1_target : kpi.q1,
+            quarter_2_target: kpi.q2,
+            quarter_3_target: kpi.q3,
+            quarter_4_target: kpi.q4,
+            year_data: {
+                months_target: {
+                    quarter_1: {
+                        month_1_target: kpi.t1,
+                        month_2_target: kpi.t2,
+                        month_3_target: kpi.t3
+                    },
+                    quarter_2: {
+                        month_1_target: kpi.t4,
+                        month_2_target: kpi.t5,
+                        month_3_target: kpi.t6
+                    },
+                    quarter_3: {
+                        month_1_target: kpi.t7,
+                        month_2_target: kpi.t8,
+                        month_3_target: kpi.t9
+                    },
+                    quarter_4: {
+                        month_1_target: kpi.t10,
+                        month_2_target: kpi.t11,
+                        month_3_target: kpi.t12
+                    }
                 }
             }
-            var quarterSumsIsNotNull = totalQuarterArray.reduce(function (prevVal, element) {
-                return prevVal && element === null
-            }, true)
-            if (quarterSumsIsNotNull) {
-                kpi.check_error_year = false
-            }
-            return kpi
-        },
-        calculationScore: function (score) {
-            var self = this
-            var year = score.year
-            var total_quarter = []
-            var count_1 = 0
-            var count_2 = 0
-            var data_quarter = []
-            var all_quarter_array = []
-            for (var i = 1; i < 5; i++) {
-                data_quarter[i] = {}
-                all_quarter_array[i] = $.isNumeric(score['q' + i]) ? parseFloat(score['q' + i]) : null
-                data_quarter[i]['month_1'] = $.isNumeric(score['t' + ((i - 1) * 3 + 1)]) ? parseFloat(score['t' + ((i - 1) * 3 + 1)]) : null
-                data_quarter[i]['month_2'] = $.isNumeric(score['t' + ((i - 1) * 3 + 2)]) ? parseFloat(score['t' + ((i - 1) * 3 + 2)]) : null
-                data_quarter[i]['month_3'] = $.isNumeric(score['t' + ((i - 1) * 3 + 3)]) ? parseFloat(score['t' + ((i - 1) * 3 + 3)]) : null
-            }
-            total_quarter[0] = calculateYearTotal(all_quarter_array)
-            for (var i = 1; i < 5; i++) {
-                total_quarter[i] = calculationQuarterTotal(data_quarter[i])
-            }
-            var total_year = total_quarter.slice().reduce(function (preVal, element) {
-                if (element.sum != null) {
-                    return preVal + element.sum
-                }
-                return preVal
-            }, null)
-            total_quarter.push(total_year)
-            console.log(total_quarter)
-            return total_quarter
-        },
+        }
+        return data
+    },
         validateTargetScoreFollowAllocationTarget: function (kpi) {
-            var self = this
-            var check_score_calculation_type = true
-            var p = self.method.indexOf(kpi.score_calculation_type.trim().toLowerCase());
-            if (p > 2 & p < 6) {
-                self.method_save = self.method[p - 3];
-            } else if (0 <= p && p <= 2) {
-                self.method_save = self.method[p];
+        // Hàm này chỉ chạy khi hệ thống có bật Ràng buộc chỉ tiêu tháng/quý/năm theo phương pháp đo
+        var self = this
+        let data_target_to_valid ={}
+        let valid_target_obj = {}
+        var check_score_calculation_type = true
+        var p = self.method.indexOf(kpi.score_calculation_type.trim().toLowerCase());
+        if (p > 2 & p<6){
+            self.method_save = self.method[p-3];
+        }else if( 0 <= p && p<=2){
+            self.method_save = self.method[p];
+        }
+        else{
+            self.method_save = "";
+            check_score_calculation_type = false
+        }
+        kpi.score_calculation_type = self.method_save;
+        data_target_to_valid = self.convert_data_target_to_valid(kpi)
+        valid_target_obj = self.validateAllocationTargetPlan(data_target_to_valid)
+        for(let i = 1;i<5;i++){
+            if(!valid_target_obj['valid_quarter_' +i]){
+                kpi['check_error_quarter_' + i] = true
+            }else{
+                kpi['check_error_quarter_' + i] = false
             }
-            else {
-                self.method_save = "";
-                check_score_calculation_type = false
-            }
-            kpi.score_calculation_type = self.method_save;
-            var total_quarter_array = self.calculationScore(kpi)
-            var sum_year = total_quarter_array[5]
-            if (check_score_calculation_type) {
-                switch (kpi.score_calculation_type) {
-                    case "sum":
-                        var sum_quarter = total_quarter_array[0].sum
-                        var sum_month_follow_quarter_array = [total_quarter_array[1].sum, total_quarter_array[2].sum, total_quarter_array[3].sum, total_quarter_array[4].sum]
-                        // par_1 là quarter_1 + quarter_2 + quarter_3 + quarter_4
-                        // par_2 là array tông [sum_quarter_1,sum_quarter_2,sum_quarter_3,sum_quarter_4] với sum_quarter_1 = month_1 +month_2 + month_3
-                        // par_3 tổng 12 tháng + 4 quý
-                        return kpi = self.checkValidate(kpi, sum_quarter, sum_month_follow_quarter_array, sum_year)
-                        break;
-                    case "most_recent":
-                        var most_recent_quarter = total_quarter_array[0].most_recent_quarter;
-                        var most_recent_month_follow_quarter_array = [total_quarter_array[1].most_recent_quarter, total_quarter_array[2].most_recent_quarter, total_quarter_array[3].most_recent_quarter, total_quarter_array[4].most_recent_quarter]
-                        // par_1 là quý có input gần nhất
-                        // par_2 là array các quý lấy tháng có input gần nhất
-                        // par_3 tổng 12 tháng + 4 quý
-                        return kpi = self.checkValidate(kpi, most_recent_quarter, most_recent_month_follow_quarter_array, sum_year)
-                        break;
-                    case "average":
-                        var average_quarter = total_quarter_array[0].average;
-                        var average_month_follow_quarter_array = [total_quarter_array[1].average, total_quarter_array[2].average, total_quarter_array[3].average, total_quarter_array[4].average]
-                        // par_1 là trung binh các quý có input
-                        // par_2 là array các quý lấy trung binh các tháng
-                        // par_3 tổng 12 tháng + 4 quý
-                        return kpi = self.checkValidate(kpi, average_quarter, average_month_follow_quarter_array, sum_year)
-                        break;
-                    default:
-                }
-            }
-            return kpi
-        },
+        }
+        kpi.check_error_year = !valid_target_obj.valid_year?true:false
+        return kpi
+    },
         validate_kpi: function (kpi, show_error=true) {
             var self = this
             var operator = ['<=', '>=', '='];
@@ -875,7 +846,7 @@ var importKpiPosition = new Vue({
             var months = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 't11', 't12'];
             var list_field_name_kpi = ['kpi_code','unit','measurement','weight','goal','kpi','score_calculation_type','operator']
             var object_trans_field = {
-                'kpi_code':"Loại KPI",
+                'kpi_code':"Mã KPI",
                 'unit': "Đơn vị",
                 'measurement': "Phương pháp đo lường",
                 'weight': "Trọng số",
@@ -895,7 +866,7 @@ var importKpiPosition = new Vue({
             kpi.validated = true;
             list_field_name_kpi.forEach(function (field) {
                 kpi.validated = false;
-                if (kpi[field] == "" || kpi[field] == null){
+                if (kpi[field] === "" || kpi[field] === null){
                     kpi.msg.push({
                         'field_name': object_trans_field[field],
                         'message': ' không được để trống'
@@ -972,11 +943,11 @@ var importKpiPosition = new Vue({
                     'message': ' không đúng định dạng'
                 });
             }
-            if (!isNaN(kpi.weight) && kpi.weight != '' && parseFloatWeight(kpi.weight) <= 0) {
+            if (!isNaN(kpi.weight) && kpi.weight != '' && parseFloatWeight(kpi.weight) < 0) {
                 kpi.validated = false;
                 kpi.msg.push({
                     'field_name': 'Trọng số',
-                    'message': ' phải lớn hơn 0'
+                    'message': ' phải lớn hơn hoặc bằng 0'
                 });
             }
             if (kpi.check_error_year == true){

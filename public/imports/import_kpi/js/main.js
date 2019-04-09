@@ -6,6 +6,31 @@
 window.parseFloatWeight = function(weight_percent){
     return $.isNumeric(weight_percent) ? Decimal.mul(parseFloat(weight_percent), 100).toNumber() : NaN;
 };
+
+function format(number) {
+
+    var decimalSeparator = ".";
+    var thousandSeparator = ",";
+
+    // make sure we have a string
+    var result = String(number);
+
+    // split the number in the integer and decimals, if any
+    var parts = result.split(decimalSeparator);
+
+    // reverse the string (1719 becomes 9171)
+    result = parts[0].split("").reverse().join("");
+
+    // add thousand separator each 3 characters, except at the end of the string
+    result = result.replace(/(\d{3}(?!$))/g, "$1" + thousandSeparator);
+
+    // reverse back the integer and replace the original integer
+    parts[0] = result.split("").reverse().join("");
+
+    // recombine integer with decimals
+    return parts.join(decimalSeparator);
+
+};
 Vue.component('decimal-input-import', {
     props: [
         'value',
@@ -114,7 +139,7 @@ Vue.component('edit-import-kpi-modal', {
         },
         isEmailFormatValid: function (email) {
              if (email) {
-                 return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi.test(email);
+                 return /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/gi.test(email);
              }
             return false;
         },
@@ -165,7 +190,7 @@ data: function () {
         organization:{},
         file: {},
         check_total: 0,
-        method: ["sum", "average", "most_recent", "tính tổng", "trung bình", "tháng gần nhất"],
+        method: ["sum", "average", "most_recent", "tổng", "trung bình", "tháng/quý gần nhất"],
         method_save: '',
 
     }
@@ -236,8 +261,6 @@ methods: {
         })
         return h('el-tooltip', {props: {content: "Thêm tất cả", placement: "top"}}, [result])
     },
-
-
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
         if (columnIndex === 0) {
             return [0, 0];
@@ -323,6 +346,7 @@ methods: {
         var that = this;
         that.kpis.length = 0;
         that.check_file = true;
+        that.is_error = false;
         var files = e.target.files || e.dataTransfer.files;
         var i, f;
         for (i = 0, f = files[i]; i != files.length; ++i) {
@@ -612,14 +636,8 @@ methods: {
             } catch (err) {
                  email = '';
             }
-            var code = '';
-            try {
-                code = String(sheet["AD" + row].v);
-            } catch (err) {
-                code = '';
-            }
+
              kpi = {
-                "code": code,
                 "kpi_id": kpi_id,
                 "check_goal": check_goal,
                 "goal": goal,
@@ -629,24 +647,24 @@ methods: {
                 "measurement": measurement,
                 "score_calculation_type": method,
                 "operator": operator,
-                "t1": $.isNumeric(t1) ?parseFloat(t1): t1,
-                "t2": $.isNumeric(t2) ?parseFloat(t2): t2,
-                "t3": $.isNumeric(t3) ?parseFloat(t3): t3,
-                "t4": $.isNumeric(t4) ?parseFloat(t4): t4,
-                "t5": $.isNumeric(t5) ?parseFloat(t5): t5,
-                "t6": $.isNumeric(t6) ?parseFloat(t6): t6,
-                "t7": $.isNumeric(t7) ?parseFloat(t7): t7,
-                "t8": $.isNumeric(t8) ?parseFloat(t8): t8,
-                "t9": $.isNumeric(t9) ?parseFloat(t9): t9,
-                "t10": $.isNumeric(t10) ?parseFloat(t10): t10,
-                "t11": $.isNumeric(t11) ?parseFloat(t11): t11,
-                "t12": $.isNumeric(t12) ?parseFloat(t12): t12,
-                "q1": $.isNumeric(q1) ?parseFloat(q1): q1,
-                "q2": $.isNumeric(q2) ?parseFloat(q2): q2,
-                "q3": $.isNumeric(q3) ?parseFloat(q3): q3,
-                "q4": $.isNumeric(q4) ?parseFloat(q4): q4,
-                'year': $.isNumeric(year) ?parseFloat(year): year,
-                "weight": $.isNumeric(weight)?parseFloatWeight(weight):weight,
+                "t1": $.isNumeric(t1) ?self.config_decimal_input(t1): t1,
+                "t2": $.isNumeric(t2) ?self.config_decimal_input(t2): t2,
+                "t3": $.isNumeric(t3) ?self.config_decimal_input(t3): t3,
+                "t4": $.isNumeric(t4) ?self.config_decimal_input(t4): t4,
+                "t5": $.isNumeric(t5) ?self.config_decimal_input(t5): t5,
+                "t6": $.isNumeric(t6) ?self.config_decimal_input(t6): t6,
+                "t7": $.isNumeric(t7) ?self.config_decimal_input(t7): t7,
+                "t8": $.isNumeric(t8) ?self.config_decimal_input(t8): t8,
+                "t9": $.isNumeric(t9) ?self.config_decimal_input(t9): t9,
+                "t10": $.isNumeric(t10) ?self.config_decimal_input(t10): t10,
+                "t11": $.isNumeric(t11) ?self.config_decimal_input(t11): t11,
+                "t12": $.isNumeric(t12) ?self.config_decimal_input(t12): t12,
+                "q1": $.isNumeric(q1) ?self.config_decimal_input(q1): q1,
+                "q2": $.isNumeric(q2) ?self.config_decimal_input(q2): q2,
+                "q3": $.isNumeric(q3) ?self.config_decimal_input(q3): q3,
+                "q4": $.isNumeric(q4) ?self.config_decimal_input(q4): q4,
+                'year': $.isNumeric(year) ?self.config_decimal_input(year): year,
+                "weight": $.isNumeric(weight)?self.config_decimal_input(parseFloatWeight(weight)):weight,
                 "email": email,
                 "check_error_year": false,
                 "check_error_quarter_1": false,
@@ -665,6 +683,10 @@ methods: {
             return false
         }
         return kpi
+    },
+    config_decimal_input: function(val,maxDecimalLength = 5){
+        val = Decimal(val).toFixed(maxDecimalLength)
+        return parseFloat(val)
     },
     addRowError: function(uuid){
         var self = this;
@@ -689,7 +711,7 @@ methods: {
 
     isEmailFormatValid: function (email) {
         if (email) {
-            return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi.test(email);
+            return /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/gi.test(email);
         }
         return false;
     },
@@ -711,78 +733,47 @@ methods: {
         }
         return count == that.kpis.length ? false : true;
     },
-    checkValidate: function(kpi,sum_q,totalQuarterArray,sum_year){
-        var self = this;
-        // Initialize pre condition
-
-        var quarterNeedTocheckSample = [1,2,3,4]
-        // {#                            var intQuarterNumber = parseInt(quarterNumber)#}
-        var quarterNeedToCheck = []
-
-        // Process conditions
-
-        // year target bang voi tong target cac quy
-        var year_target_input = !$.isNumeric(kpi.year) ? null : parseFloat(kpi.year).toFixed(15)
-        //year_target_input = parseFloat(year_target_input) == 0?0: parseFloat(year_target_input) || null
-        sum_q = !$.isNumeric(sum_q) ? null : parseFloat(sum_q).toFixed(15)
-        //sum_q = parseFloat(sum_q) || null
-        var yearTargetValid =  kpi.year == sum_q
-        if(!yearTargetValid){
-            kpi.check_error_year = true
-        }
-        //bao loi khi thang khong theo phuong phap phan quy
-        for(var i = 1;i<5; i++){
-            var quarter_target_input = !$.isNumeric(kpi['q' + i]) ? null : parseFloat(kpi['q' + i]).toFixed(15)
-            //quarter_target_input = parseFloat(quarter_target_input) || null
-            totalQuarterArray[i - 1] = !$.isNumeric(totalQuarterArray[i - 1]) ? null : parseFloat(totalQuarterArray[i - 1]).toFixed(15)
-            //totalQuarterArray[i - 1] = parseFloat(totalQuarterArray[i - 1]) || null
-            if (!(quarter_target_input == totalQuarterArray[i - 1])) {
-                kpi['check_error_quarter_' + i] = true
+    convert_data_target_to_valid: function(kpi){
+        let data = {
+            current_quarter: 0,// import not check current quater
+            calculation_method_type:kpi.score_calculation_type,
+            year_target: kpi.year,
+            quarter_1_target : kpi.q1,
+            quarter_2_target: kpi.q2,
+            quarter_3_target: kpi.q3,
+            quarter_4_target: kpi.q4,
+            year_data: {
+                months_target: {
+                    quarter_1: {
+                        month_1_target: kpi.t1,
+                        month_2_target: kpi.t2,
+                        month_3_target: kpi.t3
+                    },
+                    quarter_2: {
+                        month_1_target: kpi.t4,
+                        month_2_target: kpi.t5,
+                        month_3_target: kpi.t6
+                    },
+                    quarter_3: {
+                        month_1_target: kpi.t7,
+                        month_2_target: kpi.t8,
+                        month_3_target: kpi.t9
+                    },
+                    quarter_4: {
+                        month_1_target: kpi.t10,
+                        month_2_target: kpi.t11,
+                        month_3_target: kpi.t12
+                    }
+                }
             }
         }
-        var quarterSumsIsNotNull = totalQuarterArray.reduce(function(prevVal,element){
-            return prevVal && element === null
-        },true)
-        if (quarterSumsIsNotNull){
-            kpi.check_error_year = false
-        }
-        return kpi
-    },
-    calculationScore: function(score){
-        var self = this
-        var year = score.year
-        var total_quarter =[]
-        var count_1 = 0
-        var count_2 = 0
-        var data_quarter = []
-        var all_quarter_array = []
-        for (var i =1; i<5;i++){
-            data_quarter[i] = {}
-            all_quarter_array[i] = $.isNumeric(score['q' + i])?parseFloat(score['q' + i]):null
-            data_quarter[i]['month_1'] = $.isNumeric(score['t' + ((i -1)*3 + 1)])?parseFloat(score['t' + ((i -1)*3 + 1)]):null
-            data_quarter[i]['month_2'] = $.isNumeric(score['t' + ((i -1)*3 + 2)])?parseFloat(score['t' + ((i -1)*3 + 2)]):null
-            data_quarter[i]['month_3'] = $.isNumeric(score['t' + ((i -1)*3 + 3)])?parseFloat(score['t' + ((i -1)*3 + 3)]):null
-        }
-        total_quarter[0] = calculateYearTotal(all_quarter_array)
-        for(var i = 1; i < 5; i ++){
-            total_quarter[i] = calculationQuarterTotal(data_quarter[i])
-        }
-        var total_year = total_quarter.slice().reduce(function (preVal,element) {
-            if(element.sum != null){
-                return preVal + element.sum
-            }
-            return preVal
-        }, null)
-        total_quarter.push(total_year)
-        console.log(total_quarter)
-        return total_quarter
-
-
+        return data
     },
     validateTargetScoreFollowAllocationTarget: function (kpi) {
         // Hàm này chỉ chạy khi hệ thống có bật Ràng buộc chỉ tiêu tháng/quý/năm theo phương pháp đo
         var self = this
-        var check_score_calculation_type = true
+        let data_target_to_valid ={}
+        let valid_target_obj = {}
         var p = self.method.indexOf(kpi.score_calculation_type.trim().toLowerCase());
         if (p > 2 & p<6){
             self.method_save = self.method[p-3];
@@ -791,40 +782,18 @@ methods: {
         }
         else{
             self.method_save = "";
-            check_score_calculation_type = false
         }
         kpi.score_calculation_type = self.method_save;
-        var total_quarter_array = self.calculationScore(kpi)
-        var sum_year = total_quarter_array[5]
-        if(check_score_calculation_type){
-            switch (kpi.score_calculation_type) {
-                case "sum":
-                    var sum_quarter = total_quarter_array[0].sum
-                    var sum_month_follow_quarter_array = [total_quarter_array[1].sum,total_quarter_array[2].sum,total_quarter_array[3].sum,total_quarter_array[4].sum]
-                    // par_1 là quarter_1 + quarter_2 + quarter_3 + quarter_4
-                    // par_2 là array tông [sum_quarter_1,sum_quarter_2,sum_quarter_3,sum_quarter_4] với sum_quarter_1 = month_1 +month_2 + month_3
-                    // par_3 tổng 12 tháng + 4 quý
-                    return kpi = self.checkValidate(kpi,sum_quarter,sum_month_follow_quarter_array,sum_year)
-                    break;
-                case "most_recent":
-                    var most_recent_quarter = total_quarter_array[0].most_recent_quarter;
-                    var most_recent_month_follow_quarter_array = [total_quarter_array[1].most_recent_quarter,total_quarter_array[2].most_recent_quarter,total_quarter_array[3].most_recent_quarter,total_quarter_array[4].most_recent_quarter]
-                    // par_1 là quý có input gần nhất
-                    // par_2 là array các quý lấy tháng có input gần nhất
-                    // par_3 tổng 12 tháng + 4 quý
-                    return kpi = self.checkValidate(kpi,most_recent_quarter,most_recent_month_follow_quarter_array,sum_year)
-                    break;
-                case "average":
-                    var average_quarter = total_quarter_array[0].average;
-                    var average_month_follow_quarter_array = [total_quarter_array[1].average,total_quarter_array[2].average,total_quarter_array[3].average,total_quarter_array[4].average]
-                    // par_1 là trung binh các quý có input
-                    // par_2 là array các quý lấy trung binh các tháng
-                    // par_3 tổng 12 tháng + 4 quý
-                    return kpi = self.checkValidate(kpi,average_quarter,average_month_follow_quarter_array,sum_year)
-                    break;
-                default:
+        data_target_to_valid = self.convert_data_target_to_valid(kpi)
+        valid_target_obj = self.validateAllocationTargetPlan(data_target_to_valid)
+        for(let i = 1;i<5;i++){
+            if(!valid_target_obj['valid_quarter_' +i]){
+                kpi['check_error_quarter_' + i] = true
+            }else{
+                kpi['check_error_quarter_' + i] = false
             }
         }
+        kpi.check_error_year = !valid_target_obj.valid_year?true:false
         return kpi
     },
     validate_kpi: function (kpi) {
@@ -832,10 +801,9 @@ methods: {
         var operator = ['<=', '>=', '='];
         var scores = ['q1', 'q2', 'q3', 'q4'];
         var months = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 't11', 't12']
-        var list_field_name_kpi = ['code','kpi_id','unit','measurement','weight','goal','kpi','score_calculation_type','operator']
+        var list_field_name_kpi = ['kpi_id','unit','measurement','weight','goal','kpi','score_calculation_type','operator']
         var object_trans_field = {
-            'code':"Mã KPI",
-            'kpi_id':"Loại KPI",
+            'kpi_id':"Mã KPI",
             'unit': "Đơn vị",
             'measurement': "Phương pháp đo lường",
             'weight': "Trọng số",
@@ -864,7 +832,6 @@ methods: {
                     kpi.validated = true;
                     kpi.status = responseJSON['status'];
                     kpi.email_is_incorrect = false;
-                    kpi.code_kpi_existed = false;
                 } else {
                     kpi.status = responseJSON['status'];
                     kpi.validated = false;
@@ -873,9 +840,6 @@ methods: {
                         responseJSON['messages'].forEach(function (message) {
                             if(message.field_name == gettext("In charge Email")){
                                 kpi.email_is_incorrect = true
-                            }
-                            if(message.field_name == gettext("KPI Code")){
-                                kpi.code_kpi_existed = true
                             }
                             kpi.msg.push(
                                 {
@@ -887,7 +851,7 @@ methods: {
                 }
                 list_field_name_kpi.forEach(function (field) {
                     kpi.validated = false;
-                    if (kpi[field] == "" || kpi[field] == null){
+                    if (kpi[field] === "" || kpi[field] === null){
                         kpi.msg.push({
                             'field_name': object_trans_field[field],
                             'message': ' không được để trống'
@@ -900,7 +864,7 @@ methods: {
                     var is_kpi_id = self.checkTypeKPI(__kpi_id)
                     if(!is_kpi_id){
                         kpi.msg.push({
-                            'field_name': 'Loại KPI',
+                            'field_name': 'Mã KPI',
                             'message': ' không đúng'
                         });
                     }
@@ -965,11 +929,11 @@ methods: {
                         'message': ' không đúng định dạng'
                     });
                 }
-                if (!isNaN(kpi.weight) && kpi.weight != '' && parseFloatWeight(kpi.weight) <= 0 ) {
+                if (!isNaN(kpi.weight) && kpi.weight != '' && parseFloatWeight(kpi.weight) < 0 ) {
                     kpi.validated = false;
                     kpi.msg.push({
                         'field_name': 'Trọng số',
-                        'message': ' phải lớn hơn 0'
+                        'message': ' phải lớn hơn hoặc bằng 0'
                     });
                 }
                 if (kpi.check_error_year == true){
@@ -1135,7 +1099,7 @@ methods: {
 
                 return;
             }
-        }, 1000)
+        }, 2000)
         // Không cần thiết vì đã có filter xử lý việc này => tránh lỗi chuyển data kpi.score_calculation_type
         // qua tiếng việt rồi lại qua tiếng anh chỉ để show lên xem
         //
@@ -1165,7 +1129,6 @@ methods: {
             operator: kpi.operator,
             weight: kpi.weight,
             email: kpi.email,
-            code: kpi.code,
             year_data: {
                 months_target: {
                     quarter_1: {
