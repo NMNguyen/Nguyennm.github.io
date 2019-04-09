@@ -3997,7 +3997,7 @@ var v = new Vue({
             }
 
             // Case 2: Manager
-            let userRequestID = parseInt(COMMON.UserRequestID);
+            let userRequestID = parseInt(COMMON.ProfileUserRequestID);
             if (COMMON.ListManagerSameBranch.indexOf(userRequestID) > -1){
                 return 'manager';
             }
