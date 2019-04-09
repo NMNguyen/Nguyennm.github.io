@@ -1782,6 +1782,7 @@ Vue.component('point-calculation-methods-modal',{
         reset_adjust: function () {
             let that = this;
             that.adjusting_kpi = {};
+            that.estimated_result_with_threshold = '';
             that.dialogVisible = false;
             // Reset to month 1
 
@@ -2349,7 +2350,7 @@ Vue.component('kpi-owner', {
                     <img align="left" src="${result.avatar}" alt="Avatar" class="user-thumb">
                     <div class="incharge-user-info">
                         <div class="incharge-user-name">
-                            <span class="relative-level">L[${result.relative_level}]</span> <span>${result.display_name}</span>
+                           <span>${result.display_name}</span>
                          </div>
                         
                         <div class="incharge-user-email">${result.email}</div>    
@@ -3988,10 +3989,21 @@ var v = new Vue({
     methods: {
         getPermissionToBackupKPI: function(){
             // Chỉ admin mới có toàn quyền: Xoá, thêm.
-            // Manager có quyền thêm.
-            if (this.is_user_system) return 'admin';
-            else if (COMMON.IsManager==='True') return 'manager';
-            else return 'normal_user';
+            // Manager cấp trên cùng nhánh.
+
+            // Case 1: Admin
+            if (this.is_user_system) {
+                return 'admin';
+            }
+
+            // Case 2: Manager
+            let userRequestID = parseInt(COMMON.UserRequestID);
+            if (COMMON.ListManagerSameBranch.indexOf(userRequestID) > -1){
+                return 'manager';
+            }
+
+            // Case 3: Không có quyền.
+            return 'normal_user';
         },
         reload_backup_kpi_list: function(is_remove=false){
             this.$set(this.employee_performance, 'month_1_backup', false);
