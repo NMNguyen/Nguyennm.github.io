@@ -5104,7 +5104,6 @@ button.close{
     background: #CAED9E !important;
     color: #3F6219 !important;
     width: 500px;
-    white-space: pre-wrap;
 }
 
 .el-tooltip-measurement-method .popper__arrow::after, .el-tooltip-measurement-method .popper__arrow{
