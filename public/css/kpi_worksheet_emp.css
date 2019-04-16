@@ -103,7 +103,6 @@ tr.row-no-background > td {
     margin-left: 10px;
     margin-top: 10px;
     display: none;
-    height: 34px;
 }
 
 #btn-cancel-evi {
@@ -506,9 +505,8 @@ tr.row-no-background > td {
 }
 
 .q-score {
+    color: #008b8b;
     font-weight: 600;
-    font-size: 40px;
-    color: #337ab7;
 }
 
 #kpiscore-avg-help {
@@ -704,6 +702,7 @@ div.filter-wrapper input {
     color: #337ab7;
 }
 
+
 /* end kpi unique code*/
 
 /* children_kpis_v2*/
@@ -835,18 +834,18 @@ div.unique-content {
 
 /* kpi_snapshot.html*/
 .user-avatar {
-    text-align:center;
-    background-position: unset;
-    background-size: unset;
-    padding-top: unset;
-}
-.user-avatar>img{
-    width:70px;
-    height:70px;
-    object-fit: cover;
-}
+        text-align:center;
+        background-position: unset;
+        background-size: unset;
+        padding-top: unset;
+    }
+    .user-avatar>img{
+        width:70px;
+        height:70px;
+        object-fit: cover;
+    }
 
-/* end kpi_snapshot.html*/
+    /* end kpi_snapshot.html*/
 
 
 /*kpi_editor_toolbar_top.html*/
